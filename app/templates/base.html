@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', path='images/logo.png') }}">
+    <title>{% block title %}Cyber Scallywags{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body style="background-color: #4006a7;">
+<nav class="navbar navbar-expand-lg">
+  <div class="container" style="background-color: #4006a7;">
+    <a class="navbar-brand" href="/">
+      <img src="{{ url_for('static', path='images/logo.png') }}" alt="Hero image" width="100" class="img-fluid mb-4 rounded">
+    </a>
+    
+    <!-- Mobile hamburger button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto" style="background-color: #4006a7;">
+        <li class="nav-item">
+          <a class="nav-link btn btn-outline-primary border-0 mx-1" style="color: #00B1B3;"href="/intro">
+            <i class="bi bi-play-circle"  style="color: #CC0084;"></i> Intro
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-outline-success border-0 mx-1" style="color: #00B1B3;" href="/specialisms">
+            <i class="bi bi-code-slash" style="color: #00B1B3;"></i> Specialisms
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-outline-success border-0 mx-1" style="color: #00B1B3;" href="/projects">
+            <i class="bi bi-code-slash" style="color: #00B1B3;"></i> Projects
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-outline-success border-0 mx-1" style="color: #00B1B3;" href="/blogs">
+            <i class="bi bi-code-slash" style="color: #00B1B3;"></i> Blogs
+          </a>
+        </li>
+        
+        <!-- About Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle btn btn-outline-info border-0 mx-1" style="color: #00B1B3;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-info-circle" style="color: #00B1B3;"></i> About
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark"  style="color: #CC0084;">
+            <li><a class="dropdown-item" style="color: #CC0084;" href="/about">About Us</a></li>
+            <li><a class="dropdown-item" style="color: #CC0084;" href="/team">Our Team</a></li>
+            <li><a class="dropdown-item" style="color: #CC0084;" href="/mission">Our Mission</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" style="color: #C1E415;" href="/contact">Contact</a></li>
+            <li><a class="dropdown-item" style="color: #C1E415;" href="/support">Support us</a></li>
+          </ul>
+        </li>
+        
+        <!-- Account Dropdown with Avatar -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle btn btn-outline-warning d-flex align-items-center" 
+             style="color: #00B1B3; border: 0; margin-left: 0.25rem; padding: 0.5rem 0.75rem;" 
+             href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            
+            <!-- User Avatar or Guest Placeholder -->
+            <div class="user-avatar me-2" id="userAvatar">
+              <!-- This will be populated by JavaScript based on user status -->
+            </div>
+            
+            <!-- User Name or Guest -->
+            <span id="userName">Guest</span>
+          </a>
+          
+          <!-- Dropdown Menu - content changes based on auth status -->
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" id="accountDropdown">
+            <!-- Content will be populated by JavaScript -->
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- User Avatar Styles -->
+<style>
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 2px solid #C1E415;
+  background: #C1E415;
+  color: #4006a7;
+  overflow: hidden;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user-avatar.guest {
+  background: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+.nav-link:hover .user-avatar {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.dropdown-item.profile-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #495057;
+}
+
+.dropdown-item.profile-item:last-of-type {
+  border-bottom: none;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-info .user-avatar-large {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #C1E415;
+  color: #4006a7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #C1E415;
+  margin-bottom: 0.125rem;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: #adb5bd;
+}
+</style>
+
+<div class="container mt-4">
+  {% block content %}{% endblock %}
+</div>
+
+<!-- Footer -->
+<footer class="text-light py-4 mt-5" style="background-color: #4006a7;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+        <a class="footer-brand" href="http://cyberscallywags.uk"> <img src="{{ url_for('static', path='images/logo.png') }}" alt="Cyber Scallywags Logo" width="80" class="img-fluid">
+        </a>
+      </div>
+      <div class="col-md-5">
+        <h5 style="color: #C1E415;">Powered by Cyber Scallywags 🐺</h5>
+        <p style="color: #CC0084;"class="mb-2 text-light">Building communities through technology and innovation.
+          <br />Empowering individuals to Play, Learn, Share and Grow together.
+        </p>
+        <!-- <img src="{{ url_for('static', path='img/cyber_scallywags_logo.jpeg') }}" alt="Cyber Scallywags Logo" width="80" class="img-fluid"> -->
+      </div>
+      <div class="col-md-2">
+        <h6 style="color: #C1E415;">Support the DSF Companion</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="https://github.com/cyberscallywags/dsf_companion/discussions" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-github"></i> Suggest Improvements
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="https://github.com/cyberscallywags/dsf_companion/issues" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-linkedin"></i> Raise Issues
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+        <h6 style="color: #C1E415;">Find out About Us</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="https://github.com/cyberscallywags" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-github"></i> GitHub
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="https://www.linkedin.com/company/cyber-scallywags" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-linkedin"></i> LinkedIn
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="https://twitter.com/cyberscallywags" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-twitter"></i> Twitter
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="/contact" class="text-light text-decoration-none">
+              <i class="bi bi-envelope"></i> Contact Us
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+        <h6 style="color: #C1E415;">Support Us:</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="/support" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-github"></i> Patreon
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="/support" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-linkedin"></i> Buy us a coffee
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="/support" class="text-light text-decoration-none" target="_self">
+              <i class="bi bi-twitter"></i> Merch
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="/contact" class="text-light text-decoration-none">
+              <i class="bi bi-envelope"></i> Join Us
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr class="border-secondary">
+    <div class="row">
+      <div class="col-12 text-center">
+        <p class="mb-0 text-light">&copy; 2025 Cyber Scallywags. All rights reserved. | DSF Companion Project</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Account Management JavaScript -->
+<script>
+// Mock user data - replace with real authentication system
+let currentUser = null; // Set to null for guest, or user object when logged in
+
+// Example of logged-in user data structure
+const sampleUser = {
+  id: 1,
+  name: "Colin Moore-Hill",
+  email: "chief_gopher@cyberscallywags.uk",
+  avatar: "/static/images/team/colin/pic.jpg", // or null for initials
+  role: "Community Lead",
+  joined: "2024-01-15"
+};
+
+class AccountManager {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    // Check for user session/token here
+    // For demo purposes, we'll start as guest
+    this.checkAuthStatus();
+    this.updateAccountUI();
+  }
+
+  checkAuthStatus() {
+    // In a real app, check localStorage, cookies, or make API call
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      try {
+        currentUser = JSON.parse(storedUser);
+      } catch (e) {
+        localStorage.removeItem('currentUser');
+      }
+    }
+  }
+
+  updateAccountUI() {
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const accountDropdown = document.getElementById('accountDropdown');
+
+    if (currentUser) {
+      // Logged in user
+      this.renderLoggedInUser(userAvatar, userName, accountDropdown);
+    } else {
+      // Guest user
+      this.renderGuestUser(userAvatar, userName, accountDropdown);
+    }
+  }
+
+  renderLoggedInUser(avatarEl, nameEl, dropdownEl) {
+    // Update avatar
+    if (currentUser.avatar) {
+      avatarEl.innerHTML = `<img src="${currentUser.avatar}" alt="${currentUser.name}" />`;
+    } else {
+      const initials = this.getInitials(currentUser.name);
+      avatarEl.innerHTML = initials;
+    }
+    avatarEl.className = 'user-avatar';
+
+    // Update name
+    nameEl.textContent = currentUser.name.split(' ')[0]; // First name only
+
+    // Update dropdown
+    dropdownEl.innerHTML = `
+      <li class="dropdown-item profile-item">
+        <div class="user-info">
+          <div class="user-avatar-large">
+            ${currentUser.avatar ? 
+              `<img src="${currentUser.avatar}" alt="${currentUser.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />` : 
+              this.getInitials(currentUser.name)
+            }
+          </div>
+          <div class="user-details">
+            <div class="user-name">${currentUser.name}</div>
+            <div class="user-email">${currentUser.email}</div>
+          </div>
+        </div>
+      </li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="/profile"><i class="bi bi-person"></i> My Profile</a></li>
+      <li><a class="dropdown-item" href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      <li><a class="dropdown-item" href="/settings"><i class="bi bi-gear"></i> Settings</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="#" onclick="accountManager.signOut()"><i class="bi bi-box-arrow-right"></i> Sign Out</a></li>
+    `;
+  }
+
+  renderGuestUser(avatarEl, nameEl, dropdownEl) {
+    // Update avatar with placeholder
+    avatarEl.innerHTML = '<i class="bi bi-person"></i>';
+    avatarEl.className = 'user-avatar guest';
+
+    // Update name
+    nameEl.textContent = 'Guest';
+
+    // Update dropdown
+    dropdownEl.innerHTML = `
+      <li><a class="dropdown-item" href="/signin"><i class="bi bi-box-arrow-in-right"></i> Sign In</a></li>
+      <li><a class="dropdown-item" href="/signup"><i class="bi bi-person-plus"></i> Sign Up</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="/forgotten-password"><i class="bi bi-key"></i> Forgotten Password?</a></li>
+    `;
+  }
+
+  getInitials(name) {
+    return name.split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .join('');
+  }
+
+  signIn(userData) {
+    currentUser = userData;
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    this.updateAccountUI();
+  }
+
+  signOut() {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    this.updateAccountUI();
+    // Optionally redirect to home page
+    window.location.href = '/';
+  }
+
+  // Demo function to toggle between guest and logged-in state
+  toggleDemo() {
+    if (currentUser) {
+      this.signOut();
+    } else {
+      this.signIn(sampleUser);
+    }
+  }
+}
+
+// Initialize account manager
+const accountManager = new AccountManager();
+
+// Demo: Add a way to test the functionality (remove in production)
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+    accountManager.toggleDemo();
+  }
+});
+</script>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

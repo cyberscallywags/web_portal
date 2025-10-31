@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+{% block title %}{{ blog.title if blog else 'Blog Post' }} - Cyber Scallywags{% endblock %}
+{% block content %}
+
+<!-- Blog Header -->
+<section class="blog-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <h1 class="blog-title">{{ blog.title if blog else 'Loading...' }}</h1>
+        <div class="blog-meta">
+          <div class="author-info">
+            <div class="author-avatar">{{ blog.author.name[0] if blog and blog.author else 'A' }}</div>
+            <div class="author-details">
+              <span class="author-name">{{ blog.author.name if blog and blog.author else 'Unknown Author' }}</span>
+              <span class="author-bio">{{ blog.author.bio if blog and blog.author else '' }}</span>
+            </div>
+          </div>
+          <div class="post-info">
+            <span class="publish-date">{{ blog.published_date if blog else '' }}</span>
+            <span class="read-time">{{ blog.read_time if blog else '' }}</span>
+            <span class="view-count">{{ blog.views if blog else 0 }} views</span>
+          </div>
+        </div>
+        <div class="blog-tags">
+          {% if blog and blog.tags %}
+            {% for tag in blog.tags %}
+              <span class="blog-tag">{{ tag }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Content -->
+<section class="blog-content py-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <!-- Featured Image -->
+        <div class="featured-image mb-4">
+          <div class="image-placeholder">
+            <span class="featured-emoji">🐺</span>
+          </div>
+        </div>
+        
+        <!-- Article Content -->
+        <article class="article-content">
+          <div class="excerpt mb-4">
+            <p class="lead">{{ blog.excerpt if blog else 'Loading blog content...' }}</p>
+          </div>
+          
+          <div class="content">
+            <div id="blogContent">
+              {{ blog.content if blog else 'Content will be loaded here...' }}
+            </div>
+          </div>
+        </article>
+        
+        <!-- Share & Actions -->
+        <div class="blog-actions mt-5">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="share-buttons">
+              <span class="me-3">Share:</span>
+              <a href="#" class="btn btn-sm btn-outline-primary">Twitter</a>
+              <a href="#" class="btn btn-sm btn-outline-primary">LinkedIn</a>
+              <a href="#" class="btn btn-sm btn-outline-primary">Facebook</a>
+            </div>
+            <div class="blog-navigation">
+              <a href="/blogs" class="btn btn-outline-secondary">← Back to Blogs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Related Posts -->
+<section class="related-posts py-4 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <h4 style="color: #4006a7;">Related Posts</h4>
+        <div id="relatedPosts" class="row g-3">
+          <!-- Related posts will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.blog-header {
+  background: linear-gradient(120deg, #161a3a, #3a1d5e, #0e6abd);
+  color: white;
+  padding: 3rem 0;
+}
+
+.blog-title {
+  color: #C1E415;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.blog-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #C1E415;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4006a7;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.author-bio {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.post-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.blog-tag {
+  background: rgba(193, 228, 21, 0.2);
+  color: #C1E415;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  border: 1px solid #C1E415;
+}
+
+.featured-image {
+  text-align: center;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(45deg, #4006a7, #C1E415);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-emoji {
+  font-size: 6rem;
+  color: white;
+}
+
+.article-content {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.excerpt {
+  border-left: 4px solid #C1E415;
+  padding-left: 1.5rem;
+  font-style: italic;
+  color: #666;
+}
+
+.content {
+  color: #333;
+}
+
+.blog-actions {
+  border-top: 2px solid #e9ecef;
+  padding-top: 2rem;
+}
+
+.share-buttons a {
+  margin-right: 0.5rem;
+}
+
+.related-post-card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.related-post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .blog-title {
+    font-size: 2rem;
+  }
+  
+  .blog-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .post-info {
+    align-items: flex-start;
+  }
+  
+  .blog-actions {
+    text-align: center;
+  }
+  
+  .blog-actions .d-flex {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+</style>
+
+<script>
+// Get blog data from URL or use sample data
+const blogSlug = window.location.pathname.split('/').pop();
+
+// Sample blog data - replace with API call
+const sampleBlogData = {
+  "id": 1,
+  "title": "Building Communities Through Code: The Cyber Scallywags Way",
+  "slug": "building-communities-through-code",
+  "excerpt": "Discover how we're using technology to bring people together and create lasting change in our communities. From workshops to open-source projects, learn about our grassroots approach to making technology accessible and meaningful for everyone.",
+  "content": `
+    <p>In a world increasingly dominated by big tech and profit-driven algorithms, there's something revolutionary about choosing purpose over profit. At Cyber Scallywags, we believe that technology should serve communities, not control them.</p>
+    
+    <h3>The Genesis of Our Movement</h3>
+    <p>Born in the neon shadows of forgotten steel towns and weather-worn seaside streets, Cyber Scallywags emerged from a simple but powerful idea: that technology can be a force for good when it's built by and for the people who use it.</p>
+    
+    <p>We're not your typical tech company. We're the dreamers and doers who live between the circuits — the coders, makers, and data-misfits who understand that behind every line of code is an opportunity to make someone's life better.</p>
+    
+    <h3>Community-Driven Development</h3>
+    <p>Our approach to building technology is fundamentally different. Instead of starting with the technology and finding users, we start with the community and find solutions. This means:</p>
+    
+    <ul>
+      <li><strong>Listening First:</strong> We spend time in communities, understanding real needs and challenges before we write a single line of code.</li>
+      <li><strong>Inclusive Design:</strong> Our projects are built with accessibility and inclusion at their core, not as an afterthought.</li>
+      <li><strong>Open by Default:</strong> Everything we build is open source, ensuring that communities can own and modify their tools.</li>
+      <li><strong>Skills Sharing:</strong> We don't just build tools; we teach others to build them too.</li>
+    </ul>
+    
+    <h3>Real Projects, Real Impact</h3>
+    <p>Our community learning platform has helped over 500 people take their first steps into coding. Our local business directory API supports 15 community organizations across Wales. These aren't just numbers — they represent individuals whose lives have been touched by technology that truly serves them.</p>
+    
+    <h3>The Path Forward</h3>
+    <p>We're not here to hack the system. We're here to rewrite it — together. Every workshop we run, every open-source project we release, and every collaboration we foster is a step toward a more equitable digital future.</p>
+    
+    <p>Join us in lighting up the digital night with ideas powered by kindness, not capital. Because our code isn't just syntax — it's solidarity.</p>
+  `,
+  "author": {
+    "name": "Sarah Chen",
+    "bio": "Community Lead & Full-stack Developer",
+    "avatar": "/static/images/authors/sarah.jpg"
+  },
+  "published_date": "October 25, 2025",
+  "featured_image": "/static/images/blog/community-code.jpg",
+  "tags": ["community", "technology", "open-source", "social-impact"],
+  "read_time": "5 min read",
+  "status": "published",
+  "views": 1250,
+  "featured": true
+};
+
+// Load blog content
+document.addEventListener('DOMContentLoaded', function() {
+  // In a real app, you'd fetch this based on the slug
+  // For now, we'll use sample data
+  loadBlogContent(sampleBlogData);
+  loadRelatedPosts();
+});
+
+function loadBlogContent(blogData) {
+  // Update meta information
+  document.title = `${blogData.title} - Cyber Scallywags`;
+  
+  // Format and display content
+  const contentDiv = document.getElementById('blogContent');
+  if (contentDiv) {
+    contentDiv.innerHTML = blogData.content;
+  }
+}
+
+function loadRelatedPosts() {
+  const relatedContainer = document.getElementById('relatedPosts');
+  
+  // Sample related posts
+  const relatedPosts = [
+    {
+      title: "Getting Started with Python: A Beginner's Journey",
+      excerpt: "New to coding? Start your journey with Python!",
+      slug: "getting-started-python-beginners",
+      read_time: "8 min read"
+    },
+    {
+      title: "Open Source Contribution Guide",
+      excerpt: "Want to contribute to open source but don't know where to start?",
+      slug: "open-source-contribution-guide", 
+      read_time: "10 min read"
+    }
+  ];
+  
+  let html = '';
+  relatedPosts.forEach(post => {
+    html += `
+      <div class="col-md-6">
+        <div class="related-post-card" onclick="window.location.href='/blog/${post.slug}'">
+          <h6>${post.title}</h6>
+          <p class="text-muted mb-2">${post.excerpt}</p>
+          <small class="text-primary">${post.read_time}</small>
+        </div>
+      </div>
+    `;
+  });
+  
+  relatedContainer.innerHTML = html;
+}
+</script>
+
+{% endblock %}

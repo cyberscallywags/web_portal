@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Specialisms @ Cyber Scallywags{% endblock %}
+{% block content %}
+<h4 style="color: #CC0084;">Cyber Scallywags Specialist Groups</h4>
+<p style="color: #00B1B3;">This  encourages teams and individuals to embrace best practices within specific development areas. It simplifies onboarding checks so you can focus on learning value.</p>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <img src="{{ url_for('static', path='images/ppc_thumb.png') }}" class="img-fluid rounded mb-2" alt="Practical Python Club">
+    <h4 style="color: #CC0084;"><a href="https://ppc.cyberscallywags.uk" target="_self" rel="noopener noreferrer">Practical Python Club</a></h4>
+    <p style="color: #00B1B3;">This s where code meets creativity — a hands-on community for builders, tinkerers, and problem-solvers.
+We focus on turning Python concepts into real-world projects that make a difference.
+From data to devices, we learn by doing — together, the Scallywag way. 🐍⚙️</p>
+  </div>
+  <div class="col-md-6">
+    <img src="{{ url_for('static', path='images/gsc_thumb.png') }}" class="img-fluid rounded mb-2" alt="Graphinista Social Club">
+    <h4 style="color: #CC0084;"><a href="https://gsc.cyberscallywags.uk" target="_self" rel="noopener noreferrer">Graphinista Social Club</a></h4>
+
+    <p style="color: #00B1B3;">This is where data dreamers and graph gurus unite to map the unseen connections shaping our world.
+Born from the spirit of collaboration and curiosity, it's a community that thrives on storytelling through nodes and relationships.
+From Neo4j explorations to creative graph hacks, we celebrate the art and science of connected thinking — together.</p>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <img src="{{ url_for('static', path='images/dmw_thumb.png') }}" class="img-fluid rounded mb-2" alt="Data Mining Wales">
+    <h4 style="color: #CC0084;"><a href="https://data-mining.uk/" target="_self" rel="noopener noreferrer">Data Mining Wales</a></h4>
+    <p style="color: #00B1B3;">This is where data enthusiasts come together to explore the depths of information and uncover hidden insights.
+With a focus on ethical data practices and community-driven projects, we aim to empower individuals and organizations to harness the power of data for good.
+Join us as we navigate the ever-evolving landscape of data science and analytics — together.</p>
+  </div>
+  <div class="col-md-6">
+    <img src="{{ url_for('static', path='images/pcn_thumb.png') }}" class="img-fluid rounded mb-2" alt="Python Code Nanny">
+    <h4><a href="https://pcn.cyberscallywags.uk" target="_self" rel="noopener noreferrer">Python Code Nanny</a></h4>
+    <p style="color: #00B1B3;">Is your friendly guardian of clean, efficient, and elegant Python code — part mentor, part guardian.
+She watches over your projects with linting love, style checks, and gentle guidance to make every script shine.
+From first logging statement to production-ready pipelines. 🐍✨</p>
+  </div>
+</div>
+{% endblock %}

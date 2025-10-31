@@ -1,0 +1,11 @@
+services:
+  cyber-scallywags-uk:
+    platform: linux/amd64
+    build: .
+    container_name: cyber-scallywags-uk
+    image: cyberscallywags/cyber-scallywags-uk
+    ports:
+      - "8055:8055"
+    volumes:
+      - ./app:/app/app
+    restart: unless-stopped
