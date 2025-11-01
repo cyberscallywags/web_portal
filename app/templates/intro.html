@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Intro - Cyber Scallywags{% endblock %}
+{% block content %}
+
+<div class="hero-section text-center mb-5">
+  <h1 style="color: #CC0084;" class="display-4 fw-bold mb-4">🐺 Cyber Scallywags</h1>
+  <p class="lead" style="color: #C1E415; font-size: 1.3rem;">The Pack That Codes for the People</p>
+</div>
+
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="content-card p-4 mb-4" style="background: rgba(255,255,255,0.95); border-radius: 12px;">
+      <h3 style="color: #4006a7;" class="mb-3">Our Mission</h3>
+      <p style="color: #00B1B3;"class="mb-3">
+        In a world of algorithms built for profit, the Scallywags chose purpose.
+        We're the dreamers and doers who live between the circuits — the coders, makers, and data-misfits who believe technology should serve communities, not control them.
+      </p>
+      
+      <h3 style="color: #4006a7;" class="mb-3">Our Story</h3>
+      <p style="color: #00B1B3;" class="mb-3">
+        Born in the shadows of deserted coal fields, forgotten steel towns and weather-worn seaside streets, Cyber Scallywags stands for collective creativity, open knowledge, and tech with a conscience.
+        We share skills, build projects that matter, and light up the digital night with ideas powered by kindness, not capital.
+      </p>
+      
+      <h3 style="color: #4006a7;" class="mb-3">What We Do</h3>
+      <p style="color: #00B1B3;" class="mb-4">
+        Our code isn't just syntax — it's solidarity.
+        From grassroots workshops to open-source missions, we're helping the next generation of innovators turn curiosity into capability.
+        No gatekeepers. No jargon. Just connection, collaboration, and a bit of controlled chaos.
+      </p>
+      
+      <div class="call-to-action text-center p-3" style="background: #4006a7; border-radius: 8px;">
+        <p style="color: #00B1B3;" class="mb-0 fw-bold">
+          We're not here to hack the system. We're here to rewrite it — together.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 mx-auto">
+    <h3 style="color: #CC0084;" class="mb-3 text-center">Watch Our Intro</h3>
+    <div class="ratio ratio-16x9 mb-4">
+      <video controls class="w-100 h-100" style="border-radius: 12px;">
+        <source src="{{ url_for('static', path='images/vids/Intro_cyberScallywags.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5 mb-5">
+  <div class="col-lg-10 mx-auto">
+    <div class="stats-section p-4 text-center" style="background: linear-gradient(45deg, #4006a7, #0e6abd); border-radius: 12px;">
+      <h3 style="color: #C1E415;" class="mb-4">Our Impact So Far</h3>
+      <div class="row">
+        <div class="col-6 col-md-3 mb-3">
+          <div style="color: white;">
+            <div style="font-size: 2.5rem; font-weight: bold;">5+</div>
+            <div style="font-size: 0.9rem; opacity: 0.9;">People Trained</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div style="color: white;">
+            <div style="font-size: 2.5rem; font-weight: bold;">1</div>
+            <div style="font-size: 0.9rem; opacity: 0.9;">Active Projects</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div style="color: white;">
+            <div style="font-size: 2.5rem; font-weight: bold;">2+</div>
+            <div style="font-size: 0.9rem; opacity: 0.9;">Community Partners</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div style="color: white;">
+            <div style="font-size: 2.5rem; font-weight: bold;">100%</div>
+            <div style="font-size: 0.9rem; opacity: 0.9;">Open Source</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-lg-10 mx-auto">
+    <div class="action-cards row g-4">
+      <div class="col-md-4">
+        <div class="card h-100" style=" background-color:  #4006a7; border: 2px solid #C1E415;">
+          <div class="card-body text-center">
+            <div style="font-size: 3rem; color: #CC0084;">🚀</div>
+            <h5 style="color: #CC0084;">Explore Projects</h5>
+            <p style="color: #00B1B3;">See what we're building and how you can contribute</p>
+            <a href="/projects" class="btn btn-primary">View Projects</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100" style=" background-color:  #4006a7; border: 2px solid #00B1B3;">
+          <div class="card-body text-center">
+            <div style="font-size: 3rem; color: #00B1B3;">👥</div>
+            <h5 style="color:  #CC0084;">Meet the Pack</h5>
+            <p style="color: #00B1B3;">Get to know the scallywags behind the code</p>
+            <a href="/team" class="btn btn-info">Meet Our Team</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100" style=" background-color:  #4006a7;border: 2px solid #CC0084;">
+          <div class="card-body text-center">
+            <div style="font-size: 3rem; color: #C1E415;">🤝</div>
+            <h5 style="color:  #CC0084;">Join Us</h5>
+            <p style="color: #00B1B3;">Become part of our community-driven mission</p>
+            <a href="/contact" class="btn btn-success">Get Involved</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

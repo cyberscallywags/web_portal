@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block title %}Cyber Scallywags Team{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="wrap">
+    <h1>Cyber Scallywags Team</h1>
+    <p class="tagline">The dream team ready to support your future development and career.</p>
+  </div>
+</section>
+
+<section class="team">
+  <div class="container">
+    <div class="row g-4">
+      {% for person in team %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <article class="card team-card h-100" data-has-photo="true">
+          <div class="avatar">
+            <img class="avatar-cartoon" src="{{ person.cartoon }}" alt="{{ person.name }} cartoon avatar">
+            <img class="avatar-photo" src="{{ person.photo}}" alt="{{ person.name }} photo">
+          </div>
+          <div class="card-body">
+            <h3>{{ person.name }}</h3>
+            <p class="role">{{ person.role }}</p>
+            <p class="bio">{{ person.bio }}</p>
+            <div class="links">
+              {% for label, href in person.links.items() %}
+                <a href="{{ href }}" target="_blank" rel="noopener">{{ label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </article>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+/* Team section styling */
+.team {
+  padding: 2rem 0 3rem;
+  background-color: #4006a7;
+  color: #C1E415;
+}
+
+.team h1, .team h3, .team p {
+  color: #C1E415;
+}
+
+/* Card styling */
+.team-card {
+  border: 1px solid #e6e6ef;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  height: 100%;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Avatar styling */
+.avatar {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: #f7f7fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-cartoon,
+.avatar-photo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Show cartoon by default, hide photo */
+.avatar-cartoon {
+  opacity: 1;
+  z-index: 2;
+}
+
+.avatar-photo {
+  opacity: 0;
+  z-index: 1;
+}
+
+/* On hover, show photo and hide cartoon */
+.team-card:hover .avatar-cartoon {
+  opacity: 0;
+}
+
+.team-card:hover .avatar-photo {
+  opacity: 1;
+}
+
+/* Card body styling */
+.card-body {
+  padding: 1rem;
+  background: #fff;
+  color: #333;
+}
+
+.card-body h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.card-body .role {
+  margin: 0 0 0.75rem;
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.card-body .bio {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+.links a {
+  display: inline-block;
+  margin-right: 0.75rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: #0e6abd;
+  font-weight: 500;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+/* Hero section styling */
+.hero {
+  background: linear-gradient(120deg, #161a3a, #3a1d5e, #0e6abd);
+  color: #fff;
+  padding: 2.5rem 0;
+}
+
+.hero h1 {
+  color: #C1E415;
+  margin-bottom: 1rem;
+}
+
+.hero .tagline {
+  opacity: 0.95;
+  font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .avatar {
+    height: 180px;
+  }
+  
+  .team {
+    padding: 1.5rem 0 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .avatar {
+    height: 160px;
+  }
+  
+  .card-body {
+    padding: 0.75rem;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const teamCards = document.querySelectorAll('.team-card');
+    
+    teamCards.forEach(card => {
+        const cartoonImg = card.querySelector('.avatar-cartoon');
+        const photoImg = card.querySelector('.avatar-photo');
+        
+        if (cartoonImg && photoImg) {
+            const preloadImg = new Image();
+            preloadImg.src = photoImg.src;
+        }
+    });
+    
+    console.log('Team card hover effects initialized');
+});
+</script>
+
+{% endblock %}
