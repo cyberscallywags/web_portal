@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ url_for('static', path='images/logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', path='images/logo/logo.png') }}">
     <title>{% block title %}Cyber Scallywags{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -12,7 +12,7 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container" style="background-color: #4006a7;">
     <a class="navbar-brand" href="/">
-      <img src="{{ url_for('static', path='images/logo.png') }}" alt="Hero image" width="100" class="img-fluid mb-4 rounded">
+      <img src="{{ url_for('static', path='images/logo/logo.png') }}" alt="Hero image" width="100" class="img-fluid mb-4 rounded">
     </a>
     
     <!-- Mobile hamburger button -->
@@ -28,19 +28,33 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link btn btn-outline-success border-0 mx-1" style="color: #00B1B3;" href="/events">
+            <span style="color: #00B1B3;">&#128197;</span> Events
+          </a>
+        </li> <li class="nav-item">
           <a class="nav-link btn btn-outline-success border-0 mx-1" style="color: #00B1B3;" href="/specialisms">
-            <i class="bi bi-code-slash" style="color: #00B1B3;"></i> Specialisms
+            <span style="color: #00B1B3;">&#128373;</span> Specialisms
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link btn btn-outline-success border-0 mx-1" style="color: #00B1B3;" href="/projects">
-            <i class="bi bi-code-slash" style="color: #00B1B3;"></i> Projects
+            <span style="color: #00B1B3;">&#129520;</span> Projects
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link btn btn-outline-success border-0 mx-1" style="color: #00B1B3;" href="/blogs">
-            <i class="bi bi-code-slash" style="color: #00B1B3;"></i> Blogs
+
+        
+        
+        <!-- About Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle btn btn-outline-info border-0 mx-1" style="color: #00B1B3;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span style="color: #00B1B3;">&#128220;</span> Blogs
           </a>
+          <ul class="dropdown-menu dropdown-menu-dark"  style="color: #CC0084;">
+            <li><a class="dropdown-item" style="color: #CC0084;" href="/blogs">Our Blogs</a></li>
+            <li><a class="dropdown-item" style="color: #CC0084;" href="/vlogs">Our Vlogs</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" style="color: #C1E415;" href="/rag">Newsletter</a></li>
+          </ul>
         </li>
         
         <!-- About Dropdown -->
@@ -163,7 +177,7 @@
 }
 </style>
 
-<div class="container mt-4">
+<div class="container mt-4" style="background-color: #4006a7;">
   {% block content %}{% endblock %}
 </div>
 
@@ -172,7 +186,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-1">
-        <a class="footer-brand" href="http://cyberscallywags.uk"> <img src="{{ url_for('static', path='images/logo.png') }}" alt="Cyber Scallywags Logo" width="80" class="img-fluid">
+        <a class="footer-brand" href="http://cyberscallywags.uk"> <img src="{{ url_for('static', path='images/logo/logo.png') }}" alt="Cyber Scallywags Logo" width="80" class="img-fluid">
         </a>
       </div>
       <div class="col-md-5">
@@ -227,12 +241,12 @@
         <ul class="list-unstyled">
           <li class="mb-2">
             <a href="/support" class="text-light text-decoration-none" target="_self">
-              <i class="bi bi-github"></i> Patreon
+              <i class="bi bi-coffee"></i> Patreon
             </a>
           </li>
           <li class="mb-2">
             <a href="/support" class="text-light text-decoration-none" target="_self">
-              <i class="bi bi-linkedin"></i> Buy us a coffee
+              <i class="bi bi-coffee"></i> Buy us a coffee
             </a>
           </li>
           <li class="mb-2">

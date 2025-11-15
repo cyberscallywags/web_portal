@@ -1,0 +1,190 @@
+{
+    "datasets": [
+        "PROJECTS":
+        [
+            {
+                "id": 1,
+                "title": "Community Learning Platform",
+                "slug": "community-learning-platform",
+                "description": "An open-source platform for community-driven learning with interactive coding challenges, peer mentoring, and collaborative projects. Built to democratize access to quality programming education and foster inclusive learning environments.",
+                "emoji": "📚",
+                "status": "active",
+                "technologies": [
+                    "Python",
+                    "Django",
+                    "JavaScript",
+                    "React",
+                    "PostgreSQL",
+                    "Docker"
+                ],
+                "github_url": "https://github.com/cyberscallywags/learning-platform",
+                "demo_url": "https://learn.cyberscallywags.uk",
+                "contributors": [
+                    {
+                        "name": "Colin Moore-Hill",
+                        "role": "Lead Developer",
+                        "emoji": "🐺",
+                        "team_slug": "colin-moore-hill"
+                    },
+                    {
+                        "name": "Kishion Layne",
+                        "role": "Data Analyst",
+                        "emoji": "📊",
+                        "team_slug": "kishion-layne"
+                    },
+                    {
+                        "name": "Dean Foulds",
+                        "role": "Technical Architect",
+                        "emoji": "🔬",
+                        "team_slug": "dean-foulds"
+                    }
+                ],
+                "created_date": "January 15, 2025",
+                "last_updated": "October 28, 2025",
+                "stats": {
+                    "commits": 342,
+                    "issues_closed": 89,
+                    "stars": 127,
+                    "forks": 34,
+                    "contributors": 8,
+                    "releases": 12
+                },
+                "features": [
+                    "Interactive coding challenges with real-time feedback",
+                    "Peer-to-peer mentoring system",
+                    "Project-based learning modules",
+                    "Community forums and discussion boards",
+                    "Progress tracking and achievement badges",
+                    "Multilingual support for accessibility"
+                ],
+                "overview": "The Community Learning Platform represents our commitment to democratizing access to quality programming education.  Built from the ground up with community input, this platform serves learners from all backgrounds and skill levels. Whether you're taking your first steps into coding or looking to contribute back to the community as a mentor, our platform provides the tools and environment you need to succeed.",
+                "installation": """ # Clone the repository
+                git clone https: //github.com/cyberscallywags/learning-platform.git
+                cd learning-platform
+
+                # Set up virtual environment
+                python -m venv venv
+                source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+
+                # Install dependencies
+                pip install -r requirements.txt
+
+                # Set up database
+                python manage.py migrate
+                python manage.py createsuperuser
+
+                # Run development server
+                python manage.py runserver
+
+                #Visit http: //localhost:8000 to get started! """,
+                "contribution_guide": """ We welcome contributions from developers of all skill levels! To contribute to the Community Learning Platform, please follow these steps:
+                    1. Fork the repository on GitHub.
+                    2. Clone your fork locally.
+                    3. Create a new branch for your feature or bug fix.
+                    4. Make your changes and ensure all tests pass.
+                    5. Submit a pull request with a clear description of your changes.""",
+            }
+        ],
+        {
+            "BLOGS": 
+                [
+                    {
+                        "id": 1,
+                        "title": "Building Communities Through Code: The Cyber Scallywags Way",
+                        "slug": "building-communities-through-code",
+                        "excerpt": "Discover how we're using technology to bring people together and create lasting change in our communities. From workshops to open-source projects, learn about our grassroots approach.",
+                        "content": "Full blog content goes here...",
+                        "author": {
+                            "name": "Colin Moore-Hill",
+                            "avatar": "/static/images/team/colin/pic.jpeg",
+                            "bio": "Founder & Community Lead"
+                        },
+                        "published_date": "2025-10-25T10:00:00Z",
+                        "featured_image": "/static/images/blog/cyberscallywag_header.png",
+                        "tags": [
+                            "community",
+                            "technology",
+                            "Civic Tech"
+                        ],
+                        "read_time": "5 min read",
+                        "status": "published",
+                        "views": 12,
+                        "featured": true
+                    },
+                    {
+                        "id": 2,
+                        "title": "The DSF Companion: From Conversations to Connections",
+                        "slug": "the-dsf-companion",
+                        "excerpt": "Explore the DSF Companion, a platform designed to foster meaningful conversations and connections within the data community.",
+                        "content": "Full blog content goes here...",
+                        "author": {
+                            "name": "Kishion Layne",
+                            "avatar": "/static/images/authors/marcus.jpg",
+                            "bio": "Python Developer & Educator"
+                        },
+                        "published_date": "2025-10-20T14:30:00Z",
+                        "featured_image": "/static/images/blog/Cyber_Scallywags_DSF_Companion.png",
+                        "tags": [
+                            "tutorials",
+                            "python",
+                            "education"
+                        ],
+                        "read_time": "8 min read",
+                        "status": "published",
+                        "views": 892,
+                        "featured": false
+                    },
+                    {
+                        "id": 3,
+                        "title": "Cyber Scallywags Hackathon 2026: Get ready to innovate!",
+                        "slug": "hackathon-2026-preview",
+                        "excerpt": "It will be an incredible weekend! Our annual hackathon brought together 120+ developers, designers, and innovators. Watch out for the amazing projects and see who wins.",
+                        "content": "Event: hackathon 2026 preview...",
+                        "author": {
+                            "name": "Fran Moore-Hill",
+                            "avatar": "/static/images/team/HairyCoo.jpeg",
+                            "bio": "Event Coordinator & UX Designer"
+                        },
+                        "published_date": "2025-10-15T09:00:00Z",
+                        "featured_image": "/static/images/blog/csw_hackathon.png",
+                        "tags": [
+                            "events",
+                            "community",
+                            "innovation"
+                        ],
+                        "read_time": "6 min read",
+                        "status": "published",
+                        "views": 2103,
+                        "featured": true
+                    }
+                ],{
+            "EVENTS": 
+            [
+                {
+                    "id": "evt_1699876543210_abc123def",
+                    "name": "Team Meeting",
+                    "date": "2025-11-15T10:00:00.000Z",
+                    "location": "Conference Room A",
+                    "description": "Quarterly planning session",
+                    "createdAt": "2025-11-12T09:30:00.000Z"
+                },
+                {
+                    "id": "evt_1699876543211_xyz789ghi",
+                    "name": "Product Launch",
+                    "date:""2025-12-01T14:00:00.000Z",
+                    "location": "Main Auditorium",
+                    "description": "Launch of new product line",
+                    "createdAt": "2025-11-12T09:30:00.000Z"
+                },
+                {
+                    "id": "evt_1699876543212_mno456pqr",
+                    "name": "Holiday Party",
+                    "date": "2025-12-20T18:00:00.000Z",
+                    "location": "Downtown Hotel Ballroom",
+                    "description": "Annual company holiday celebration",
+                    "createdAt": "2025-11-12T09:30:00.000Z"
+                }
+            ]
+        ]
+    
+}

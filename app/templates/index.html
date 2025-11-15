@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Welcome - Cyber Scallywags{% endblock %}
 {% block content %}
-<div class="p-5 mb-4 bg-light rounded-3">
+<div class="p-5 mb-4 rounded-3" style="background-color: #4006a7;">
   <div class="container-fluid py-5 text-center">
-    <img src="{{ url_for('static', path='images/logo.png') }}" alt="Hero image" width="450" class="img-fluid mb-4 rounded">
-    <h1 class="display-5 fw-bold">Welcome to Cyber Scallywags</h1>
-    <p class="fs-5">Your friendly supportive community for clean, consistent, and technical practices.</p>
+    <img src="{{ url_for('static', path='images/logo/cyberscallywags.png') }}" alt="cyber scallywags image" width="450" class="img-fluid mb-4 rounded">
+    <h1 style="color: #CC0084;" class="display-5 fw-bold">Welcome to Cyber Scallywags</h1>
+    <p class="fs-5" style="color: #00B1B3;">Your friendly supportive community for clean, consistent, and technical practices.</p>
   </div>
 </div>
 {% endblock %}
