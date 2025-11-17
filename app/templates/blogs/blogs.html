@@ -82,12 +82,24 @@
 .blog-featured-image {
   width: 100%;
   height: 200px;
-  background: linear-gradient(45deg, #4006a7, #C1E415);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 3rem;
+  position: relative;
+  overflow: hidden;
+  background-color: #4006a7;
+  transition: filter 0.3s ease;
+}
+
+.blog-featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.blog-card:hover .blog-featured-image {
+  filter: brightness(1.1);
 }
 
 .blog-card-body {
@@ -199,7 +211,7 @@ const blogData = {
         "bio": "Founder & Community Lead"
       },
       "published_date": "2025-10-25T10:00:00Z",
-      "featured_image": "/static/images/blog/cyberscallywag_header.png",
+      "featured_image": "/static/images/logo/CyberScallywags.png",
       "tags": ["community", "technology", "Civic Tech"],
       "read_time": "5 min read",
       "status": "published",
@@ -218,7 +230,7 @@ const blogData = {
         "bio": "Python Developer & Educator"
       },
       "published_date": "2025-10-20T14:30:00Z",
-      "featured_image": "/static/images/blog/Cyber_Scallywags_DSF_Companion.png",
+      "featured_image": "/static/images/logo/logo.png",
       "tags": ["tutorials", "python", "education"],
       "read_time": "8 min read",
       "status": "published",
@@ -237,7 +249,7 @@ const blogData = {
         "bio": "Event Coordinator & UX Designer"
       },
       "published_date": "2025-10-15T09:00:00Z",
-      "featured_image": "/static/images/blog/csw_hackathon.png",
+      "featured_image": "/static/images/logo/pogo.png",
       "tags": ["events", "community", "innovation"],
       "read_time": "6 min read",
       "status": "published",
@@ -325,7 +337,7 @@ class BlogManager {
     col.innerHTML = `
       <article class="blog-card" onclick="window.location.href='/blog/${blog.slug}'">
         <div class="blog-featured-image">
-          🐺
+          <img src="${blog.featured_image}" alt="${blog.title}">
         </div>
         <div class="blog-card-body">
           <h3 class="blog-title">${blog.title}</h3>

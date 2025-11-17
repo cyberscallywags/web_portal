@@ -111,11 +111,12 @@ async def read_blogs(request: Request):
 async def read_blog_detail(request: Request, slug: str):
     # In a real app, you'd fetch the blog post by slug from your database
     resp = get_blog_data_by_slug(slug)
+    blog = resp[0] if resp else None
     # For now, we'll pass the slug to the template
     return templates.TemplateResponse("blogs/blog-detail.html", {
         "request": request,
         "slug": slug,
-        "blog": resp  # Replace with actual blog data
+        "blog": blog
     })
 
 
@@ -128,11 +129,12 @@ async def read_vlogs(request: Request):
 @app.get("/vlogs/{slug}")
 async def read_vlogs_detail(request: Request, slug: str):
     resp = get_vlog_data_by_slug(slug)
+    vlog = resp[0] if resp else None
     # For now, we'll pass the slug to the template
-    return templates.TemplateResponse("blogs/vlogs-detail.html", {
+    return templates.TemplateResponse("blogs/vlog-detail.html", {
         "request": request,
         "slug": slug,
-        "vlog": resp  # Replace with actual vlog data
+        "blog": vlog  # Using 'blog' key for template compatibility
     })
 
 
