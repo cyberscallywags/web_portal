@@ -41,20 +41,30 @@
       <div class="col-lg-8 mx-auto">
         <!-- Featured Image -->
         <div class="featured-image mb-4">
+          {% if blog and blog.featured_image %}
+          <img src="{{ blog.featured_image }}" alt="{{ blog.title }}" class="img-fluid rounded shadow-sm">
+          {% else %}
           <div class="image-placeholder">
-            <span class="featured-emoji">🐺</span>
+            <span class="featured-emoji">🎬</span>
           </div>
+          {% endif %}
         </div>
         
         <!-- Article Content -->
         <article class="article-content">
+          {% if blog and blog.excerpt %}
           <div class="excerpt mb-4">
-            <p class="lead">{{ blog.excerpt if blog else 'Loading blog content...' }}</p>
+            <p class="lead">{{ blog.excerpt }}</p>
           </div>
+          {% endif %}
           
           <div class="content">
             <div id="blogContent">
-              {{ blog.content if blog else 'Content will be loaded here...' }}
+              {% if blog and blog.content %}
+                {{ blog.content | safe }}
+              {% else %}
+                <p>Content will be loaded here...</p>
+              {% endif %}
             </div>
           </div>
         </article>
@@ -175,6 +185,14 @@
 
 .featured-image {
   text-align: center;
+  margin-bottom: 2rem;
+}
+
+.featured-image img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  background-color: #f8f9fa;
 }
 
 .image-placeholder {
@@ -194,7 +212,33 @@
 
 .article-content {
   font-size: 1.1rem;
-  line-height: 1.7;
+  line-height: 1.8;
+  color: #333;
+}
+
+.article-content h3 {
+  color: #4006a7;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.article-content p {
+  margin-bottom: 1.5rem;
+}
+
+.article-content ul, .article-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.article-content li {
+  margin-bottom: 0.5rem;
+}
+
+.article-content strong {
+  color: #C1E415;
+  font-weight: 600;
 }
 
 .excerpt {
@@ -202,33 +246,73 @@
   padding-left: 1.5rem;
   font-style: italic;
   color: #666;
+  background: rgba(193, 228, 21, 0.05);
+  padding: 1rem 1.5rem;
+  border-radius: 0 8px 8px 0;
 }
 
 .content {
   color: #333;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.content h3 {
+  color: #4006a7;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.content p {
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
 }
 
 .blog-actions {
   border-top: 2px solid #e9ecef;
   padding-top: 2rem;
+  margin-top: 3rem;
+}
+
+.share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .share-buttons a {
-  margin-right: 0.5rem;
+  border-color: #4006a7;
+  color: #4006a7;
+  transition: all 0.3s ease;
+}
+
+.share-buttons a:hover {
+  background-color: #4006a7;
+  color: white;
 }
 
 .related-post-card {
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1.5rem;
   background: white;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
+  height: 100%;
 }
 
 .related-post-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(64, 6, 167, 0.15);
+  border-color: #C1E415;
+}
+
+.related-post-card h6 {
+  color: #4006a7;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
 }
 
 /* Responsive Design */
