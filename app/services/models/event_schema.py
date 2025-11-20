@@ -9,6 +9,7 @@ class Event(BaseModel):
     description: str = Field(..., description="A brief description of the event")
     createdAt: str = Field(..., description="The date and time when the event was created")
     lastUpdated: str = Field(..., description="The date and time when the event was last updated")  
+    organiser: str = Field(..., description="The organizer of the event")
 
 
 class EventListing(BaseModel):

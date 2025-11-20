@@ -3,7 +3,7 @@ services:
     platform: linux/amd64
     build: .
     container_name: cyber-scallywags-uk
-    image: cyberscallywags/cyber-scallywags-uk
+    image: cyberscallywags/cyber-scallywags-uk:v0.1.6
     ports:
       - "8055:8055"
     volumes:
