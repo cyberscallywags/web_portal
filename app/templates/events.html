@@ -251,71 +251,39 @@
 </style>
 
 <script>
-// Sample events data - this would typically come from your API
-const eventsData = {
-  "events": [
-    {
-      "id": 3,
-      "title": "Event DSF Companion Launch ",
-      "slug": "event-dsf-companion-launch",
-      "description": "An event to introduce the features and functionalities of the DSF Companion app, designed to promote and enhance user experience with DSF.",
-      "emoji": "🦾",
-      "status": "17 Nov 24",
-      "technologies": ["python", "FastAPI", "Jinja2"],
-      "github_url": "https://github.com/cyberscallywags/business-directory-api",
-      "demo_url": null,
-      "contributors": [
-        {
-          "name": "Colin Moore-Hill",
-          "emoji": "🌐",
-          "team_slug": "colin-moore-hill"
-        },
-        {
-          "name": "Dean Foulds",
-          "emoji": "🎨",
-          "team_slug": "dean-foulds"
-        },
-        {
-          "name": "Amit ",
-          "emoji": "🎨",
-          "team_slug": "dean-foulds"
-        },
-        {
-          "name": "Edward Bensa",
-          "emoji": "🎨",
-          "team_slug": "dean-foulds"
-        }
-      ],
-      "created_date": "2024-08-20T00:00:00Z",
-      "last_updated": "2025-02-14T16:45:00Z"
-    }
-  ],
-  "pagination": {
-    "current_page": 1,
-    "total_pages": 1,
-    "total_projects": 6,
-    "projects_per_page": 9
-  }
-};
-
 // Events functionality
 class EventsManager {
   constructor() {
-    this.events = eventsData.events;
-    this.filteredEvents = [...this.events];
+    this.events = [];
+    this.filteredEvents = [];
     this.currentPage = 1;
     this.eventsPerPage = 6;
     this.init();
   }
 
-  init() {
-    this.renderEvents();
+  async init() {
+    await this.fetchEvents();
     this.bindEvents();
+  }
+
+  async fetchEvents() {
+    try {
+      const response = await fetch('/api/events');
+      const data = await response.json();
+      this.events = data.events || [];
+      this.filteredEvents = [...this.events];
+      this.renderEvents();
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      this.events = [];
+      this.filteredEvents = [];
+      this.renderEvents();
+    }
   }
 
   bindEvents() {
     document.getElementById('searchInput').addEventListener('input', (e) => {
-      this.filterProjects(
+      this.filterEvents(
         e.target.value, 
         document.getElementById('statusFilter').value,
         document.getElementById('techFilter').value
@@ -323,7 +291,7 @@ class EventsManager {
     });
 
     document.getElementById('statusFilter').addEventListener('change', (e) => {
-      this.filterProjects(
+      this.filterEvents(
         document.getElementById('searchInput').value,
         e.target.value,
         document.getElementById('techFilter').value
@@ -331,7 +299,7 @@ class EventsManager {
     });
 
     document.getElementById('techFilter').addEventListener('change', (e) => {
-      this.filterProjects(
+      this.filterEvents(
         document.getElementById('searchInput').value,
         document.getElementById('statusFilter').value,
         e.target.value
@@ -339,83 +307,65 @@ class EventsManager {
     });
   }
 
-  filterProjects(searchTerm = '', selectedStatus = '', selectedTech = '') {
-    this.filteredProjects = this.projects.filter(project => {
+  filterEvents(searchTerm = '', selectedStatus = '', selectedTech = '') {
+    this.filteredEvents = this.events.filter(event => {
       const matchesSearch = !searchTerm || 
-        project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.description.toLowerCase().includes(searchTerm.toLowerCase());
+        event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesStatus = !selectedStatus || project.status === selectedStatus;
-      const matchesTech = !selectedTech || project.technologies.includes(selectedTech);
+      const matchesStatus = !selectedStatus || event.status === selectedStatus;
+      const matchesTech = !selectedTech || (event.technologies && event.technologies.includes(selectedTech));
       
       return matchesSearch && matchesStatus && matchesTech;
     });
 
     this.currentPage = 1;
-    this.renderProjects();
+    this.renderEvents();
   }
 
-  renderProjects() {
-    const startIndex = (this.currentPage - 1) * this.projectsPerPage;
-    const endIndex = startIndex + this.projectsPerPage;
-    const projectsToShow = this.filteredProjects.slice(startIndex, endIndex);
+  renderEvents() {
+    const startIndex = (this.currentPage - 1) * this.eventsPerPage;
+    const endIndex = startIndex + this.eventsPerPage;
+    const eventsToShow = this.filteredEvents.slice(startIndex, endIndex);
 
-    const projectsGrid = document.getElementById('projectsGrid');
-    projectsGrid.innerHTML = '';
+    const eventsGrid = document.getElementById('projectsGrid');
+    eventsGrid.innerHTML = '';
 
-    if (projectsToShow.length === 0) {
-      projectsGrid.innerHTML = '<div class="col-12 text-center"><p style="color: #C1E415; font-size: 1.2rem;">No projects found matching your criteria.</p></div>';
+    if (eventsToShow.length === 0) {
+      eventsGrid.innerHTML = '<div class="col-12 text-center"><p style="color: #C1E415; font-size: 1.2rem;">No events found matching your criteria.</p></div>';
       return;
     }
 
-    projectsToShow.forEach(project => {
-      const projectCard = this.createProjectCard(project);
-      projectsGrid.appendChild(projectCard);
+    eventsToShow.forEach(event => {
+      const eventCard = this.createEventCard(event);
+      eventsGrid.appendChild(eventCard);
     });
 
     this.renderPagination();
   }
 
-  createProjectCard(project) {
+  createEventCard(event) {
     const col = document.createElement('div');
     col.className = 'col-12 col-md-6 col-lg-4';
-    
-    const contributorsHTML = project.contributors.map(contributor => `
-      <div class="contributor-avatar" 
-           onclick="window.location.href='/team#${contributor.team_slug}'" 
-           title="${contributor.name}">
-        <span class="contributor-emoji">${contributor.emoji}</span>
-      </div>
-    `).join('');
-
-    const linksHTML = `
-      <div class="project-links">
-        <a href="${project.github_url}" target="_blank" rel="noopener" class="project-link">
-          📂 GitHub
-        </a>
-        ${project.demo_url ? `<a href="${project.demo_url}" target="_blank" rel="noopener" class="project-link">🔗 Demo</a>` : ''}
-      </div>
-    `;
 
     col.innerHTML = `
-      <article class="project-card" onclick="window.location.href='/project/${project.slug}'">
+      <article class="project-card">
         <div class="project-header">
-          <span class="project-status status-${project.status}">${project.status}</span>
-          <span style="font-size: 4rem;">${project.emoji}</span>
+          <span class="project-status status-planning">${event.date ? new Date(event.date).toLocaleDateString() : 'TBD'}</span>
+          <span style="font-size: 4rem;">📅</span>
         </div>
         <div class="project-card-body">
-          <h3 class="project-title">${project.title}</h3>
-          <p class="project-description">${project.description}</p>
-          <div class="project-technologies">
-            ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+          <h3 class="project-title">${event.name}</h3>
+          <p class="project-description">${event.description}</p>
+          <div class="project-meta">
+            <p><strong>📍 Location:</strong> ${event.location || 'TBD'}</p>
+            ${event.organizer ? `<p><strong>👤 Organizer:</strong> ${event.organizer}</p>` : ''}
           </div>
-          <div class="project-contributors">
-            <div class="contributors-title">Contributors (${project.contributors.length})</div>
-            <div class="contributors-list">
-              ${contributorsHTML}
-            </div>
+          <div class="project-links" style="margin-top: 1rem;">
+            <button class="project-link" onclick="eventsManager.registerForEvent(${event.id}, '${event.name}')" style="border: none; cursor: pointer;">
+              ✅ Register
+            </button>
           </div>
-          ${linksHTML}
         </div>
       </article>
     `;
@@ -423,8 +373,14 @@ class EventsManager {
     return col;
   }
 
+  registerForEvent(eventId, eventName) {
+    // You can customize this behavior - redirect to a registration form, open a modal, etc.
+    alert(`Registration for "${eventName}" coming soon!\n\nEvent ID: ${eventId}`);
+    // Example: window.location.href = `/events/${eventId}/register`;
+  }
+
   renderPagination() {
-    const totalPages = Math.ceil(this.filteredProjects.length / this.projectsPerPage);
+    const totalPages = Math.ceil(this.filteredEvents.length / this.eventsPerPage);
     const paginationNav = document.getElementById('paginationNav');
     
     if (totalPages <= 1) {
@@ -437,7 +393,7 @@ class EventsManager {
     for (let i = 1; i <= totalPages; i++) {
       paginationHTML += `
         <li class="page-item ${i === this.currentPage ? 'active' : ''}">
-          <button class="page-link" onclick="projectsManager.goToPage(${i})" style="color: ${i === this.currentPage ? '#fff' : '#4006a7'}; background-color: ${i === this.currentPage ? '#4006a7' : '#fff'};">${i}</button>
+          <button class="page-link" onclick="eventsManager.goToPage(${i})" style="color: ${i === this.currentPage ? '#fff' : '#4006a7'}; background-color: ${i === this.currentPage ? '#4006a7' : '#fff'};">${i}</button>
         </li>
       `;
     }
@@ -447,14 +403,14 @@ class EventsManager {
 
   goToPage(page) {
     this.currentPage = page;
-    this.renderProjects();
+    this.renderEvents();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
-// Initialize projects manager when DOM is loaded
+// Initialize events manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  window.projectsManager = new ProjectsManager();
+  window.eventsManager = new EventsManager();
 });
 </script>
 
