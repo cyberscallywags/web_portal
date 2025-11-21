@@ -2,58 +2,426 @@
 {% block title %}{{ project['title'] if project else 'Project' }} - Cyber Scallywags{% endblock %}
 {% block content %}
 
+<style>
+.project-detail-hero {
+  background: linear-gradient(135deg, #4006a7 0%, #0e6abd 50%, #CC0084 100%);
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.project-detail-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(193, 228, 21, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: moveGrid 20s linear infinite;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.project-detail-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.project-emoji-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.project-emoji {
+  font-size: 5rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.project-emoji img {
+  max-height: 100px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.project-status {
+  padding: 0.6rem 1.5rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.status-active { 
+  background: linear-gradient(45deg, #28a745, #20c997);
+}
+
+.status-completed { 
+  background: linear-gradient(45deg, #6c757d, #5a6268);
+}
+
+.status-planning { 
+  background: linear-gradient(45deg, #ffc107, #ffb300);
+  color: #212529;
+}
+
+.status-maintenance { 
+  background: linear-gradient(45deg, #17a2b8, #138496);
+}
+
+.project-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.project-description {
+  font-size: 1.3rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meta-label {
+  opacity: 0.8;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.meta-value {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn-primary, .btn-success, .btn-outline-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #C1E415, #00B1B3);
+  color: #4006a7;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(193, 228, 21, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.btn-outline-secondary {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.btn-outline-secondary:hover {
+  background: white;
+  color: #4006a7;
+  transform: translateY(-3px);
+}
+
+.section-card, .sidebar-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(193, 228, 21, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-card::before, .sidebar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #CC0084, #C1E415, #00B1B3);
+}
+
+.sidebar-card {
+  padding: 2rem;
+}
+
+.section-card h3, .sidebar-card h4 {
+  color: #4006a7;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  position: relative;
+  display: inline-block;
+}
+
+.section-card h3::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, #4006a7, #C1E415);
+  border-radius: 2px;
+}
+
+.sidebar-card h4 {
+  font-size: 1.3rem;
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tech-tag {
+  background: linear-gradient(135deg, #4006a7, #CC0084);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.tech-tag:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 5px 15px rgba(204, 0, 132, 0.4);
+}
+
+.contributor-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 2px solid rgba(193, 228, 21, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+
+.contributor-item:hover {
+  background: linear-gradient(135deg, rgba(193, 228, 21, 0.1), rgba(0, 177, 179, 0.1));
+  transform: translateX(5px);
+}
+
+.contributor-item:last-child {
+  border-bottom: none;
+}
+
+.contributor-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C1E415, #00B1B3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4006a7;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.contributor-item:hover .contributor-avatar {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.contributor-info {
+  flex: 1;
+}
+
+.contributor-name {
+  font-weight: 700;
+  color: #4006a7;
+  font-size: 1.05rem;
+}
+
+.contributor-role {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(193, 228, 21, 0.05), rgba(0, 177, 179, 0.05));
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateX(5px);
+  background: linear-gradient(135deg, rgba(193, 228, 21, 0.1), rgba(0, 177, 179, 0.1));
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 700;
+  color: #4006a7;
+  font-size: 1.1rem;
+}
+
+.related-project {
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(193, 228, 21, 0.05), rgba(0, 177, 179, 0.05));
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.related-project:hover {
+  background: linear-gradient(135deg, rgba(193, 228, 21, 0.1), rgba(0, 177, 179, 0.1));
+  transform: translateX(5px);
+  border-color: #C1E415;
+}
+
+.related-project:last-child {
+  margin-bottom: 0;
+}
+
+.related-project-title {
+  font-weight: 700;
+  color: #4006a7;
+  margin-bottom: 0.25rem;
+}
+
+.related-project-desc {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .project-title { font-size: 2rem; }
+  .project-description { font-size: 1.1rem; }
+  .project-emoji { font-size: 3rem; }
+  .section-card, .sidebar-card { padding: 1.5rem; }
+}
+</style>
+
 <!-- Project Header -->
-<section class="project-header">
+<section class="project-detail-hero">
   <div class="container">
     <div class="row">
       <div class="col-lg-10 mx-auto">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <div class="project-emoji">
-            {% if project and project.get('logoRect') %}
-              <img src="{{ url_for('static', path=project.get('logoRect')) }}" alt="Project Logo" style="height: 100px; width: 190px; object-fit: fill;" class="img-fluid">
-            {% elif project and project.get('logoSqr') %}
-              <img src="{{ url_for('static', path=project.get('logoSqr')) }}" alt="Project Logo" style="height: 100px; width: 100px; object-fit: fill;" class="img-fluid">
-            {% else %}
-              <span style="font-size: 4rem;">{{ project.get('emoji', '📱') if project else '📱' }}</span>
-            {% endif %}
+        <div class="project-detail-hero-content">
+          <div class="project-emoji-container">
+            <div class="project-emoji">
+              {% if project and project.get('logoRect') %}
+                <img src="{{ url_for('static', path=project.get('logoRect')) }}" alt="Project Logo" style="height: 100px; width: 190px; object-fit: fill;" class="img-fluid">
+              {% elif project and project.get('logoSqr') %}
+                <img src="{{ url_for('static', path=project.get('logoSqr')) }}" alt="Project Logo" style="height: 100px; width: 100px; object-fit: fill;" class="img-fluid">
+              {% else %}
+                <span>{{ project.get('emoji', '📱') if project else '📱' }}</span>
+              {% endif %}
+            </div>
+            <span class="project-status status-{{ project.get('status', 'active')|lower if project else 'active' }}">
+              {{ project.get('status', 'Active') if project else 'Active' }}
+            </span>
           </div>
-          <span class="project-status status-{{ project.get('status', 'active')|lower if project else 'active' }}">
-            {{ project.get('status', 'Active') if project else 'Active' }}
-          </span>
-        </div>
-        <div class="d-flex align-items-center justify-content-between mb-3">
+          
           <h1 class="project-title">{{ project.get('title', 'Loading Project...') if project else 'Loading Project...' }}</h1>
           <p class="project-description">{{ project.get('description', 'Loading description...') if project else 'Loading description...' }}</p>
-        </div>
-        <div class="project-meta">
-          <div class="meta-item">
-            <span class="meta-label">Created:</span>
-            <span class="meta-value">{{ project.get('created_date', 'Unknown') if project else 'Unknown' }}</span>
+          
+          <div class="project-meta">
+            <div class="meta-item">
+              <span class="meta-label">📅 Created</span>
+              <span class="meta-value">{{ project.get('created_date', 'Unknown') if project else 'Unknown' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">🔄 Last Updated</span>
+              <span class="meta-value">{{ project.get('last_updated', 'Unknown') if project else 'Unknown' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">👥 Contributors</span>
+              <span class="meta-value">{{ project.get('contributors', [])|length if project else 0 }}</span>
+            </div>
           </div>
-          <div class="meta-item">
-            <span class="meta-label">Last Updated:</span>
-            <span class="meta-value">{{ project.get('last_updated', 'Unknown') if project else 'Unknown' }}</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Contributors:</span>
-            <span class="meta-value">{{ project.get('contributors', [])|length if project else 0 }}</span>
-          </div>
-        </div>
-        
-        <div class="project-links">
-          {% if project and project.get('github_url') %}
-            <a href="{{ project['github_url'] }}" target="_blank" rel="noopener" class="btn btn-primary">
-              📂 View on GitHub
+          
+          <div class="project-links">
+            {% if project and project.get('github_url') %}
+              <a href="{{ project['github_url'] }}" target="_blank" rel="noopener" class="btn btn-primary">
+                📂 View on GitHub
+              </a>
+            {% endif %}
+            {% if project and project.get('demo_url') %}
+              <a href="{{ project['demo_url'] }}" target="_blank" rel="noopener" class="btn btn-success">
+                🔗 Live Demo
+              </a>
+            {% endif %}
+            <a href="/projects" class="btn btn-outline-secondary">
+              ← Back to Projects
             </a>
-          {% endif %}
-          {% if project and project.get('demo_url') %}
-            <a href="{{ project['demo_url'] }}" target="_blank" rel="noopener" class="btn btn-success">
-              🔗 Live Demo
-            </a>
-          {% endif %}
-          <a href="/projects" class="btn btn-outline-secondary">
-            ← Back to Projects
-          </a>
+          </div>
         </div>
       </div>
     </div>
@@ -111,7 +479,7 @@
       <div class="col-lg-4">
         <!-- Contributors -->
         <div class="sidebar-card mb-4">
-          <h4>Contributors</h4>
+          <h4>👥 Contributors</h4>
           <div class="contributors-list" id="contributorsList">
             <!-- Contributors will be loaded here -->
           </div>
@@ -119,7 +487,7 @@
         
         <!-- Project Stats -->
         <div class="sidebar-card mb-4">
-          <h4>Project Statistics</h4>
+          <h4>📊 Project Statistics</h4>
           <div class="stats-list" id="projectStats">
             <!-- Stats will be loaded here -->
           </div>
@@ -127,7 +495,7 @@
         
         <!-- Related Projects -->
         <div class="sidebar-card mb-4">
-          <h4>Related Projects</h4>
+          <h4>🔗 Related Projects</h4>
           <div class="related-projects" id="relatedProjects">
             <!-- Related projects will be loaded here -->
           </div>
@@ -136,200 +504,6 @@
     </div>
   </div>
 </section>
-
-<style>
-.project-header {
-  background: linear-gradient(120deg, #161a3a, #3a1d5e, #0e6abd);
-  color: white;
-  padding: 4rem 0;
-}
-
-.project-emoji {
-  font-size: 4rem;
-  line-height: 1;
-}
-
-.project-status {
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.status-active { background: #28a745; color: white; }
-.status-completed { background: #6c757d; color: white; }
-.status-planning { background: #ffc107; color: #212529; }
-.status-maintenance { background: #17a2b8; color: white; }
-
-.project-title {
-  color: #C1E415;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 1rem 0;
-  line-height: 1.2;
-}
-
-.project-description {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-}
-
-.project-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  font-size: 0.9rem;
-}
-
-.meta-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.meta-label {
-  opacity: 0.7;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.meta-value {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.project-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.section-card, .sidebar-card {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.sidebar-card {
-  padding: 1.5rem;
-}
-
-.section-card h3, .sidebar-card h4 {
-  color: #4006a7;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-}
-
-.tech-stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.tech-tag {
-  background: linear-gradient(45deg, #4006a7, #C1E415);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.contributor-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #f0f0f0;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.contributor-item:hover {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding-left: 0.5rem;
-}
-
-.contributor-item:last-child {
-  border-bottom: none;
-}
-
-.contributor-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #C1E415;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4006a7;
-  font-weight: bold;
-}
-
-.contributor-info {
-  flex: 1;
-}
-
-.contributor-name {
-  font-weight: 600;
-  color: #333;
-}
-
-.contributor-role {
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.stats-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.stat-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.stat-item:last-child {
-  border-bottom: none;
-}
-
-.stat-label {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.stat-value {
-  font-weight: 600;
-  color: #4006a7;
-}
-
-.related-project {
-  padding: 1rem 0;
-  border-bottom: 1px solid #f0f0f0;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.related-project:hover {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding-left: 0.5rem;
-}
-
-.related-project:last-child {
-  border-bottom: none;
-}
 
 .related-project-title {
   font-weight: 600;

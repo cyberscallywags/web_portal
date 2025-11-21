@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+{% block title %}{{ event.name }} - Cyber Scallywags Events{% endblock %}
+{% block content %}
+
+<style>
+.event-detail-hero {
+  background: linear-gradient(135deg, #4006a7 0%, #0e6abd 50%, #C1E415 100%);
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.event-detail-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(193, 228, 21, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: moveGrid 20s linear infinite;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.event-detail-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.back-link {
+  color: white;
+  text-decoration: none;
+  opacity: 0.9;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+
+.back-link:hover {
+  opacity: 1;
+  color: #C1E415;
+}
+
+.event-badge {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(45deg, #28a745, #20c997);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.event-detail-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.event-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.event-meta-item strong {
+  font-weight: 600;
+}
+
+.countdown-display {
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 1rem 1.5rem;
+  background: rgba(193, 228, 21, 0.2);
+  border-radius: 15px;
+  display: inline-block;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.section-card, .sidebar-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(193, 228, 21, 0.2);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.section-card::before, .sidebar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #CC0084, #C1E415, #00B1B3);
+}
+
+.sidebar-card {
+  padding: 2rem;
+}
+
+.section-card h2, .sidebar-card h4 {
+  color: #4006a7;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  position: relative;
+  display: inline-block;
+}
+
+.section-card h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, #4006a7, #C1E415);
+  border-radius: 2px;
+}
+
+.sidebar-card h4 {
+  font-size: 1.3rem;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #4006a7, #CC0084);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(64, 6, 167, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.register-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(193, 228, 21, 0.4);
+  background: linear-gradient(135deg, #C1E415, #00B1B3);
+  color: #4006a7;
+}
+
+.calendar-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  color: #4006a7;
+  border: 2px solid #4006a7;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.3s ease;
+  margin-bottom: 0.75rem;
+}
+
+.calendar-btn:hover {
+  background: #4006a7;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(64, 6, 167, 0.3);
+}
+
+@media (max-width: 768px) {
+  .event-detail-title { font-size: 2rem; }
+  .event-meta { gap: 1rem; }
+  .section-card, .sidebar-card { padding: 1.5rem; }
+}
+</style>
+
+<section class="event-detail-hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="event-detail-hero-content">
+          <div class="mb-3">
+            <a href="/events" class="back-link">← Back to Events</a>
+          </div>
+          <span class="event-badge">📅 Upcoming Event</span>
+          <h1 class="event-detail-title">{{ event.name }}</h1>
+          <div class="event-meta">
+            <span class="event-meta-item">📅 <span id="eventDate"></span></span>
+            <span class="event-meta-item">📍 {{ event.location }}</span>
+            <span class="event-meta-item">👤 {{ event.organizer }}</span>
+          </div>
+          <div class="countdown-display" id="countdownDisplay"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="event-details py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="section-card">
+          <h2>About This Event</h2>
+          <p style="font-size: 1.1rem; line-height: 1.8; color: #666;">{{ event.description }}</p>
+        </div>
+
+        <div class="section-card">
+          <h2>Event Details</h2>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <p><strong>📅 Date & Time:</strong></p>
+              <p id="fullEventDate" style="color: #666;"></p>
+            </div>
+            <div class="col-md-6 mb-3">
+              <p><strong>📍 Location:</strong></p>
+              <p style="color: #666;">{{ event.location }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+              <p><strong>👤 Organizer:</strong></p>
+              <p style="color: #666;">{{ event.organizer }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="sidebar-card">
+          <button class="register-btn" onclick="registerForEventDetail()">
+            ✅ Register Now
+          </button>
+
+          <div class="d-grid gap-2">
+            <a id="googleCalLink" href="#" target="_blank" class="calendar-btn">
+              📅 Add to Google Calendar
+            </a>
+            <a id="icalLink" href="#" download="event.ics" class="calendar-btn">
+              📥 Download iCal
+            </a>
+            <button class="calendar-btn" onclick="shareEvent()">
+              🔗 Share Event
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const event = {{ event | tojson }};
+
+function formatEventDate(dateString) {
+  const startDate = new Date(dateString);
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+  return startDate.toLocaleDateString('en-US', options);
+}
+
+function generateGoogleCalendarUrl() {
+  const startDate = new Date(event.date);
+  const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Default 2 hours
+  
+  const formatDateForGoogle = (date) => {
+    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  };
+  
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: event.name,
+    dates: `${formatDateForGoogle(startDate)}/${formatDateForGoogle(endDate)}`,
+    details: event.description,
+    location: event.location || ''
+  });
+  
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function generateICalUrl() {
+  const startDate = new Date(event.date);
+  const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+  
+  const formatDateForICal = (date) => {
+    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  };
+  
+  const icalContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:${event.name}
+DTSTART:${formatDateForICal(startDate)}
+DTEND:${formatDateForICal(endDate)}
+DESCRIPTION:${event.description}
+LOCATION:${event.location || ''}
+END:VEVENT
+END:VCALENDAR`;
+  
+  return 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icalContent);
+}
+
+function updateCountdown() {
+  const now = new Date();
+  const eventDate = new Date(event.date);
+  const diff = eventDate - now;
+  
+  if (diff < 0) {
+    document.getElementById('countdownDisplay').textContent = 'Event has started!';
+    return;
+  }
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  
+  document.getElementById('countdownDisplay').textContent = 
+    `🕒 Starts in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+function registerForEventDetail() {
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(64, 6, 167, 0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(5px);';
+  modal.innerHTML = `
+    <div style="background: linear-gradient(135deg, white, #f8f9fa); padding: 2.5rem; border-radius: 24px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); border: 3px solid #C1E415;">
+      <h2 style="color: #4006a7; margin-bottom: 1.5rem; font-size: 2rem; font-weight: 700;">Register for ${event.name}</h2>
+      <form id="registrationForm">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Name *</label>
+          <input type="text" name="name" required style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Email *</label>
+          <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Phone</label>
+          <input type="tel" name="phone" style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
+        </div>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+          <button type="submit" style="flex: 1; padding: 1rem; background: linear-gradient(135deg, #4006a7, #CC0084); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(64, 6, 167, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(193, 228, 21, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(64, 6, 167, 0.3)'">Submit</button>
+          <button type="button" onclick="this.closest('div[style*=fixed]').remove()" style="flex: 1; padding: 1rem; background: #6c757d; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease;" onmouseover="this.style.background='#5a6268'" onmouseout="this.style.background='#6c757d'">Cancel</button>
+        </div>
+      </form>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  modal.querySelector('#registrationForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+    // Replace form with success message
+    const modalContent = modal.querySelector('div[style*="background: linear-gradient"]');
+    modalContent.innerHTML = `
+      <div style="text-align: center; padding: 2rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+        <h2 style="color: #28a745; margin-bottom: 1rem; font-size: 2rem; font-weight: 700;">Registration Successful!</h2>
+        <p style="color: #666; margin-bottom: 0.5rem; font-size: 1.1rem;">Thank you, ${formData.get('name')}!</p>
+        <p style="color: #666; margin-bottom: 2rem;">A confirmation email has been sent to ${formData.get('email')}</p>
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="padding: 0.75rem 2rem; background: linear-gradient(135deg, #4006a7, #CC0084); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Close</button>
+      </div>
+    `;
+  });
+}
+
+function shareEvent() {
+  const shareData = {
+    title: event.name,
+    text: event.description,
+    url: window.location.href
+  };
+  
+  if (navigator.share) {
+    navigator.share(shareData);
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Event link copied to clipboard!');
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  const formattedDate = formatEventDate(event.date);
+  document.getElementById('eventDate').textContent = formattedDate;
+  document.getElementById('fullEventDate').textContent = formattedDate;
+  
+  // Set calendar URLs
+  document.getElementById('googleCalLink').href = generateGoogleCalendarUrl();
+  document.getElementById('icalLink').href = generateICalUrl();
+  
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+});
+</script>
+
+{% endblock %}

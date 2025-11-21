@@ -98,6 +98,27 @@ async def read_events(request: Request):
     return templates.TemplateResponse("/events.html", {"request": request, "events": events})
 
 
+@app.get("/event/{event_id}")
+async def read_event_detail(request: Request, event_id: int):
+    """Render event detail page"""
+    events_data = service_events.get_all_events()
+    events_list = events_data.get('events', [])
+    
+    event = None
+    for e in events_list:
+        if e.get('id') == event_id:
+            event = e
+            break
+    
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    return templates.TemplateResponse("/event-detail.html", {
+        "request": request,
+        "event": event
+    })
+
+
 @app.get("/support")
 async def read_support(request: Request):
     return templates.TemplateResponse("/support.html", {"request": request})

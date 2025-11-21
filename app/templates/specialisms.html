@@ -1,48 +1,325 @@
 {% extends "base.html" %}
 {% block title %}Specialisms @ Cyber Scallywags{% endblock %}
 {% block content %}
-<h4 style="color: #CC0084;">Cyber Scallywags Specialist Groups</h4>
-<p style="color: #00B1B3;">This  encourages teams and individuals to embrace best practices within specific development areas. It simplifies onboarding checks so you can focus on learning value.</p>
 
-<div class="row mt-4">
-  <div class="col-md-6">
-    <!-- <img src="{{ url_for('static', path='images/ppc_thumb.png') }}" class="img-fluid rounded mb-2" alt="Practical Python Club"> -->
-    <h4 style="color: #CC0084;"><a href="https://ppc.cyberscallywags.uk" target="_self" rel="noopener noreferrer">
-      <img src="{{ url_for('static', path='images/logo/ppc_logo.png') }}" class="rounded me-3" alt="Practical Python Club" style="height: 50px; width: 60px; object-fit: cover;">Practical Python Club</a></h4>
-    <p style="color: #00B1B3;">This s where code meets creativity — a hands-on community for builders, tinkerers, and problem-solvers.
-We focus on turning Python concepts into real-world projects that make a difference.
-From data to devices, we learn by doing — together, the Scallywag way. 🐍⚙️</p>
-  </div>
-  <div class="col-md-6">
-    <!-- <img src="{{ url_for('static', path='images/gsc_thumb.png') }}" class="img-fluid rounded mb-2" alt="Graphinista Social Club"> -->
-    <h4 style="color: #CC0084;"><a href="https://gsc.cyberscallywags.uk" target="_self" rel="noopener noreferrer"> 
-      <img src="{{ url_for('static', path='images/logo/gsc_logo.png') }}" class="rounded me-3" alt="Graphinista Social Club" style="height: 40px; width: 40px; object-fit: cover;">
-      Graphinista Social Club</a>
-    </h4>
+<style>
+.specialisms-hero {
+  background: linear-gradient(135deg, #4006a7 0%, #0e6abd 50%, #CC0084 100%);
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  margin-bottom: 3rem;
+}
 
-    <p style="color: #00B1B3;">This is where data dreamers and graph gurus unite to map the unseen connections shaping our world.
-Born from the spirit of collaboration and curiosity, it's a community that thrives on storytelling through nodes and relationships.
-From Neo4j explorations to creative graph hacks, we celebrate the art and science of connected thinking — together.</p>
+.specialisms-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(193, 228, 21, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: moveGrid 20s linear infinite;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.specialisms-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, #C1E415, #00B1B3, #CC0084);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeInDown 1s ease-out;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1rem;
+}
+
+.specialisms-subtitle {
+  font-size: 1.3rem;
+  color: white;
+  font-weight: 500;
+  animation: fadeInUp 1s ease-out 0.3s both;
+  position: relative;
+  z-index: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.specialism-card {
+  background: linear-gradient(135deg, rgba(64, 6, 167, 0.95), rgba(14, 106, 189, 0.9));
+  border-radius: 24px;
+  padding: 2.5rem;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 2px solid transparent;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.specialism-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(193, 228, 21, 0.1), rgba(0, 177, 179, 0.1));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.specialism-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #CC0084, #C1E415, #00B1B3);
+  border-radius: 24px 24px 0 0;
+}
+
+.specialism-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(193, 228, 21, 0.3);
+  border-color: #C1E415;
+}
+
+.specialism-card:hover::before {
+  opacity: 1;
+}
+
+.specialism-card:nth-child(1) .specialism-card::after {
+  background: linear-gradient(90deg, #C1E415, #00B1B3);
+}
+
+.specialism-card:nth-child(2) .specialism-card::after {
+  background: linear-gradient(90deg, #00B1B3, #CC0084);
+}
+
+.specialism-card:nth-child(3) .specialism-card::after {
+  background: linear-gradient(90deg, #CC0084, #C1E415);
+}
+
+.specialism-card:nth-child(4) .specialism-card::after {
+  background: linear-gradient(90deg, #C1E415, #4006a7);
+}
+
+.specialism-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.specialism-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-right: 1rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(193, 228, 21, 0.5);
+}
+
+.specialism-card:hover .specialism-logo {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.specialism-title-link {
+  color: #C1E415;
+  text-decoration: none;
+  font-size: 1.8rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.specialism-title-link::after {
+  content: '→';
+  margin-left: 0.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.specialism-card:hover .specialism-title-link::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.specialism-title-link:hover {
+  color: #00B1B3;
+  text-shadow: 0 0 10px rgba(193, 228, 21, 0.5);
+}
+
+.specialism-description {
+  color: #e6f4ff;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.specialism-icon {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 4rem;
+  opacity: 0.1;
+  transition: all 0.3s ease;
+}
+
+.specialism-card:hover .specialism-icon {
+  opacity: 0.2;
+  transform: scale(1.2) rotate(-10deg);
+}
+
+.section-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #C1E415, transparent);
+  margin: 4rem 0;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .specialisms-title { font-size: 2.5rem; }
+  .specialisms-subtitle { font-size: 1.1rem; }
+  .specialism-card { padding: 2rem; }
+  .specialism-logo { width: 50px; height: 50px; }
+  .specialism-title-link { font-size: 1.5rem; }
+}
+</style>
+
+<div class="specialisms-hero">
+  <div class="container">
+    <h1 class="specialisms-title">🎯 Cyber Scallywags Specialist Groups</h1>
+    <p class="specialisms-subtitle">
+      We encourage teams and individuals to embrace best practices within specific development areas. 
+      It simplifies onboarding and helps you focus on learning value through hands-on collaboration.
+    </p>
   </div>
 </div>
 
-<div class="row mt-4">
-  <div class="col-md-6">
-    <!-- <img src="{{ url_for('static', path='images/dmw_thumb.png') }}" class="img-fluid rounded mb-2" alt="Data Mining Wales"> -->
-    <h4 style="color: #CC0084;"><a href="https://data-mining.uk/" target="_self" rel="noopener noreferrer">
-      <img src="{{ url_for('static', path='images/logo/dataminingwales.png') }}" class="rounded me-3" alt="Data Mining Wales" style="height: 34px; width: 34px; object-fit: cover;">Data Mining Wales</a></h4>
-    <p style="color: #00B1B3;">This is where data enthusiasts come together to explore the depths of information and uncover hidden insights.
-With a focus on ethical data practices and community-driven projects, we aim to empower individuals and organizations to harness the power of data for good.
-Join us as we navigate the ever-evolving landscape of data science and analytics — together.</p>
+<div class="container mb-5">
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="specialism-card">
+        <div class="specialism-header">
+          <img src="{{ url_for('static', path='images/logo/ppc_logo.png') }}" class="specialism-logo" alt="Practical Python Club">
+          <h4 class="mb-0">
+            <a href="https://ppc.cyberscallywags.uk" target="_self" rel="noopener noreferrer" class="specialism-title-link">
+              Practical Python Club
+            </a>
+          </h4>
+        </div>
+        <p class="specialism-description">
+          This is where code meets creativity — a hands-on community for builders, tinkerers, and problem-solvers.
+          We focus on turning Python concepts into real-world projects that make a difference.
+          From data to devices, we learn by doing — together, the Scallywag way. 🐍⚙️
+        </p>
+        <div class="specialism-icon">🐍</div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="specialism-card">
+        <div class="specialism-header">
+          <img src="{{ url_for('static', path='images/logo/gsc_logo.png') }}" class="specialism-logo" alt="Graphinista Social Club">
+          <h4 class="mb-0">
+            <a href="https://gsc.cyberscallywags.uk" target="_self" rel="noopener noreferrer" class="specialism-title-link">
+              Graphinista Social Club
+            </a>
+          </h4>
+        </div>
+        <p class="specialism-description">
+          This is where data dreamers and graph gurus unite to map the unseen connections shaping our world.
+          Born from the spirit of collaboration and curiosity, it's a community that thrives on storytelling through nodes and relationships.
+          From Neo4j explorations to creative graph hacks, we celebrate the art and science of connected thinking — together.
+        </p>
+        <div class="specialism-icon">📊</div>
+      </div>
+    </div>
   </div>
-  <div class="col-md-6">
-   <!-- <img src="{{ url_for('static', path='images/pcn_thumb.png') }}" class="img-fluid rounded mb-2" alt="Python Code Nanny"> -->
-    <h4><a href="https://pcn.cyberscallywags.uk" target="_self" rel="noopener noreferrer">
-      <img src="{{ url_for('static', path='images/logo/pogo.png') }}" class="rounded me-3" alt="Practical Python Club" style="height: 40px; width: 40px; object-fit: cover;">
-    Python Code Nanny</a></h4>
-    <p style="color: #00B1B3;">Is your friendly guardian of clean, efficient, and elegant Python code — part mentor, part guardian.
-She watches over your projects with linting love, style checks, and gentle guidance to make every script shine.
-From first logging statement to production-ready pipelines. 🐍✨</p>
+
+  <div class="section-divider"></div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="specialism-card">
+        <div class="specialism-header">
+          <img src="{{ url_for('static', path='images/logo/dataminingwales.png') }}" class="specialism-logo" alt="Data Mining Wales">
+          <h4 class="mb-0">
+            <a href="https://data-mining.uk/" target="_self" rel="noopener noreferrer" class="specialism-title-link">
+              Data Mining Wales
+            </a>
+          </h4>
+        </div>
+        <p class="specialism-description">
+          This is where data enthusiasts come together to explore the depths of information and uncover hidden insights.
+          With a focus on ethical data practices and community-driven projects, we aim to empower individuals and organizations to harness the power of data for good.
+          Join us as we navigate the ever-evolving landscape of data science and analytics — together.
+        </p>
+        <div class="specialism-icon">⛏️</div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="specialism-card">
+        <div class="specialism-header">
+          <img src="{{ url_for('static', path='images/logo/pogo.png') }}" class="specialism-logo" alt="Python Code Nanny">
+          <h4 class="mb-0">
+            <a href="https://pcn.cyberscallywags.uk" target="_self" rel="noopener noreferrer" class="specialism-title-link">
+              Python Code Nanny
+            </a>
+          </h4>
+        </div>
+        <p class="specialism-description">
+          Is your friendly guardian of clean, efficient, and elegant Python code — part mentor, part guardian.
+          She watches over your projects with linting love, style checks, and gentle guidance to make every script shine.
+          From first logging statement to production-ready pipelines. 🐍✨
+        </p>
+        <div class="specialism-icon">✨</div>
+      </div>
+    </div>
   </div>
 </div>
+
 {% endblock %}
