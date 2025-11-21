@@ -2,120 +2,448 @@
 {% block title %}Intro - Cyber Scallywags{% endblock %}
 {% block content %}
 
-<div class="hero-section text-center mb-5">
-  <h1 style="color: #CC0084;" class="display-4 fw-bold mb-4">🐺 Cyber Scallywags</h1>
-  <p class="lead" style="color: #C1E415; font-size: 1.3rem;">The Pack That Codes for the People</p>
+<style>
+.hero-intro {
+  background: linear-gradient(135deg, #4006a7 0%, #0e6abd 50%, #C1E415 100%);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.hero-intro::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(193, 228, 21, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: moveGrid 20s linear infinite;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, #CC0084, #C1E415, #00B1B3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeInDown 1s ease-out;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-subtitle {
+  font-size: 1.8rem;
+  color: white;
+  font-weight: 600;
+  margin-top: 1rem;
+  animation: fadeInUp 1s ease-out 0.3s both;
+  position: relative;
+  z-index: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mission-card {
+  background: linear-gradient(135deg, rgba(64, 6, 167, 0.95), rgba(14, 106, 189, 0.95));
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(193, 228, 21, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 1s ease-out 0.6s both;
+}
+
+.mission-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #CC0084, #C1E415, #00B1B3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.section-title {
+  color: #CC0084;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, #CC0084, #C1E415);
+  border-radius: 2px;
+}
+
+.mission-text {
+  color: #e6f4ff;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.cta-badge {
+  background: linear-gradient(135deg, #4006a7, #CC0084);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 2px solid #C1E415;
+  box-shadow: 0 8px 24px rgba(193, 228, 21, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 8px 24px rgba(193, 228, 21, 0.3); }
+  50% { transform: scale(1.02); box-shadow: 0 12px 32px rgba(193, 228, 21, 0.5); }
+}
+
+.cta-text {
+  color: #C1E415;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.video-container {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 3px solid #C1E415;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 70px rgba(193, 228, 21, 0.4);
+}
+
+.stats-card {
+  background: linear-gradient(135deg, #4006a7 0%, #0e6abd 100%);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(193, 228, 21, 0.1) 2px, transparent 2px);
+  background-size: 40px 40px;
+  animation: rotatePattern 30s linear infinite;
+}
+
+@keyframes rotatePattern {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.stat-item {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-10px);
+}
+
+.stat-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, #C1E415, #00B1B3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.action-card {
+  background: linear-gradient(135deg, rgba(64, 6, 167, 0.95), rgba(14, 106, 189, 0.9));
+  border-radius: 20px;
+  padding: 2.5rem;
+  height: 100%;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(193, 228, 21, 0.1), rgba(0, 177, 179, 0.1));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-15px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(193, 228, 21, 0.4);
+  border-color: currentColor;
+}
+
+.action-card:hover::before {
+  opacity: 1;
+}
+
+.action-card:nth-child(1) { border-color: #C1E415; }
+.action-card:nth-child(2) { border-color: #00B1B3; }
+.action-card:nth-child(3) { border-color: #CC0084; }
+
+.action-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.action-card:hover .action-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.action-title {
+  color: #C1E415;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.action-text {
+  color: #e6f4ff;
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.action-btn {
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+  z-index: -1;
+}
+
+.action-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.action-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.5rem; }
+  .hero-subtitle { font-size: 1.3rem; }
+  .mission-card { padding: 2rem; }
+  .stat-number { font-size: 2.5rem; }
+}
+</style>
+
+<div class="hero-intro">
+  <div class="container">
+    <h1 class="hero-title">🐺 Cyber Scallywags</h1>
+    <p class="hero-subtitle">The Pack That Codes for the People</p>
+  </div>
 </div>
 
-<div class="row">
-  <div class="col-lg-8 mx-auto">
-    <div class="content-card p-4 mb-4"style="background-color: #4006a7; border-radius: 12px;">
-      <h3 style="color: #CC0084;" class="mb-3">Our Mission</h3>
-      <p style="color: #00B1B3;"class="mb-3">
-        In a world of algorithms built for profit, the Scallywags chose purpose.
-        We're the dreamers and doers who live between the circuits — the coders, makers, and data-misfits who believe technology should serve communities, not control them.
-      </p>
-      
-      <h3 style="color: #CC0084;" class="mb-3">Our Story</h3>
-      <p style="color: #00B1B3;" class="mb-3">
-        Born in the shadows of deserted coal fields, forgotten steel towns and weather-worn seaside streets, Cyber Scallywags stands for collective creativity, open knowledge, and tech with a conscience.
-        We share skills, build projects that matter, and light up the digital night with ideas powered by kindness, not capital.
-      </p>
-      
-      <h3 style="color: #CC0084;" class="mb-3">What We Do</h3>
-      <p style="color: #00B1B3;" class="mb-4">
-        Our code isn't just syntax — it's solidarity.
-        From grassroots workshops to open-source missions, we're helping the next generation of innovators turn curiosity into capability.
-        No gatekeepers. No jargon. Just connection, collaboration, and a bit of controlled chaos.
-      </p>
-      
-      <div class="call-to-action text-center p-3" style="background: #4006a7; border-radius: 8px;">
-        <p style="color:#C1E415;" class="mb-0 fw-bold">
-          We're not here to hack the system. We're here to rewrite it — together.
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <div class="mission-card">
+        <h3 class="section-title">Our Mission</h3>
+        <p class="mission-text">
+          In a world of algorithms built for profit, the Scallywags chose purpose.
+          We're the dreamers and doers who live between the circuits — the coders, makers, and data-misfits who believe technology should serve communities, not control them.
         </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-lg-10 mx-auto">
-    <h3 style="color: #CC0084;" class="mb-3 text-center">Watch Our Intro</h3>
-    <div class="ratio ratio-16x9 mb-4">
-      <video controls class="w-100 h-100" style="border-radius: 12px;">
-        <source src="{{ url_for('static', path='images/vids/Intro_cyberScallywags.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </div>
-</div>
-
-<div class="row mt-5 mb-5">
-  <div class="col-lg-10 mx-auto">
-    <div class="stats-section p-4 text-center" style="background: linear-gradient(45deg, #4006a7, #0e6abd); border-radius: 12px;">
-      <h3 style="color: #C1E415;" class="mb-4">Our Impact So Far</h3>
-      <div class="row">
-        <div class="col-6 col-md-3 mb-3">
-          <div style="color: white;">
-            <div style="font-size: 2.5rem; font-weight: bold;">5+</div>
-            <div style="font-size: 0.9rem; opacity: 0.9;">People Trained</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 mb-3">
-          <div style="color: white;">
-            <div style="font-size: 2.5rem; font-weight: bold;">1</div>
-            <div style="font-size: 0.9rem; opacity: 0.9;">Active Projects</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 mb-3">
-          <div style="color: white;">
-            <div style="font-size: 2.5rem; font-weight: bold;">2+</div>
-            <div style="font-size: 0.9rem; opacity: 0.9;">Community Partners</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 mb-3">
-          <div style="color: white;">
-            <div style="font-size: 2.5rem; font-weight: bold;">100%</div>
-            <div style="font-size: 0.9rem; opacity: 0.9;">Open Source</div>
-          </div>
+        
+        <h3 class="section-title">Our Story</h3>
+        <p class="mission-text">
+          Born in the shadows of deserted coal fields, forgotten steel towns and weather-worn seaside streets, Cyber Scallywags stands for collective creativity, open knowledge, and tech with a conscience.
+          We share skills, build projects that matter, and light up the digital night with ideas powered by kindness, not capital.
+        </p>
+        
+        <h3 class="section-title">What We Do</h3>
+        <p class="mission-text">
+          Our code isn't just syntax — it's solidarity.
+          From grassroots workshops to open-source missions, we're helping the next generation of innovators turn curiosity into capability.
+          No gatekeepers. No jargon. Just connection, collaboration, and a bit of controlled chaos.
+        </p>
+        
+        <div class="cta-badge">
+          <p class="cta-text">
+            We're not here to hack the system. We're here to rewrite it — together.
+          </p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row mt-5">
-  <div class="col-lg-10 mx-auto">
-    <div class="action-cards row g-4">
-      <div class="col-md-4">
-        <div class="card h-100" style=" background-color:  #4006a7; border: 2px solid #C1E415;">
-          <div class="card-body text-center">
-            <div style="font-size: 3rem; color: #CC0084;">🚀</div>
-            <h5 style="color: #CC0084;">Explore Projects</h5>
-            <p style="color: #00B1B3;">See what we're building and how you can contribute</p>
-            <a href="/projects" class="btn btn-primary">View Projects</a>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <h3 class="section-title text-center mb-4" style="font-size: 2.5rem;">Watch Our Intro</h3>
+      <div class="video-container">
+        <div class="ratio ratio-16x9">
+          <video controls class="w-100 h-100">
+            <source src="{{ url_for('static', path='images/vids/Intro_cyberScallywags.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <div class="stats-card">
+        <h3 class="section-title text-center mb-5" style="color: #C1E415; font-size: 2.5rem;">Our Impact So Far</h3>
+        <div class="row">
+          <div class="col-6 col-md-3 mb-4">
+            <div class="stat-item text-center">
+              <div class="stat-number">5+</div>
+              <div class="stat-label">People Trained</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div class="stat-item text-center">
+              <div class="stat-number">1</div>
+              <div class="stat-label">Active Projects</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div class="stat-item text-center">
+              <div class="stat-number">2+</div>
+              <div class="stat-label">Community Partners</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div class="stat-item text-center">
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Open Source</div>
+            </div>
           </div>
         </div>
       </div>
-      
-      <div class="col-md-4">
-        <div class="card h-100" style=" background-color:  #4006a7; border: 2px solid #00B1B3;">
-          <div class="card-body text-center">
-            <div style="font-size: 3rem; color: #00B1B3;">👥</div>
-            <h5 style="color:  #CC0084;">Meet the Pack</h5>
-            <p style="color: #00B1B3;">Get to know the scallywags behind the code</p>
-            <a href="/team" class="btn btn-info">Meet Our Team</a>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="action-card text-center">
+            <div class="action-icon">🚀</div>
+            <h5 class="action-title">Explore Projects</h5>
+            <p class="action-text">See what we're building and how you can contribute</p>
+            <a href="/projects" class="action-btn" style="background: #C1E415; color: #4006a7; border-color: #C1E415; text-decoration: none; display: inline-block;">View Projects</a>
           </div>
         </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="card h-100" style=" background-color:  #4006a7;border: 2px solid #CC0084;">
-          <div class="card-body text-center">
-            <div style="font-size: 3rem; color: #C1E415;">🤝</div>
-            <h5 style="color:  #CC0084;">Join Us</h5>
-            <p style="color: #00B1B3;">Become part of our community-driven mission</p>
-            <a href="/contact" class="btn btn-success">Get Involved</a>
+        
+        <div class="col-md-4">
+          <div class="action-card text-center">
+            <div class="action-icon">👥</div>
+            <h5 class="action-title">Meet the Pack</h5>
+            <p class="action-text">Get to know the scallywags behind the code</p>
+            <a href="/team" class="action-btn" style="background: #00B1B3; color: white; border-color: #00B1B3; text-decoration: none; display: inline-block;">Meet Our Team</a>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="action-card text-center">
+            <div class="action-icon">🤝</div>
+            <h5 class="action-title">Join Us</h5>
+            <p class="action-text">Become part of our community-driven mission</p>
+            <a href="/contact" class="action-btn" style="background: #CC0084; color: white; border-color: #CC0084; text-decoration: none; display: inline-block;">Get Involved</a>
           </div>
         </div>
       </div>

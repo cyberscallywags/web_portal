@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, HTTPException
 from app.static.data import team, blogs
 from app.services.models.project_schema import Project, ProjectsResponse
 from app.services import service_projects
+from app.services import service_events
 from app.templates.comms.forms.schema.contact_form import ContactFormData
 from app.services import graphDB as gdb 
 from fastapi.staticfiles import StaticFiles
@@ -93,7 +94,29 @@ async def read_contact(request: Request):
 
 @app.get("/events")
 async def read_events(request: Request):
-    return templates.TemplateResponse("/events.html", {"request": request})
+    events = service_events.get_all_events()
+    return templates.TemplateResponse("/events.html", {"request": request, "events": events})
+
+
+@app.get("/event/{event_id}")
+async def read_event_detail(request: Request, event_id: int):
+    """Render event detail page"""
+    events_data = service_events.get_all_events()
+    events_list = events_data.get('events', [])
+    
+    event = None
+    for e in events_list:
+        if e.get('id') == event_id:
+            event = e
+            break
+    
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    return templates.TemplateResponse("/event-detail.html", {
+        "request": request,
+        "event": event
+    })
 
 
 @app.get("/support")
@@ -348,6 +371,26 @@ async def get_project_by_slug(project_slug: str):
         raise HTTPException(status_code=404, detail="Project not found")
     
     return project
+
+
+@app.get("/api/events")
+async def get_all_events_api():
+    """API endpoint to get all events"""
+    events = service_events.get_all_events()
+    return events
+
+
+@app.get("/api/events/{event_id}")
+async def get_event_by_id(event_id: int):
+    """Get a specific event by ID"""
+    events_data = service_events.get_all_events()
+    events_list = events_data.get('events', [])
+    
+    for event in events_list:
+        if event.get('id') == event_id:
+            return event
+    
+    raise HTTPException(status_code=404, detail="Event not found")
 
 @app.get("/project/{project_slug}")
 async def read_project_detail(request: Request, project_slug: str):
