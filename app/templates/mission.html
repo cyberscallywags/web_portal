@@ -1,34 +1,339 @@
 {% extends "base.html" %}
-{% block title %}About - Cyber Scallywags{% endblock %}
+{% block title %}Mission - Cyber Scallywags{% endblock %}
 {% block content %}
-<h1 style="color: #CC0084;">Cyber Scallywags mission</h1>
-<p style="color: #00B1B3;">
-    Cyber Scallywags is a lightweight, community-driven application that helps developers adopt clean coding practices effortlessly.
+<style>
+    @keyframes moveGrid {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px); }
+    }
 
- In a world of algorithms built for profit, the Scallywags chose purpose.
-        We're the dreamers and doers who live between the circuits — the coders, makers, and data-misfits who believe technology should serve communities, not control them.
-      </p>
-      
-      <h3 style="color: #4006a7;" class="mb-3">Our Story</h3>
-      <p style="color: #00B1B3;" class="mb-3">
-        Born in the shadows of deserted coal fields, forgotten steel towns and weather-worn seaside streets, Cyber Scallywags stands for collective creativity, open knowledge, and tech with a conscience.
-        We share skills, build projects that matter, and light up the digital night with ideas powered by kindness, not capital.
-      </p>
-      
-      <h3 style="color: #4006a7;" class="mb-3">What We Do</h3>
-      <p style="color: #00B1B3;" class="mb-4">
-        Our code isn't just syntax — it's solidarity.
-        From grassroots workshops to open-source missions, we're helping the next generation of Welsh innovators turn curiosity into capability.
-        No gatekeepers. No jargon. Just connection, collaboration, and a bit of controlled chaos.
-      </p>
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-<h3 style="color: #4006a7;" class="mb-3">How We Do it</h3>
-      <p style="color: #00B1B3;" class="mb-4">
-       How we do it is simple: by fostering a culture of collaboration and continuous learning.
-        We provide opportunities for anyone who wants to play/learn/grow through accessible resources, mentorship programs, 
-        and community events that empower individuals to grow their skills and contribute meaningfully to projects that make a difference.
-      </p>
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
 
-      
-<p class="mt-3"><strong>Powered by Cyber Scallywags 🐺</strong></p>
+    /* Hero Section */
+    .mission-hero {
+        background: linear-gradient(135deg, #0e6abd 0%, #00B1B3 50%, #C1E415 100%);
+        padding: 120px 0;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .mission-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            linear-gradient(rgba(193, 228, 21, 0.05) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(193, 228, 21, 0.05) 2px, transparent 2px);
+        background-size: 50px 50px;
+        animation: moveGrid 3s linear infinite;
+        pointer-events: none;
+    }
+
+    .mission-hero .container {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .mission-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: slideInUp 0.8s ease-out;
+    }
+
+    .mission-hero .subtitle {
+        font-size: 1.3rem;
+        color: #fff;
+        margin: 0 0 30px 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        animation: slideInUp 0.8s ease-out 0.2s backwards;
+        line-height: 1.6;
+    }
+
+    /* Mission Content */
+    .mission-content {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 80px 20px;
+        background: #fff;
+    }
+
+    /* Mission Statement */
+    .mission-statement {
+        text-align: center;
+        margin-bottom: 80px;
+        animation: slideInUp 0.6s ease-out;
+        background: #fff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .mission-statement h2 {
+        font-size: 2.5rem;
+        color: #4006a7;
+        margin-bottom: 30px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .mission-statement h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, #C1E415, #00B1B3);
+        border-radius: 2px;
+    }
+
+    .mission-statement p {
+        font-size: 1.2rem;
+        line-height: 1.9;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+        font-weight: 400;
+    }
+
+    .mission-statement strong {
+        color: #CC0084;
+    }
+
+    /* Values Grid */
+    .values-section {
+        margin-bottom: 80px;
+        background: #fff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .values-section h3 {
+        font-size: 2.2rem;
+        color: #4006a7;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .value-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 35px 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border-top: 5px solid transparent;
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .value-card:nth-child(1) {
+        border-top-color: #4006a7;
+    }
+
+    .value-card:nth-child(2) {
+        border-top-color: #0e6abd;
+    }
+
+    .value-card:nth-child(3) {
+        border-top-color: #00B1B3;
+    }
+
+    .value-card:nth-child(4) {
+        border-top-color: #CC0084;
+    }
+
+    .value-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .value-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        display: block;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .value-card h4 {
+        font-size: 1.5rem;
+        color: #1a1a1a;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .value-card p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #2a2a2a;
+        margin: 0;
+        font-weight: 400;
+    }
+
+    /* CTA Section */
+    .mission-cta {
+        background: linear-gradient(135deg, #4006a7 0%, #CC0084 100%);
+        padding: 60px 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .mission-cta h3 {
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .mission-cta p {
+        font-size: 1.1rem;
+        color: #C1E415;
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    .mission-cta strong {
+        color: #fff;
+        font-size: 1.3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .mission-hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .mission-hero .subtitle {
+            font-size: 1.1rem;
+        }
+
+        .mission-statement h2 {
+            font-size: 2rem;
+        }
+
+        .values-section h3 {
+            font-size: 1.8rem;
+        }
+
+        .values-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .mission-cta {
+            padding: 40px 25px;
+        }
+
+        .mission-cta h3 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+<section class="mission-hero">
+    <div class="container">
+        <h1>Cyber Scallywags Mission</h1>
+        <p class="subtitle">
+            In a world of algorithms built for profit, the Scallywags chose purpose.<br>
+            We're the dreamers and doers who live between the circuits.
+        </p>
+    </div>
+</section>
+
+<div class="mission-content">
+    <section class="mission-statement">
+        <h2>Our Story</h2>
+        <p>
+            Born in the shadows of deserted coal fields, forgotten steel towns and weather-worn seaside streets, 
+            Cyber Scallywags stands for collective creativity, open knowledge, and tech with a conscience.
+            We share skills, build projects that matter, and light up the digital night with ideas powered by 
+            kindness, not capital.
+        </p>
+    </section>
+
+    <section class="values-section">
+        <h3>What We Do</h3>
+        <div class="values-grid">
+            <div class="value-card">
+                <span class="value-icon">💻</span>
+                <h4>Build with Purpose</h4>
+                <p>
+                    Our code isn't just syntax — it's solidarity. From grassroots workshops to open-source missions, 
+                    we're helping the next generation of Welsh innovators turn curiosity into capability.
+                </p>
+            </div>
+            <div class="value-card">
+                <span class="value-icon">🤝</span>
+                <h4>Collaborate Openly</h4>
+                <p>
+                    No gatekeepers. No jargon. Just connection, collaboration, and a bit of controlled chaos. 
+                    We believe in collective creativity and sharing knowledge freely.
+                </p>
+            </div>
+            <div class="value-card">
+                <span class="value-icon">🌱</span>
+                <h4>Empower Communities</h4>
+                <p>
+                    We foster a culture of collaboration and continuous learning through accessible resources, 
+                    mentorship programs, and community events that empower individuals to grow.
+                </p>
+            </div>
+            <div class="value-card">
+                <span class="value-icon">🎓</span>
+                <h4>Learn Together</h4>
+                <p>
+                    We provide opportunities for anyone who wants to play, learn, and grow, enabling them to 
+                    contribute meaningfully to projects that make a real difference.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-cta">
+        <h3>How We Do It</h3>
+        <p>
+            By fostering a culture of collaboration and continuous learning, we provide opportunities for 
+            anyone who wants to play, learn, and grow through accessible resources, mentorship programs, 
+            and community events that empower individuals to grow their skills and contribute meaningfully 
+            to projects that make a difference.
+        </p>
+        <p style="margin-top: 30px;">
+            <strong>Powered by Cyber Scallywags 🐺</strong>
+        </p>
+    </section>
+</div>
+
 {% endblock %}

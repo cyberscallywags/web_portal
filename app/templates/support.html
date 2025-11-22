@@ -1,32 +1,265 @@
 {% extends "base.html" %}
 {% block title %}Support Us @ Cyber Scallywags{% endblock %}
 {% block content %}
-<h1 style="color: #CC0084;">Support us:</h1>
-<p style="color: #C1E415;">This encourages teams and individuals to embrace best practices within specific development areas. It simplifies onboarding checks so you can focus on learning value.</p>
+<style>
+    @keyframes moveGrid {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px); }
+    }
 
-<div class="row mt-4">
-  <div class="col-md-4">
-    <!-- <img src="{{ url_for('static', path='images/ppc_thumb.png') }}" class="img-fluid rounded mb-2" alt="Practical Python Club"> -->
-    <h4 style="color: #CC0084;">Buy us a coffee</h4>
-    <p style="color: #00B1B3;">To Be Continued</p>
-  </div>
-  <!-- <div class="col-md-6">
-    <img src="{{ url_for('static', path='images/gsc_thumb.png') }}" class="img-fluid rounded mb-2" alt="Graphinista Social Club">
-   <h4 style="color: #CC0084;">Patreon</h4>
-    <p style="color: #00B1B3;">To Be Continued</p>
-  </div> -->
-<!-- </div> -->
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-<!-- <div class="row mt-4"> -->
-  <div class="col-md-4">
-    <!-- <img src="{{ url_for('static', path='images/dmw_thumb.png') }}" class="img-fluid rounded mb-2" alt="Data Sourcery"> -->
-    <h4 style="color: #CC0084;">Merchandise</h4>
-    <p style="color: #00B1B3;">To Be Continued</p>
-  </div>
-  <div class="col-md-4">
-    <!-- <img src="{{ url_for('static', path='images/pcn_thumb.png') }}" class="img-fluid rounded mb-2" alt="Python Code Nanny"> -->
-    <h4 style="color: #CC0084;">Join the Pack</h4>
-    <p style="color: #00B1B3;">To Be Continued</p>
-  </div>
-</div>
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* Hero Section */
+    .support-hero {
+        background: linear-gradient(135deg, #CC0084 0%, #4006a7 50%, #C1E415 100%);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .support-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            linear-gradient(rgba(193, 228, 21, 0.03) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(193, 228, 21, 0.03) 2px, transparent 2px);
+        background-size: 50px 50px;
+        animation: moveGrid 3s linear infinite;
+        pointer-events: none;
+    }
+
+    .support-hero .container {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .support-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: slideInUp 0.8s ease-out;
+    }
+
+    .support-hero p {
+        font-size: 1.3rem;
+        color: #fff;
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        animation: slideInUp 0.8s ease-out 0.2s backwards;
+        line-height: 1.6;
+    }
+
+    /* Support Options */
+    .support-options {
+        max-width: 1200px;
+        margin: 80px auto;
+        padding: 0 20px;
+    }
+
+    .support-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+    }
+
+    .support-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 50px 35px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.4s ease;
+        border-top: 5px solid transparent;
+        animation: slideInUp 0.6s ease-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .support-card:nth-child(1) {
+        border-top-color: #CC0084;
+    }
+
+    .support-card:nth-child(2) {
+        border-top-color: #4006a7;
+    }
+
+    .support-card:nth-child(3) {
+        border-top-color: #C1E415;
+    }
+
+    .support-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(193, 228, 21, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .support-card:hover::before {
+        left: 100%;
+    }
+
+    .support-card:hover {
+        transform: translateY(-15px) scale(1.03);
+        box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+    }
+
+    .support-icon {
+        font-size: 4rem;
+        margin-bottom: 25px;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .support-card h4 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    .support-card p {
+        font-size: 1.1rem;
+        color: #666;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .coming-soon {
+        display: inline-block;
+        background: linear-gradient(135deg, #4006a7, #CC0084);
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+
+    /* CTA Section */
+    .support-cta {
+        max-width: 900px;
+        margin: 60px auto 100px;
+        padding: 0 20px;
+    }
+
+    .cta-box {
+        background: linear-gradient(135deg, #00B1B3 0%, #0e6abd 100%);
+        border-radius: 20px;
+        padding: 50px 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .cta-box h3 {
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 15px;
+    }
+
+    .cta-box p {
+        font-size: 1.2rem;
+        color: #C1E415;
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .support-hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .support-hero p {
+            font-size: 1.1rem;
+        }
+
+        .support-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .support-card {
+            padding: 40px 25px;
+        }
+
+        .cta-box {
+            padding: 40px 25px;
+        }
+
+        .cta-box h3 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+<section class="support-hero">
+    <div class="container">
+        <h1>Support Us</h1>
+        <p>Help us continue building technology that empowers communities and champions ethical innovation.</p>
+    </div>
+</section>
+
+<section class="support-options">
+    <div class="support-grid">
+        <div class="support-card">
+            <div class="support-icon">☕</div>
+            <h4>Buy Us a Coffee</h4>
+            <p>Support our ongoing projects and help us keep the lights on while we build tools for the common good.</p>
+            <span class="coming-soon">Coming Soon</span>
+        </div>
+
+        <div class="support-card">
+            <div class="support-icon">��</div>
+            <h4>Merchandise</h4>
+            <p>Show your Scallywag pride with exclusive merchandise. All proceeds support our community initiatives.</p>
+            <span class="coming-soon">Coming Soon</span>
+        </div>
+
+        <div class="support-card">
+            <div class="support-icon">🐺</div>
+            <h4>Join the Pack</h4>
+            <p>Become an active member of our community. Contribute your skills, learn from others, and make a difference.</p>
+            <span class="coming-soon">Coming Soon</span>
+        </div>
+    </div>
+</section>
+
+<section class="support-cta">
+    <div class="cta-box">
+        <h3>Every Contribution Matters</h3>
+        <p>Whether through donations, volunteering, or spreading the word, your support helps us build a more ethical and inclusive tech community. Stay tuned for ways to contribute!</p>
+    </div>
+</section>
+
 {% endblock %}
