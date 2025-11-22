@@ -15,6 +15,7 @@ from app.static.data.projects import get_all_project_data
 from app.static.data.projects import get_project_data_by_slug
 from typing import List, Optional
 from pydantic import BaseModel
+import logfire
 
 
 app = FastAPI()
@@ -22,30 +23,35 @@ app = FastAPI()
 # Mount static files directory
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
-
+logfire.configure(token="pylf_v1_us_5HdpTCcCBjqgmwHgnzHHKLQN3g1STTwK8YPWkvFzdvYL")  # Replace 'xxx' with your actual Logfire token
 
 @app.get("/")
 async def read_root(request: Request):
+    logfire.info('TRIGGERED: read_root !')  
     return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/practice")
 async def read_practice(request: Request):
+    logfire.info('TRIGGERED: read_practice !')  
     return templates.TemplateResponse("practice.html", {"request": request})
 
 
 @app.get("/intro")
 async def read_videos(request: Request, ):
+    logfire.info('TRIGGERED: read_videos !')  
     return templates.TemplateResponse("intro.html", {"request": request})
 
 
 @app.get("/about")
 async def read_about(request: Request):
+    logfire.info('TRIGGERED: read_about !')  
     return templates.TemplateResponse("about.html", {"request": request})
 
 
 @app.get("/specialisms")
 async def read_specialisms(request: Request):
+    logfire.info('TRIGGERED: read_specialisms !')  
     return templates.TemplateResponse("specialisms.html", {"request": request})
 
 
@@ -53,49 +59,58 @@ async def read_specialisms(request: Request):
 @app.get("/team")
 async def read_team(request: Request):
     items = team.get_team_data()
+    logfire.info('TRIGGERED: read_team !')  
     return templates.TemplateResponse("team.html", {"request": request, "team": items})
 
 
 @app.get("/mission")
 async def read_mission(request: Request):
+    logfire.info('TRIGGERED: read_mission !')  
     return templates.TemplateResponse("mission.html", {"request": request})
 
 
 @app.get("/projects")
 async def read_projects(request: Request):
     items = service_projects.get_all_projects()
+    logfire.info('TRIGGERED: read_projects !')  
     return templates.TemplateResponse("projects/projects.html", {"request": request, "projects": items})
 
 
 @app.get("/signup")
 async def read_signup(request: Request):
+    logfire.info('TRIGGERED: read_signup !')  
     return templates.TemplateResponse("/auth/signup.html", {"request": request})
 
 
 @app.get("/signin")
 async def read_signin(request: Request):
+    logfire.info('TRIGGERED: read_signin !')  
     return templates.TemplateResponse("/auth/signin.html", {"request": request})
 
 
 @app.get("/signout")
 async def read_signout(request: Request):
+    logfire.info('TRIGGERED: read_signout !')  
     return templates.TemplateResponse("/auth/signout.html", {"request": request})
 
 
 @app.get("/forgotten-password")
 async def read_forgot_password(request: Request):
+    logfire.info('TRIGGERED: read_forgot_password !')  
     return templates.TemplateResponse("/auth/forgot-password.html", {"request": request})
 
 
 @app.get("/contact")
 async def read_contact(request: Request):
+    logfire.info('TRIGGERED: read_contact !')  
     return templates.TemplateResponse("comms/forms/contact.html", {"request": request})
 
 
 @app.get("/events")
 async def read_events(request: Request):
     events = service_events.get_all_events()
-    return templates.TemplateResponse("/events.html", {"request": request, "events": events})
+    logfire.info('TRIGGERED: read_ALL_events !')  
+    return templates.TemplateResponse("/events/events.html", {"request": request, "events": events})
 
 
 @app.get("/event/{event_id}")
@@ -103,7 +118,8 @@ async def read_event_detail(request: Request, event_id: int):
     """Render event detail page"""
     events_data = service_events.get_all_events()
     events_list = events_data.get('events', [])
-    
+    logfire.info('TRIGGERED: read_event_detail !')
+
     event = None
     for e in events_list:
         if e.get('id') == event_id:
@@ -113,7 +129,7 @@ async def read_event_detail(request: Request, event_id: int):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     
-    return templates.TemplateResponse("/event-detail.html", {
+    return templates.TemplateResponse("/events/event-detail.html", {
         "request": request,
         "event": event
     })
@@ -121,12 +137,14 @@ async def read_event_detail(request: Request, event_id: int):
 
 @app.get("/support")
 async def read_support(request: Request):
+    logfire.info('TRIGGERED: read_support !')
     return templates.TemplateResponse("/support.html", {"request": request})
 
 
 @app.get("/blogs")
 async def read_blogs(request: Request):
     items = blogs.get_all_blog_data()
+    logfire.info('TRIGGERED: read_ALL_blogs !')
     return templates.TemplateResponse("blogs/blogs.html", {"request": request, "blogs": items})
 
 
@@ -135,6 +153,7 @@ async def read_blog_detail(request: Request, slug: str):
     # In a real app, you'd fetch the blog post by slug from your database
     resp = get_blog_data_by_slug(slug)
     blog = resp[0] if resp else None
+    logfire.info('TRIGGERED: read_blog_detail !')
     # For now, we'll pass the slug to the template
     return templates.TemplateResponse("blogs/blog-detail.html", {
         "request": request,
@@ -147,12 +166,14 @@ async def read_blog_detail(request: Request, slug: str):
 @app.get("/vlogs")
 async def read_vlogs(request: Request):
     items = blogs.get_all_blog_data()
+    logfire.info('TRIGGERED: read_vlogs !')
     return templates.TemplateResponse("blogs/vlogs.html", {"request": request, "blogs": items})
 
 @app.get("/vlogs/{slug}")
 async def read_vlogs_detail(request: Request, slug: str):
     resp = get_vlog_data_by_slug(slug)
     vlog = resp[0] if resp else None
+    logfire.info('TRIGGERED: read_vlogs_detail !')
     # For now, we'll pass the slug to the template
     return templates.TemplateResponse("blogs/vlog-detail.html", {
         "request": request,
@@ -166,6 +187,7 @@ async def submit_contact_form(form_data: ContactFormData):
     """Handle contact form submissions and store in Neo4j"""
     try:
         driver = gdb.get_driver()
+        logfire.info('TRIGGERED: submit_contact_form !')
 
         with driver.session() as session:
             # Create a contact node in Neo4j
@@ -211,7 +233,7 @@ async def submit_contact_form(form_data: ContactFormData):
 
 
 
-# API Endpoints for Projects
+# API Endpoints for PROJECTS
 
 @app.get("/project/{slug}")
 async def read_project_detail(request: Request, slug: str):
@@ -355,11 +377,11 @@ async def get_projects():
     }
 
 
-@app.get("/api/projects")
-async def get_all_projects_api():
-    """API endpoint to get all projects"""
-    projects = get_all_project_data()
-    return {"projects": projects}
+# @app.get("/api/projects")
+# async def get_all_projects_api():
+#     """API endpoint to get all projects"""
+#     projects = get_all_project_data()
+#     return {"projects": projects}
 
 
 @app.get("/api/projects/{project_slug}")
@@ -367,16 +389,19 @@ async def get_project_by_slug(project_slug: str):
     """Get a specific project by slug"""
     
     project = get_project_data_by_slug(project_slug)
+    logfire.info(f'TRIGGERED: get_project_by_slug (project_slug={project_slug}) !')
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     
     return project
 
+# API Endpoints for EVENTS
 
 @app.get("/api/events")
 async def get_all_events_api():
     """API endpoint to get all events"""
     events = service_events.get_all_events()
+    logfire.info('TRIGGERED: get_ALL_events !')
     return events
 
 
@@ -385,31 +410,10 @@ async def get_event_by_id(event_id: int):
     """Get a specific event by ID"""
     events_data = service_events.get_all_events()
     events_list = events_data.get('events', [])
-    
+    logfire.info('TRIGGERED: get_event_by_id !')
+
     for event in events_list:
         if event.get('id') == event_id:
             return event
     
     raise HTTPException(status_code=404, detail="Event not found")
-
-@app.get("/project/{project_slug}")
-async def read_project_detail(request: Request, project_slug: str):
-    """Render project detail page"""
-    try:
-        # Get project data from the API endpoint
-        project_data = await get_project_by_slug(project_slug)
-        
-        return templates.TemplateResponse("projects/project-detail.html", {
-            "request": request,
-            "project": project_data
-        })
-        
-    except HTTPException as e:
-        if e.status_code == 404:
-            return templates.TemplateResponse("projects/project-detail.html", {
-                "request": request,
-                "project": None,
-                "error": "Project not found"
-            })
-        raise
-
