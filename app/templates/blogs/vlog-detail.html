@@ -1,141 +1,586 @@
 {% extends "base.html" %}
-{% block title %}{{ blog.title if blog else 'Blog Post' }} - Cyber Scallywags{% endblock %}
+{% block title %}{{ blog.title if blog else 'Vlog' }} - Cyber Scallywags{% endblock %}
 {% block content %}
 
-<!-- Blog Header -->
-<section class="blog-header">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <h1 class="blog-title">{{ blog.title if blog else 'Loading...' }}</h1>
-        <div class="blog-meta">
-          <div class="author-info">
-            <div class="author-avatar">{{ blog.author.name[0] if blog and blog.author else 'A' }}</div>
-            <div class="author-details">
-              <span class="author-name">{{ blog.author.name if blog and blog.author else 'Unknown Author' }}</span>
-              <span class="author-bio">{{ blog.author.bio if blog and blog.author else '' }}</span>
-            </div>
-          </div>
-          <div class="post-info">
-            <span class="publish-date">{{ blog.published_date if blog else '' }}</span>
-            <span class="read-time">{{ blog.read_time if blog else '' }}</span>
-            <span class="view-count">{{ blog.views if blog else 0 }} views</span>
-          </div>
-        </div>
-        <div class="blog-tags">
-          {% if blog and blog.tags %}
-            {% for tag in blog.tags %}
-              <span class="blog-tag">{{ tag }}</span>
-            {% endfor %}
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Blog Content -->
-<section class="blog-content py-4">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <!-- Featured Image -->
-        <div class="featured-image mb-4">
-          {% if blog and blog.featured_image %}
-          <img src="{{ blog.featured_image }}" alt="{{ blog.title }}" class="img-fluid rounded shadow-sm">
-          {% else %}
-          <div class="image-placeholder">
-            <span class="featured-emoji">🎬</span>
-          </div>
-          {% endif %}
-        </div>
-        
-        <!-- Article Content -->
-        <article class="article-content">
-          {% if blog and blog.excerpt %}
-          <div class="excerpt mb-4">
-            <p class="lead">{{ blog.excerpt }}</p>
-          </div>
-          {% endif %}
-          
-          <div class="content">
-            <div id="blogContent">
-              {% if blog and blog.content %}
-                {{ blog.content | safe }}
-              {% else %}
-                <p>Content will be loaded here...</p>
-              {% endif %}
-            </div>
-          </div>
-        </article>
-        
-        <!-- Share & Actions -->
-        <div class="blog-actions mt-5">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="share-buttons">
-              <span class="me-3">Share:</span>
-              <a href="#" class="btn btn-sm btn-outline-primary">Twitter</a>
-              <a href="#" class="btn btn-sm btn-outline-primary">LinkedIn</a>
-              <a href="#" class="btn btn-sm btn-outline-primary">Facebook</a>
-            </div>
-            <div class="blog-navigation">
-              <a href="/blogs" class="btn btn-outline-secondary">← Back to Blogs</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Related Posts -->
-<section class="related-posts py-4 bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <h4 style="color: #4006a7;">Related Posts</h4>
-        <div id="relatedPosts" class="row g-3">
-          <!-- Related posts will be loaded here -->
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <style>
-.blog-header {
-  background: linear-gradient(120deg, #161a3a, #3a1d5e, #0e6abd);
-  color: white;
-  padding: 3rem 0;
+.vlog-detail-hero {
+  background: linear-gradient(135deg, #CC0084 0%, #4006a7 50%, #0e6abd 100%);
+  padding: 4rem 0 3rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 3rem;
 }
 
-.blog-title {
+.vlog-detail-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(193, 228, 21, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: moveGrid 20s linear infinite;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.vlog-detail-content {
+  position: relative;
+  z-index: 1;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.1);
   color: #C1E415;
-  font-size: 2.5rem;
-  font-weight: 700;
+  transform: translateX(-5px);
+}
+
+.vlog-detail-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: white;
   margin-bottom: 1.5rem;
   line-height: 1.2;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.blog-meta {
+.vlog-meta-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  gap: 2rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.author-info {
+.creator-info {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.author-avatar {
+.creator-avatar {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  background: linear-gradient(135deg, #CC0084, #4006a7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.3rem;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.creator-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.creator-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.creator-bio {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.video-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+.video-info span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.vlog-tags-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.vlog-tag {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 2px solid rgba(204, 0, 132, 0.5);
+  transition: all 0.3s ease;
+}
+
+.vlog-tag:hover {
+  background: #C1E415;
+  color: #4006a7;
+  border-color: #C1E415;
+  transform: scale(1.05);
+}
+
+.main-content {
+  background: white;
+}
+
+.content-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.video-player-section {
+  margin-bottom: 3rem;
+}
+
+.video-player-wrapper {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #CC0084, #4006a7);
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+.video-player-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #CC0084, #4006a7);
+  position: relative;
+}
+
+.play-button {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #CC0084;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.play-button:hover {
+  background: #C1E415;
+  color: #4006a7;
+  transform: scale(1.1);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
+}
+
+.featured-emoji {
+  font-size: 8rem;
+  position: absolute;
+  opacity: 0.3;
+}
+
+.article-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.excerpt {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: #555;
+  font-weight: 300;
+  font-style: italic;
+  border-left: 5px solid #CC0084;
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+  background: rgba(204, 0, 132, 0.05);
+  padding: 1.5rem 1.5rem 1.5rem 2rem;
+  border-radius: 0 12px 12px 0;
+}
+
+.content {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: #333;
+}
+
+.content h2, .content h3 {
+  color: #CC0084;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.content h2 {
+  font-size: 2rem;
+  border-bottom: 3px solid #CC0084;
+  padding-bottom: 0.5rem;
+}
+
+.content h3 {
+  font-size: 1.5rem;
+}
+
+.content p {
+  margin-bottom: 1.5rem;
+}
+
+.content ul, .content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.content li {
+  margin-bottom: 0.75rem;
+}
+
+.content strong {
+  color: #CC0084;
+  font-weight: 700;
+}
+
+.content a {
+  color: #4006a7;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.content a:hover {
+  color: #CC0084;
+}
+
+.content blockquote {
+  border-left: 5px solid #CC0084;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #666;
+  background: rgba(204, 0, 132, 0.05);
+  padding: 1rem 1.5rem;
+  border-radius: 0 12px 12px 0;
+}
+
+.content code {
+  background: #f8f9fa;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: #CC0084;
+  font-family: 'Courier New', monospace;
+}
+
+.content pre {
+  background: #1e1e1e;
+  color: #C1E415;
+  padding: 1.5rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.vlog-actions {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.share-label {
+  font-weight: 700;
+  color: #CC0084;
+  font-size: 1.1rem;
+}
+
+.share-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-btn-twitter {
+  background: #1DA1F2;
+  color: white;
+  border-color: #1DA1F2;
+}
+
+.share-btn-twitter:hover {
+  background: white;
+  color: #1DA1F2;
+  transform: translateY(-2px);
+}
+
+.share-btn-linkedin {
+  background: #0077B5;
+  color: white;
+  border-color: #0077B5;
+}
+
+.share-btn-linkedin:hover {
+  background: white;
+  color: #0077B5;
+  transform: translateY(-2px);
+}
+
+.share-btn-facebook {
+  background: #1877F2;
+  color: white;
+  border-color: #1877F2;
+}
+
+.share-btn-facebook:hover {
+  background: white;
+  color: #1877F2;
+  transform: translateY(-2px);
+}
+
+.related-section {
+  background: linear-gradient(to bottom, #f8f9fa, white);
+  padding: 3rem 0;
+}
+
+.related-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #CC0084;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.related-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  cursor: pointer;
+  border-top: 4px solid #CC0084;
+}
+
+.related-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(204, 0, 132, 0.15);
+}
+
+.related-video {
+  height: 150px;
+  background: linear-gradient(135deg, #CC0084, #4006a7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  position: relative;
+}
+
+.related-video::after {
+  content: '▶';
+  position: absolute;
+  font-size: 2rem;
+  color: white;
+}
+
+.related-body {
+  padding: 1.25rem;
+}
+
+.related-card-title {
+  color: #CC0084;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.related-excerpt {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .vlog-detail-title {
+    font-size: 2rem;
+  }
+  
+  .vlog-meta-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .video-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .share-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+</style>
+
+<!-- Vlog Header -->
+<section class="vlog-detail-hero">
+  <div class="container">
+    <div class="vlog-detail-content">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <a href="/vlogs" class="back-link">← Back to Vlogs</a>
+          <h1 class="vlog-detail-title">{{ blog.title if blog else 'Loading...' }}</h1>
+          
+          <div class="vlog-meta-header">
+            <div class="creator-info">
+              <div class="creator-avatar">{{ blog.author.name[0] if blog and blog.author else 'V' }}</div>
+              <div class="creator-details">
+                <span class="creator-name">{{ blog.author.name if blog and blog.author else 'Unknown Creator' }}</span>
+                <span class="creator-bio">{{ blog.author.bio if blog and blog.author else 'Content Creator' }}</span>
+              </div>
+            </div>
+            
+            <div class="video-info">
+              <span>📅 {{ blog.published_date if blog else '' }}</span>
+              <span>⏱️ {{ blog.read_time if blog else '' }}</span>
+              <span>👁️ {{ blog.views if blog else 0 }} views</span>
+            </div>
+          </div>
+          
+          <div class="vlog-tags-header">
+            {% if blog and blog.tags %}
+              {% for tag in blog.tags %}
+                <span class="vlog-tag">{{ tag }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Vlog Content -->
+<section class="main-content py-5">
+  <div class="container">
+    <div class="content-wrapper">
+      <!-- Video Player -->
+      <div class="video-player-section">
+        <div class="video-player-wrapper">
+          {% if blog and blog.featured_image %}
+          <img src="{{ blog.featured_image }}" alt="{{ blog.title }}">
+          {% else %}
+          <div class="video-placeholder">
+            <span class="featured-emoji">🎬</span>
+            <div class="play-button">▶</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Article Content -->
+      <article class="article-content">
+        {% if blog and blog.excerpt %}
+        <div class="excerpt">
+          {{ blog.excerpt }}
+        </div>
+        {% endif %}
+        
+        <div class="content">
+          <div id="blogContent">
+            {% if blog and blog.content %}
+              {{ blog.content | safe }}
+            {% else %}
+              <p class="text-muted">Content will be loaded here...</p>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+      
+      <!-- Share & Actions -->
+      <div class="vlog-actions">
+        <div class="share-buttons">
+          <span class="share-label">Share this vlog:</span>
+          <a href="#" class="share-btn share-btn-twitter">🐦 Twitter</a>
+          <a href="#" class="share-btn share-btn-linkedin">💼 LinkedIn</a>
+          <a href="#" class="share-btn share-btn-facebook">📘 Facebook</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Related Vlogs -->
+<section class="related-section">
+  <div class="container">
+    <h2 class="related-title">Related Videos</h2>
+    <div class="row g-4">
+      <div class="col-lg-10 mx-auto">
+        <div id="relatedPosts" class="row g-4">
+          <!-- Related vlogs will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Get blog data from URL or use sample data
   background: #C1E415;
   display: flex;
   align-items: center;

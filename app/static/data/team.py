@@ -53,7 +53,7 @@ def get_team_data() -> list[dict]:
                 {
                     "name": "Amit Kumar",
                     "role": "ML/AI Associate",
-                    "bio": "Excellent Digital magician helping turn Data into Insights",
+                    "bio": "Digital magician transforming raw data into actionable insights through advanced ML techniques. Passionate about building intelligent systems that solve real-world problems.",
                     "cartoon": "/static/images/team/amit/team.png",
                     "photo": "/static/images/team/amit/pic.jpeg",
                     "links": {

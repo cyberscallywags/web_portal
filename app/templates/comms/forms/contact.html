@@ -1,66 +1,242 @@
 {% extends "base.html" %}
 {% block title %}Contact - Cyber Scallywags{% endblock %}
 {% block content %}
-<h1 style="color: #CC0084;">Contact Cyber Scallywags  🐺</h1>
-<p style="color: #00B1B3;">Cyber Scallywags is a lightweight, community-driven application that helps developers adopt clean coding practices effortlessly.</p>
+<style>
+    @keyframes moveGrid {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px); }
+    }
 
-<!-- Contact form -->
-<section class="mt-4">
-  <h2 style="color: #C1E415;">Get in touch</h2>
-  <form id="joinForm" data-api-url="/api/contact" class="row g-3" novalidate>
-    
-    <!-- Form Type Selector -->
-    <div class="col-12" style="color: #00B1B3;">
-      <label for="formType" class="form-label">What would you like to do?</label>
-      <select class="form-select" id="formType" name="formType" required>
-        <!-- <option value="">Please select...</option> -->
-        <option value="mailing-list">&#x1F4F0; Join mailing list</option>
-        <option value="apply-to-join">&#x1F4DD; Apply to join</option>
-        <option value="general-enquiry">ℹ️General enquiry</option>
-      </select>
-      <div class="invalid-feedback">Please select an option.</div>
-    </div>
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-    <!-- Name field - always visible -->
-    <div class="col-md-6" style="color: #00B1B3;">
-      <label for="name" class="form-label">Full name</label>
-      <input type="text" class="form-control" id="name" name="name" required maxlength="120" placeholder="Your name">
-      <div class="invalid-feedback">Please provide your name.</div>
-    </div>
+    /* Hero Section */
+    .contact-hero {
+        background: linear-gradient(135deg, #00B1B3 0%, #0e6abd 50%, #4006a7 100%);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
 
-    <!-- Email field - always visible -->
-    <div class="col-md-6" style="color: #00B1B3;">
-      <label for="email" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="email" name="email" required maxlength="254" placeholder="you@example.com">
-      <div class="invalid-feedback">Please provide a valid email.</div>
-    </div>
+    .contact-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            linear-gradient(rgba(193, 228, 21, 0.03) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(193, 228, 21, 0.03) 2px, transparent 2px);
+        background-size: 50px 50px;
+        animation: moveGrid 3s linear infinite;
+        pointer-events: none;
+    }
 
-    <!-- Role field - only for apply-to-join -->
-    <div class="col-12 field-role" style="color: #00B1B3; display: none;">
-      <label for="role" class="form-label">Interest / Role</label>
-      <input type="text" class="form-control" id="role" name="role" placeholder="e.g. volunteer, mentor, learner">
-    </div>
+    .contact-hero .container {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
 
-    <!-- Message field - for apply-to-join and general-enquiry -->
-    <div class="col-12 field-message" style="color: #00B1B3; display: none;">
-      <label for="message" class="form-label"><span class="message-label">Optional message</span></label>
-      <textarea id="message" name="message" class="form-control" rows="3" maxlength="1000" placeholder="Tell us a bit about yourself (optional)"></textarea>
-    </div>
+    .contact-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: slideInUp 0.8s ease-out;
+    }
 
-    <!-- Consent checkbox - always visible -->
-    <div class="col-12 form-check" style="color: #00B1B3;">
-      <input class="form-check-input" type="checkbox" value="yes" id="consent" required>
-      <label class="form-check-label" for="consent">
-        I consent to my details being stored and used to contact me.
-      </label>
-      <div class="invalid-feedback">Consent is required.</div>
-    </div>
+    .contact-hero p {
+        font-size: 1.3rem;
+        color: #C1E415;
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        animation: slideInUp 0.8s ease-out 0.2s backwards;
+    }
 
-    <div class="col-12">
-      <button id="submitBtn" class="btn btn-primary">Send request</button>
-      <span id="formStatus" class="ms-3" aria-live="polite"></span>
+    /* Form Section */
+    .contact-form-section {
+        max-width: 800px;
+        margin: -50px auto 80px;
+        padding: 0 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .form-container {
+        background: #fff;
+        border-radius: 20px;
+        padding: 50px 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .form-container h2 {
+        font-size: 2rem;
+        color: #4006a7;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .form-label {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #C1E415;
+        box-shadow: 0 0 0 3px rgba(193, 228, 21, 0.1);
+        outline: none;
+    }
+
+    .form-check-input:checked {
+        background-color: #4006a7;
+        border-color: #4006a7;
+    }
+
+    .form-check-label {
+        color: #555;
+        font-size: 0.95rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4006a7, #0e6abd);
+        border: none;
+        border-radius: 25px;
+        padding: 14px 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #CC0084, #4006a7);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(64, 6, 167, 0.3);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    #formStatus {
+        display: inline-block;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .contact-hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .contact-hero p {
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            padding: 35px 25px;
+        }
+    }
+</style>
+
+<section class="contact-hero">
+    <div class="container">
+        <h1>Contact Cyber Scallywags 🐺</h1>
+        <p>We're here to help. Get in touch with our team today!</p>
     </div>
-  </form>
+</section>
+
+<section class="contact-form-section">
+    <div class="form-container">
+        <h2>Get in Touch</h2>
+        <form id="joinForm" data-api-url="/api/contact" class="row g-3" novalidate>
+            
+            <!-- Form Type Selector -->
+            <div class="col-12">
+                <label for="formType" class="form-label">What would you like to do?</label>
+                <select class="form-select" id="formType" name="formType" required>
+                    <option value="mailing-list">📰 Join mailing list</option>
+                    <option value="apply-to-join">📝 Apply to join</option>
+                    <option value="general-enquiry">ℹ️ General enquiry</option>
+                </select>
+                <div class="invalid-feedback">Please select an option.</div>
+            </div>
+
+            <!-- Name field -->
+            <div class="col-md-6">
+                <label for="name" class="form-label">Full name</label>
+                <input type="text" class="form-control" id="name" name="name" required maxlength="120" placeholder="Your name">
+                <div class="invalid-feedback">Please provide your name.</div>
+            </div>
+
+            <!-- Email field -->
+            <div class="col-md-6">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" required maxlength="254" placeholder="you@example.com">
+                <div class="invalid-feedback">Please provide a valid email.</div>
+            </div>
+
+            <!-- Role field - only for apply-to-join -->
+            <div class="col-12 field-role" style="display: none;">
+                <label for="role" class="form-label">Interest / Role</label>
+                <input type="text" class="form-control" id="role" name="role" placeholder="e.g. volunteer, mentor, learner">
+            </div>
+
+            <!-- Message field -->
+            <div class="col-12 field-message" style="display: none;">
+                <label for="message" class="form-label"><span class="message-label">Optional message</span></label>
+                <textarea id="message" name="message" class="form-control" rows="4" maxlength="1000" placeholder="Tell us a bit about yourself (optional)"></textarea>
+            </div>
+
+            <!-- Consent checkbox -->
+            <div class="col-12 form-check">
+                <input class="form-check-input" type="checkbox" value="yes" id="consent" required>
+                <label class="form-check-label" for="consent">
+                    I consent to my details being stored and used to contact me.
+                </label>
+                <div class="invalid-feedback">Consent is required.</div>
+            </div>
+
+            <div class="col-12 text-center mt-4">
+                <button id="submitBtn" class="btn btn-primary">Send Request</button>
+                <div class="mt-3">
+                    <span id="formStatus" aria-live="polite"></span>
+                </div>
+            </div>
+        </form>
+    </div>
 </section>
 
 <script>
@@ -75,24 +251,19 @@
   const messageInput = document.getElementById('message');
   const apiUrl = form.dataset.apiUrl || '/api/contact';
 
-  // Handle form type changes
   formTypeSelect.addEventListener('change', function() {
     const formType = this.value;
     
-    // Reset visibility and requirements
     roleField.style.display = 'none';
     messageField.style.display = 'none';
     roleInput.required = false;
     messageInput.required = false;
     
-    // Show/hide fields based on selection
     switch(formType) {
       case 'mailing-list':
-        // Only name and email needed
         break;
         
       case 'apply-to-join':
-        // Show role and message fields
         roleField.style.display = 'block';
         messageField.style.display = 'block';
         roleInput.required = true;
@@ -102,7 +273,6 @@
         break;
         
       case 'general-enquiry':
-        // Show message field only (no role)
         messageField.style.display = 'block';
         messageLabel.textContent = 'Your message';
         messageInput.placeholder = 'Please tell us how we can help you';
@@ -113,10 +283,9 @@
 
   function setStatus(msg, ok = true) {
     statusEl.textContent = msg;
-    statusEl.style.color = ok ? '#C1E415' : '#ff6b6b';
+    statusEl.style.color = ok ? '#C1E415' : '#dc3545';
   }
 
-  // Bootstrap-style client validation
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -137,14 +306,11 @@
       submitted_at: new Date().toISOString()
     };
 
-    // store locally as JSON fallback
     try {
       const existing = JSON.parse(localStorage.getItem('contact_pending') || '[]');
       existing.push(payload);
       localStorage.setItem('contact_pending', JSON.stringify(existing));
-    } catch (err) {
-      // ignore localStorage errors
-    }
+    } catch (err) {}
 
     setStatus('Sending...', true);
     document.getElementById('submitBtn').disabled = true;
@@ -162,29 +328,24 @@
         throw new Error(text || 'Server returned an error');
       }
 
-      // successful post
       setStatus('Request sent. Thank you — we will be in touch soon.', true);
       form.reset();
       form.classList.remove('was-validated');
       
-      // Reset form visibility
       roleField.style.display = 'none';
       messageField.style.display = 'none';
       roleInput.required = false;
       messageInput.required = false;
 
-      // optionally remove the stored item(s) or mark them as sent
       localStorage.removeItem('contact_pending');
     } catch (err) {
       console.error('Contact form error:', err);
       setStatus('Failed to send — your request is saved locally and will be retried later.', false);
-      // leave payload in localStorage for retry
     } finally {
       document.getElementById('submitBtn').disabled = false;
     }
   });
 
-  // optional: try to resend pending entries when online
   window.addEventListener('online', async function () {
     const pending = JSON.parse(localStorage.getItem('contact_pending') || '[]');
     if (!pending.length) return;
