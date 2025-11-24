@@ -1,0 +1,5 @@
+# Core testing frameworkpytest>=7.4.0pytest-asyncio>=0.21.0# Playwright for browser automationplaywright>=1.40.0# Reporting and utilitiespytest-html>=3.2.0pytest-xdist>=3.3.0# Environment and configurationpython-dotenv>=1.0.0
+
+# Additional testing utilities
+pytest-mock>=3.11.0
+pytest-cov>=4.1.0
