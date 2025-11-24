@@ -1,5 +1,5 @@
 import os
-
+import logfire
 import requests
 
 API_BASE = os.getenv("API_BASE", "https://api.cyberscallywags.uk")
@@ -83,6 +83,12 @@ projects = [{
 
 
 def get_all_projects():
+    """Fetch all projects.
+
+    Returns:
+        list: A list of all projects.
+    """
+    logfire.debug(f"TRIGGER: get_all_projects :: Fetching all projects")
     # resp = requests.get(f"{API_BASE}/projects")
     projectsList = projects
     # return resp.json()['projects']
@@ -90,6 +96,16 @@ def get_all_projects():
 
 
 def get_projects_by_id(project_id: int = 1):
+    """Fetch a project by its ID.
+
+    Args:
+        project_id (int, optional): The ID of the project to fetch. Defaults to 1.
+
+    Returns:
+        dict: The project with the specified ID, or None if not found.
+        _type_: _description_
+    """
+    logfire.debug(f" Getting project by id :: {project_id}")
     # resp = requests.get(f"{API_BASE}/projects/{project_id}")
     projects = get_all_projects()
     for project in projects:

@@ -116,9 +116,9 @@ async def read_events(request: Request):
 @app.get("/event/{event_id}")
 async def read_event_detail(request: Request, event_id: int):
     """Render event detail page"""
+    logfire.info(f'TRIGGERED: read_event_detail :: {event_id} !')
     events_data = service_events.get_all_events()
     events_list = events_data.get('events', [])
-    logfire.info('TRIGGERED: read_event_detail !')
 
     event = None
     for e in events_list:
@@ -153,7 +153,7 @@ async def read_blog_detail(request: Request, slug: str):
     # In a real app, you'd fetch the blog post by slug from your database
     resp = get_blog_data_by_slug(slug)
     blog = resp[0] if resp else None
-    logfire.info('TRIGGERED: read_blog_detail !')
+    logfire.info(f'TRIGGERED: read_blog_detail  :: {slug}!')
     # For now, we'll pass the slug to the template
     return templates.TemplateResponse("blogs/blog-detail.html", {
         "request": request,
@@ -173,7 +173,7 @@ async def read_vlogs(request: Request):
 async def read_vlogs_detail(request: Request, slug: str):
     resp = get_vlog_data_by_slug(slug)
     vlog = resp[0] if resp else None
-    logfire.info('TRIGGERED: read_vlogs_detail !')
+    logfire.info(f'TRIGGERED: read_vlogs_detail :: {slug} !')
     # For now, we'll pass the slug to the template
     return templates.TemplateResponse("blogs/vlog-detail.html", {
         "request": request,
