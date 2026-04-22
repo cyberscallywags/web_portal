@@ -28,31 +28,31 @@ logfire.configure(token="pylf_v1_us_5HdpTCcCBjqgmwHgnzHHKLQN3g1STTwK8YPWkvFzdvYL
 @app.get("/")
 async def read_root(request: Request):
     logfire.info('TRIGGERED: read_root !')  
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html", {})
 
 
 @app.get("/practice")
 async def read_practice(request: Request):
     logfire.info('TRIGGERED: read_practice !')  
-    return templates.TemplateResponse("practice.html", {"request": request})
+    return templates.TemplateResponse(request, "practice.html", {})
 
 
 @app.get("/intro")
 async def read_videos(request: Request, ):
     logfire.info('TRIGGERED: read_videos !')  
-    return templates.TemplateResponse("intro.html", {"request": request})
+    return templates.TemplateResponse(request, "intro.html", {})
 
 
 @app.get("/about")
 async def read_about(request: Request):
     logfire.info('TRIGGERED: read_about !')  
-    return templates.TemplateResponse("about.html", {"request": request})
+    return templates.TemplateResponse(request, "about.html", {})
 
 
 @app.get("/specialisms")
 async def read_specialisms(request: Request):
     logfire.info('TRIGGERED: read_specialisms !')  
-    return templates.TemplateResponse("specialisms.html", {"request": request})
+    return templates.TemplateResponse(request, "specialisms.html", {})
 
 
 
@@ -60,57 +60,57 @@ async def read_specialisms(request: Request):
 async def read_team(request: Request):
     items = team.get_team_data()
     logfire.info('TRIGGERED: read_team !')  
-    return templates.TemplateResponse("team.html", {"request": request, "team": items})
+    return templates.TemplateResponse(request, "team.html", {"team": items})
 
 
 @app.get("/mission")
 async def read_mission(request: Request):
     logfire.info('TRIGGERED: read_mission !')  
-    return templates.TemplateResponse("mission.html", {"request": request})
+    return templates.TemplateResponse(request, "mission.html", {})
 
 
 @app.get("/projects")
 async def read_projects(request: Request):
     items = service_projects.get_all_projects()
     logfire.info('TRIGGERED: read_projects !')  
-    return templates.TemplateResponse("projects/projects.html", {"request": request, "projects": items})
+    return templates.TemplateResponse(request, "projects/projects.html", {"projects": items})
 
 
 @app.get("/signup")
 async def read_signup(request: Request):
     logfire.info('TRIGGERED: read_signup !')  
-    return templates.TemplateResponse("/auth/signup.html", {"request": request})
+    return templates.TemplateResponse(request, "/auth/signup.html", {})
 
 
 @app.get("/signin")
 async def read_signin(request: Request):
     logfire.info('TRIGGERED: read_signin !')  
-    return templates.TemplateResponse("/auth/signin.html", {"request": request})
+    return templates.TemplateResponse(request, "/auth/signin.html", {})
 
 
 @app.get("/signout")
 async def read_signout(request: Request):
     logfire.info('TRIGGERED: read_signout !')  
-    return templates.TemplateResponse("/auth/signout.html", {"request": request})
+    return templates.TemplateResponse(request, "/auth/signout.html", {})
 
 
 @app.get("/forgotten-password")
 async def read_forgot_password(request: Request):
     logfire.info('TRIGGERED: read_forgot_password !')  
-    return templates.TemplateResponse("/auth/forgot-password.html", {"request": request})
+    return templates.TemplateResponse(request, "/auth/forgot-password.html", {})
 
 
 @app.get("/contact")
 async def read_contact(request: Request):
     logfire.info('TRIGGERED: read_contact !')  
-    return templates.TemplateResponse("comms/forms/contact.html", {"request": request})
+    return templates.TemplateResponse(request, "comms/forms/contact.html", {})
 
 
 @app.get("/events")
 async def read_events(request: Request):
     events = service_events.get_all_events()
     logfire.info('TRIGGERED: read_ALL_events !')  
-    return templates.TemplateResponse("/events/events.html", {"request": request, "events": events})
+    return templates.TemplateResponse(request, "/events/events.html", {"events": events})
 
 
 @app.get("/event/{event_id}")
@@ -129,8 +129,7 @@ async def read_event_detail(request: Request, event_id: int):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     
-    return templates.TemplateResponse("/events/event-detail.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "/events/event-detail.html", {
         "event": event
     })
 
@@ -138,14 +137,14 @@ async def read_event_detail(request: Request, event_id: int):
 @app.get("/support")
 async def read_support(request: Request):
     logfire.info('TRIGGERED: read_support !')
-    return templates.TemplateResponse("/support.html", {"request": request})
+    return templates.TemplateResponse(request, "/support.html", {})
 
 
 @app.get("/blogs")
 async def read_blogs(request: Request):
     items = blogs.get_all_blog_data()
     logfire.info('TRIGGERED: read_ALL_blogs !')
-    return templates.TemplateResponse("blogs/blogs.html", {"request": request, "blogs": items})
+    return templates.TemplateResponse(request, "blogs/blogs.html", {"blogs": items})
 
 
 @app.get("/blog/{slug}")
@@ -155,8 +154,7 @@ async def read_blog_detail(request: Request, slug: str):
     blog = resp[0] if resp else None
     logfire.info(f'TRIGGERED: read_blog_detail  :: {slug}!')
     # For now, we'll pass the slug to the template
-    return templates.TemplateResponse("blogs/blog-detail.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "blogs/blog-detail.html", {
         "slug": slug,
         "blog": blog
     })
@@ -167,7 +165,7 @@ async def read_blog_detail(request: Request, slug: str):
 async def read_vlogs(request: Request):
     items = blogs.get_all_blog_data()
     logfire.info('TRIGGERED: read_vlogs !')
-    return templates.TemplateResponse("blogs/vlogs.html", {"request": request, "blogs": items})
+    return templates.TemplateResponse(request, "blogs/vlogs.html", {"blogs": items})
 
 @app.get("/vlogs/{slug}")
 async def read_vlogs_detail(request: Request, slug: str):
@@ -175,8 +173,7 @@ async def read_vlogs_detail(request: Request, slug: str):
     vlog = resp[0] if resp else None
     logfire.info(f'TRIGGERED: read_vlogs_detail :: {slug} !')
     # For now, we'll pass the slug to the template
-    return templates.TemplateResponse("blogs/vlog-detail.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "blogs/vlog-detail.html", {
         "slug": slug,
         "blog": vlog  # Using 'blog' key for template compatibility
     })
@@ -246,8 +243,7 @@ async def read_project_detail(request: Request, slug: str):
     print(f"Project data type: {type(project_data)}")
     print(f"Project data: {project_data}")
     
-    return templates.TemplateResponse("projects/project-detail.html", {
-        "request": request, 
+    return templates.TemplateResponse(request, "projects/project-detail.html", {
         "slug": slug,
         "project": project_data,  # This should be a dict, not a list
         "all_projects": all_projects
