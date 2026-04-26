@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import JSONResponse
 from app.static.data import team, blogs
 from app.services.models.project_schema import Project, ProjectsResponse
 from app.services import service_projects
 from app.services import service_events
+from app.services.auth_service import authenticate_user, LoginRequest, AuthServiceError
 from app.templates.comms.forms.schema.contact_form import ContactFormData
 from app.services import graphDB as gdb 
 from fastapi.staticfiles import StaticFiles
@@ -86,6 +88,46 @@ async def read_signup(request: Request):
 async def read_signin(request: Request):
     logfire.info('TRIGGERED: read_signin !')  
     return templates.TemplateResponse(request, "/auth/signin.html", {})
+
+
+@app.post("/auth/login")
+async def login(login_request: LoginRequest):
+    """
+    Handle user login by authenticating against the auth service
+    and returning access token to store in session/localStorage
+    """
+    try:
+        logfire.info(f'TRIGGERED: login attempt for {login_request.email}')
+        
+        response = await authenticate_user(login_request.email, login_request.password)
+        
+        logfire.info(f'LOGIN SUCCESS: {login_request.email}')
+        
+        return {
+            "access_token": response.access_token,
+            "refresh_token": response.refresh_token,
+            "token_type": response.token_type,
+            "success": True
+        }
+        
+    except AuthServiceError as e:
+        logfire.error(f'LOGIN FAILED: {login_request.email} - {str(e)}')
+        return JSONResponse(
+            status_code=401,
+            content={
+                "success": False,
+                "detail": str(e)
+            }
+        )
+    except Exception as e:
+        logfire.error(f'UNEXPECTED LOGIN ERROR: {str(e)}')
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "detail": "An unexpected error occurred during login"
+            }
+        )
 
 
 @app.get("/signout")
