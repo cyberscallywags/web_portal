@@ -208,6 +208,131 @@
     }
 </style>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const signinForm = document.getElementById('signupForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        signinForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Clear any previous error messages
+            errorMessage.style.display = 'none';
+            errorMessage.textContent = '';
+
+            // Get form values
+            const email = document.getElementById('email').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            // TODO: Validations for username (no duplications, etc), password and confirmation match, checkbox ticked
+
+            // Validate inputs
+            if (!username || !password || !email || !confirmPassword) {
+                showError('Please enter all required fields');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showError("Passwords don't match");
+                return;
+            }
+
+            // Disable submit button while processing
+            const submitBtn = signinForm.querySelector('.btn-auth');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account...';
+
+            try {
+                // Make API call to auth service on port 8001
+                const response = await fetch('http://localhost:8001/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Handle different error response formats
+                    let errorMessage = 'Registration failed. Please try again.';
+                    if (data.detail) {
+                        // If detail is an array of validation errors, extract messages
+                        if (Array.isArray(data.detail)) {
+                            errorMessage = data.detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+                        } else if (typeof data.detail === 'string') {
+                            errorMessage = data.detail;
+                        } else {
+                            errorMessage = JSON.stringify(data.detail);
+                        }
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                // Store the access token
+                if (data.access_token) {
+                    localStorage.setItem('access_token', data.access_token);
+                    
+                    // Store remember me preference if checked
+                    if (remember) {
+                        localStorage.setItem('remember_me', 'true');
+                    }
+
+                    // Optional: Store user info if provided
+                    if (data.user) {
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                    }
+
+                    // Verify token and get user roles
+                    try {
+                        const verifyResponse = await fetch('http://localhost:8001/auth/me', {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${data.access_token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        const verifyData = await verifyResponse.json();
+                        
+                        if (verifyResponse.ok && verifyData.roles) {
+                            // TODO: change to redirect to landing page
+                            console.log(verifyData.roles);
+                        }
+                    } catch (verifyError) {
+                        console.error('Error verifying token:', verifyError);
+                    }
+
+                    // Redirect to dashboard or home page
+                    // window.location.href = '/dashboard' || '/';
+                } else {
+                    throw new Error('No access token received');
+                }
+
+            } catch (error) {
+                console.log('Error message:', error.message);
+                console.error('Full error:', error);
+                showError(error.message || 'An error occurred during sign up');
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+    });
+</script>
+
 <div class="auth-page">
     <div class="auth-container">
         <div class="auth-card">
@@ -221,6 +346,11 @@
                 <div class="form-group">
                     <label for="name" class="form-label">Full Name</label>
                     <input type="text" id="name" name="name" class="form-input" placeholder="Your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Username" required>
                 </div>
 
                 <div class="form-group">
@@ -245,11 +375,13 @@
                     </label>
                 </div>
 
-                <span class="coming-soon-badge">Registration Coming Soon</span>
+                <div id="errorMessage" style="display: none; color: #d32f2f; background-color: #ffebee; border: 1px solid #ef5350; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.9rem;"></div>
+
+                <button type="submit" class="btn-auth">Sign In</button>
             </form>
 
             <div class="auth-links">
-                Already have an account? <a href="/auth/signin">Sign In</a>
+                Already have an account? <a href="/signin">Sign In</a>
             </div>
         </div>
     </div>
