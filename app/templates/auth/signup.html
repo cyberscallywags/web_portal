@@ -196,6 +196,24 @@
         margin-top: 15px;
     }
 
+    .success-message {
+        display: none;
+        color: #2e7d32;
+        background-color: #e8f5e9;
+        border: 1px solid #4caf50;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 0.9rem;
+    }
+
+    .form-input:disabled,
+    .form-checkbox input:disabled {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
     /* Responsive */
     @media (max-width: 576px) {
         .auth-card {
@@ -212,6 +230,8 @@
     document.addEventListener('DOMContentLoaded', function() {
         const signinForm = document.getElementById('signupForm');
         const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const submitBtn = signinForm.querySelector('.btn-auth');
 
         signinForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -220,12 +240,15 @@
             errorMessage.style.display = 'none';
             errorMessage.textContent = '';
 
+            // Clear any previous success messages
+            successMessage.style.display = 'none';
+            successMessage.textContent = '';
+
             // Get form values
             const email = document.getElementById('email').value.trim();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            // TODO: Validations for username (no duplications, etc), password and confirmation match, checkbox ticked
 
             // Validate inputs
             if (!username || !password || !email || !confirmPassword) {
@@ -238,7 +261,6 @@
             }
 
             // Disable submit button while processing
-            const submitBtn = signinForm.querySelector('.btn-auth');
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
             submitBtn.textContent = 'Creating account...';
@@ -261,59 +283,36 @@
 
                 if (!response.ok) {
                     // Handle different error response formats
-                    let errorMessage = 'Registration failed. Please try again.';
+                    let errorMsg = 'Registration failed. Please try again.';
                     if (data.detail) {
                         // If detail is an array of validation errors, extract messages
                         if (Array.isArray(data.detail)) {
-                            errorMessage = data.detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+                            errorMsg = data.detail.map(err => err.msg || JSON.stringify(err)).join(', ');
                         } else if (typeof data.detail === 'string') {
-                            errorMessage = data.detail;
+                            errorMsg = data.detail;
                         } else {
-                            errorMessage = JSON.stringify(data.detail);
+                            errorMsg = JSON.stringify(data.detail);
                         }
                     }
-                    throw new Error(errorMessage);
+                    throw new Error(errorMsg);
                 }
 
-                // Store the access token
-                if (data.access_token) {
-                    localStorage.setItem('access_token', data.access_token);
-                    
-                    // Store remember me preference if checked
-                    if (remember) {
-                        localStorage.setItem('remember_me', 'true');
-                    }
-
-                    // Optional: Store user info if provided
-                    if (data.user) {
-                        localStorage.setItem('user', JSON.stringify(data.user));
-                    }
-
-                    // Verify token and get user roles
-                    try {
-                        const verifyResponse = await fetch('http://localhost:8001/auth/me', {
-                            method: 'GET',
-                            headers: {
-                                'Authorization': `Bearer ${data.access_token}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-
-                        const verifyData = await verifyResponse.json();
-                        
-                        if (verifyResponse.ok && verifyData.roles) {
-                            // TODO: change to redirect to landing page
-                            console.log(verifyData.roles);
-                        }
-                    } catch (verifyError) {
-                        console.error('Error verifying token:', verifyError);
-                    }
-
-                    // Redirect to dashboard or home page
-                    // window.location.href = '/dashboard' || '/';
-                } else {
-                    throw new Error('No access token received');
-                }
+                // Success! Disable all form fields
+                disableAllFormFields();
+                
+                // Show success message
+                successMessage.textContent = 'Account successfully created';
+                successMessage.style.display = 'block';
+                
+                // Change button text and behavior
+                submitBtn.textContent = 'Back to sign in';
+                submitBtn.disabled = false;
+                
+                // Remove form submission and add redirect
+                signinForm.onsubmit = null;
+                submitBtn.onclick = function() {
+                    window.location.href = '/signin';
+                };
 
             } catch (error) {
                 console.log('Error message:', error.message);
@@ -329,6 +328,14 @@
         function showError(message) {
             errorMessage.textContent = message;
             errorMessage.style.display = 'block';
+        }
+
+        function disableAllFormFields() {
+            // Disable all input fields
+            const inputs = signinForm.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.disabled = true;
+            });
         }
     });
 </script>
@@ -377,7 +384,9 @@
 
                 <div id="errorMessage" style="display: none; color: #d32f2f; background-color: #ffebee; border: 1px solid #ef5350; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.9rem;"></div>
 
-                <button type="submit" class="btn-auth">Sign In</button>
+                <div id="successMessage" class="success-message"></div>
+
+                <button type="submit" class="btn-auth">Sign Up</button>
             </form>
 
             <div class="auth-links">
