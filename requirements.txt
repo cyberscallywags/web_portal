@@ -4,7 +4,6 @@ jinja2
 
 neo4j
 pydantic
-logfire
 python-dotenv
 email-validator
 requests

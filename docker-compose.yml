@@ -8,4 +8,6 @@ services:
       - "8055:8055"
     volumes:
       - ./app:/app/app
+    env_file:
+      - .env
     restart: unless-stopped
