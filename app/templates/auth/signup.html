@@ -266,8 +266,8 @@
             submitBtn.textContent = 'Creating account...';
 
             try {
-                // Make API call to auth service on port 8001
-                const response = await fetch('http://localhost:8001/auth/register', {
+                // Make API call to auth service
+                const response = await fetch('http://135.181.99.53:8910/auth/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

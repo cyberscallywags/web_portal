@@ -229,14 +229,14 @@
             submitBtn.textContent = 'Signing in...';
 
             try {
-                // Make API call to auth service on port 8001
-                const response = await fetch('http://localhost:8001/auth/login', {
+                // Make API call to auth service
+                const response = await fetch('http://135.181.99.53:8910/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        username: username,
+                        identity: username,
                         password: password
                     })
                 });
@@ -244,12 +244,13 @@
                 const data = await response.json();
 
                 if (!response.ok) {
+                    console.log(data.detail)
                     throw new Error(data.detail || 'Login failed. Please check your credentials.');
                 }
 
                 // Store the access token
-                if (data.access_token) {
-                    localStorage.setItem('access_token', data.access_token);
+                if (data.tokens.access_token) {
+                    localStorage.setItem('access_token', data.tokens.access_token);
                     
                     // Store remember me preference if checked
                     if (remember) {
@@ -263,21 +264,21 @@
 
                     // Verify token and get user roles
                     try {
-                        const verifyResponse = await fetch('http://localhost:8001/auth/me', {
+                        const verifyResponse = await fetch('http://135.181.99.53:8910/auth/me', {
                             method: 'GET',
                             headers: {
-                                'Authorization': `Bearer ${data.access_token}`,
+                                'Authorization': `Bearer ${data.tokens.access_token}`,
                                 'Content-Type': 'application/json'
                             }
                         });
 
                         const verifyData = await verifyResponse.json();
-                        
-                        if (verifyResponse.ok && verifyData.roles) {
+                        if (verifyResponse.ok && verifyData.membership_tier) {
                             // TODO: change to redirect to landing page
-                            console.log(verifyData.roles);
+                            console.log(verifyData.membership_tier);
                         }
                     } catch (verifyError) {
+                        console.log(verifyError)
                         console.error('Error verifying token:', verifyError);
                     }
 
