@@ -236,7 +236,7 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        identity: username,
+                        username: username,
                         password: password
                     })
                 });
@@ -273,17 +273,17 @@
                         });
 
                         const verifyData = await verifyResponse.json();
-                        if (verifyResponse.ok && verifyData.membership_tier) {
-                            // TODO: change to redirect to landing page
-                            console.log(verifyData.membership_tier);
+                        if (verifyResponse.ok && verifyData) {
+                            // Store the current user object from verifyData
+                            localStorage.setItem('currentUser', JSON.stringify(verifyData));
+                            console.log('Current user set:', verifyData);
+                            window.location.href = `/`;
+                            return;
                         }
                     } catch (verifyError) {
                         console.log(verifyError)
                         console.error('Error verifying token:', verifyError);
                     }
-
-                    // Redirect to dashboard or home page
-                    // window.location.href = '/dashboard' || '/';
                 } else {
                     throw new Error('No access token received');
                 }
@@ -341,7 +341,7 @@
                 <div class="auth-divider">or</div>
 
                 <div class="auth-links">
-                    <a href="/auth/forgot-password">Forgot Password?</a>
+                    <a href="/forgot-password">Forgot Password?</a>
                 </div>
             </form>
 

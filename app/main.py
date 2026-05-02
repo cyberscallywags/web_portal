@@ -90,6 +90,13 @@ async def read_signin(request: Request):
     return templates.TemplateResponse(request, "/auth/signin.html", {})
 
 
+@app.get("/landing")
+async def read_landing(request: Request):
+    logfire.info('TRIGGERED: read_landing !')
+    membership_tier = request.query_params.get("tier", "User")
+    return templates.TemplateResponse(request, "landing.html", {"membership_tier": membership_tier})
+
+
 @app.post("/auth/login")
 async def login(login_request: LoginRequest):
     """
@@ -136,7 +143,7 @@ async def read_signout(request: Request):
     return templates.TemplateResponse(request, "/auth/signout.html", {})
 
 
-@app.get("/forgotten-password")
+@app.get("/forgot-password")
 async def read_forgot_password(request: Request):
     logfire.info('TRIGGERED: read_forgot_password !')  
     return templates.TemplateResponse(request, "/auth/forgot-password.html", {})
