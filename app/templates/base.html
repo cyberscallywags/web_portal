@@ -336,7 +336,7 @@ class AccountManager {
     avatarEl.className = 'user-avatar';
 
     // Update name
-    nameEl.textContent = currentUser.name.split(' ')[0]; // First name only
+    nameEl.textContent = currentUser.username; // Display full username
 
     // Update dropdown
     dropdownEl.innerHTML = `
@@ -344,12 +344,12 @@ class AccountManager {
         <div class="user-info">
           <div class="user-avatar-large">
             ${currentUser.avatar ? 
-              `<img src="${currentUser.avatar}" alt="${currentUser.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />` : 
-              this.getInitials(currentUser.name)
+              `<img src="${currentUser.avatar}" alt="${currentUser.username}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />` : 
+              this.getInitials(currentUser.username)
             }
           </div>
           <div class="user-details">
-            <div class="user-name">${currentUser.name}</div>
+            <div class="user-name">${currentUser.username}</div>
             <div class="user-email">${currentUser.email}</div>
           </div>
         </div>
@@ -381,9 +381,17 @@ class AccountManager {
   }
 
   getInitials(name) {
-    return name.split(' ')
-      .map(word => word.charAt(0).toUpperCase())
-      .join('');
+    if (!name) return '';
+    
+    // If name contains a space, get first letter of each word
+    if (name.includes(' ')) {
+      return name.split(' ')
+        .map(word => word.charAt(0).toUpperCase())
+        .join('');
+    } else {
+      // If single word, just get the first initial
+      return name.charAt(0).toUpperCase();
+    }
   }
 
   signIn(userData) {
