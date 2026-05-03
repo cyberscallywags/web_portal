@@ -203,6 +203,136 @@
     }
 </style>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const signinForm = document.getElementById('signinForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Check for signup success parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('signup') === 'success') {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = 'color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; font-weight: 600;';
+            successDiv.textContent = '✓ Account created successfully! Please sign in with your credentials.';
+            
+            // Insert success message before the form
+            signinForm.parentNode.insertBefore(successDiv, signinForm);
+            
+            // Remove the query parameter from the URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        if (urlParams.get('reset') === 'success') {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = 'color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; font-weight: 600;';
+            successDiv.textContent = '✓ Password updated successfully! Please sign in with your new password.';
+            
+            const signinForm = document.getElementById('signinForm');
+            signinForm.parentNode.insertBefore(successDiv, signinForm);
+            
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        signinForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+
+            // Validate inputs
+            if (!username || !password) {
+                showError('Please enter both username and password');
+                return;
+            }
+
+            // Disable submit button while processing
+            const submitBtn = signinForm.querySelector('.btn-auth');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+
+            try {
+                // Make API call to auth service
+                const response = await fetch('http://135.181.99.53:8910/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Login failed. Please check your credentials.');
+                }
+
+                // Store the access token
+                if (data.tokens.access_token) {
+                    localStorage.setItem('access_token', data.tokens.access_token);
+                    
+                    // Store remember me preference if checked
+                    if (remember) {
+                        localStorage.setItem('remember_me', 'true');
+                    }
+
+                    // Optional: Store user info if provided
+                    if (data.user) {
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                    }
+
+                    // Verify token and get user roles
+                    try {
+                        const verifyResponse = await fetch('http://135.181.99.53:8910/auth/me', {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${data.tokens.access_token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        const verifyData = await verifyResponse.json();
+                        if (verifyResponse.ok && verifyData) {
+                            // Store the current user object from verifyData
+                            localStorage.setItem('currentUser', JSON.stringify(verifyData));
+                            console.log('Current user set:', verifyData);
+                            window.location.href = `/`;
+                            return;
+                        }
+                    } catch (verifyError) {
+                        console.log(verifyError)
+                        console.error('Error verifying token:', verifyError);
+                    }
+                } else {
+                    throw new Error('No access token received');
+                }
+
+            } catch (error) {
+                showError(error.message || 'An error occurred during sign in');
+                console.error('Sign in error:', error);
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            // Auto-hide error after 5 seconds
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+    });
+</script>
+
 <div class="auth-page">
     <div class="auth-container">
         <div class="auth-card">
@@ -214,8 +344,8 @@
 
             <form id="signinForm" novalidate>
                 <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required>
+                    <label for="username" class="form-label">Username</label>
+                    <input type="username" id="username" name="username" class="form-input" placeholder="you@example.com" required>
                 </div>
 
                 <div class="form-group">
@@ -228,17 +358,19 @@
                     <label for="remember">Remember me</label>
                 </div>
 
-                <span class="coming-soon-badge">Authentication Coming Soon</span>
+                <button type="submit" class="btn-auth">Sign In</button>
+
+                <div id="errorMessage" style="display: none; color: #dc3545; padding: 12px; background: #f8d7da; border-radius: 8px; margin-bottom: 20px; text-align: center;"></div>
 
                 <div class="auth-divider">or</div>
 
                 <div class="auth-links">
-                    <a href="/auth/forgot-password">Forgot Password?</a>
+                    <a href="/forgot-password">Forgot Password?</a>
                 </div>
             </form>
 
             <div class="auth-links">
-                Don't have an account? <a href="/auth/signup">Sign Up</a>
+                Don't have an account? <a href="/signup">Sign Up</a>
             </div>
         </div>
     </div>

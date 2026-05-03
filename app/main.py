@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import JSONResponse
 from app.static.data import team, blogs
 from app.services.models.project_schema import Project, ProjectsResponse
 from app.services import service_projects
 from app.services import service_events
+from app.services.auth_service import authenticate_user, LoginRequest, AuthServiceError
 from app.templates.comms.forms.schema.contact_form import ContactFormData
 from app.services import graphDB as gdb 
 from fastapi.staticfiles import StaticFiles
@@ -32,89 +34,136 @@ templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/")
 async def read_root(request: Request):
-    logger.info('TRIGGERED: read_root !')  
-    return templates.TemplateResponse(request, "index.html")
+    logfire.info('TRIGGERED: read_root !')  
+    return templates.TemplateResponse(request, "index.html", {})
 
 
 @app.get("/practice")
 async def read_practice(request: Request):
-    logger.info('TRIGGERED: read_practice !')  
-    return templates.TemplateResponse(request, "practice.html")
+    logfire.info('TRIGGERED: read_practice !')  
+    return templates.TemplateResponse(request, "practice.html", {})
 
 
 @app.get("/intro")
 async def read_videos(request: Request, ):
-    logger.info('TRIGGERED: read_videos !')  
-    return templates.TemplateResponse(request, "intro.html")
+    logfire.info('TRIGGERED: read_videos !')  
+    return templates.TemplateResponse(request, "intro.html", {})
 
 
 @app.get("/about")
 async def read_about(request: Request):
-    logger.info('TRIGGERED: read_about !')  
-    return templates.TemplateResponse(request, "about.html")
+    logfire.info('TRIGGERED: read_about !')  
+    return templates.TemplateResponse(request, "about.html", {})
 
 
 @app.get("/specialisms")
 async def read_specialisms(request: Request):
-    logger.info('TRIGGERED: read_specialisms !')  
-    return templates.TemplateResponse(request, "specialisms.html")
+    logfire.info('TRIGGERED: read_specialisms !')  
+    return templates.TemplateResponse(request, "specialisms.html", {})
 
 
 
 @app.get("/team")
 async def read_team(request: Request):
     items = team.get_team_data()
-    logger.info('TRIGGERED: read_team !')  
+    logfire.info('TRIGGERED: read_team !')  
     return templates.TemplateResponse(request, "team.html", {"team": items})
 
 
 @app.get("/mission")
 async def read_mission(request: Request):
-    logger.info('TRIGGERED: read_mission !')  
-    return templates.TemplateResponse(request, "mission.html")
+    logfire.info('TRIGGERED: read_mission !')  
+    return templates.TemplateResponse(request, "mission.html", {})
 
 
 @app.get("/projects")
 async def read_projects(request: Request):
     items = service_projects.get_all_projects()
-    logger.info('TRIGGERED: read_projects !')  
+    logfire.info('TRIGGERED: read_projects !')  
     return templates.TemplateResponse(request, "projects/projects.html", {"projects": items})
 
 
 @app.get("/signup")
 async def read_signup(request: Request):
-    logger.info('TRIGGERED: read_signup !')  
-    return templates.TemplateResponse(request, "/auth/signup.html")
+    logfire.info('TRIGGERED: read_signup !')  
+    return templates.TemplateResponse(request, "/auth/signup.html", {})
 
 
 @app.get("/signin")
 async def read_signin(request: Request):
-    logger.info('TRIGGERED: read_signin !')  
-    return templates.TemplateResponse(request, "/auth/signin.html")
+    logfire.info('TRIGGERED: read_signin !')  
+    return templates.TemplateResponse(request, "/auth/signin.html", {})
+
+
+@app.get("/landing")
+async def read_landing(request: Request):
+    logfire.info('TRIGGERED: read_landing !')
+    membership_tier = request.query_params.get("tier", "User")
+    return templates.TemplateResponse(request, "landing.html", {"membership_tier": membership_tier})
+
+
+@app.post("/auth/login")
+async def login(login_request: LoginRequest):
+    """
+    Handle user login by authenticating against the auth service
+    and returning access token to store in session/localStorage
+    """
+    try:
+        logfire.info(f'TRIGGERED: login attempt for {login_request.email}')
+        
+        response = await authenticate_user(login_request.email, login_request.password)
+        
+        logfire.info(f'LOGIN SUCCESS: {login_request.email}')
+        
+        return {
+            "access_token": response.access_token,
+            "refresh_token": response.refresh_token,
+            "token_type": response.token_type,
+            "success": True
+        }
+        
+    except AuthServiceError as e:
+        logfire.error(f'LOGIN FAILED: {login_request.email} - {str(e)}')
+        return JSONResponse(
+            status_code=401,
+            content={
+                "success": False,
+                "detail": str(e)
+            }
+        )
+    except Exception as e:
+        logfire.error(f'UNEXPECTED LOGIN ERROR: {str(e)}')
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "detail": "An unexpected error occurred during login"
+            }
+        )
 
 
 @app.get("/signout")
 async def read_signout(request: Request):
-    logger.info('TRIGGERED: read_signout !')  
-    return templates.TemplateResponse(request, "/auth/signout.html")
+    logfire.info('TRIGGERED: read_signout !')  
+    return templates.TemplateResponse(request, "/auth/signout.html", {})
 
 
-@app.get("/forgotten-password")
+@app.get("/forgot-password")
 async def read_forgot_password(request: Request):
-    logger.info('TRIGGERED: read_forgot_password !')  
-    return templates.TemplateResponse(request, "/auth/forgot-password.html")
+    logfire.info('TRIGGERED: read_forgot_password !')  
+    return templates.TemplateResponse(request, "/auth/forgot-password.html", {})
 
 
 @app.get("/contact")
 async def read_contact(request: Request):
-    logger.info('TRIGGERED: read_contact !')  
-    return templates.TemplateResponse(request, "comms/forms/contact.html")
+    logfire.info('TRIGGERED: read_contact !')  
+    return templates.TemplateResponse(request, "comms/forms/contact.html", {})
 
 
 @app.get("/events")
 async def read_events(request: Request):
     events = service_events.get_all_events()
-    logger.info('TRIGGERED: read_ALL_events !')  
+    logfire.info('TRIGGERED: read_ALL_events !')  
     return templates.TemplateResponse(request, "/events/events.html", {"events": events})
 
 
@@ -141,14 +190,14 @@ async def read_event_detail(request: Request, event_id: int):
 
 @app.get("/support")
 async def read_support(request: Request):
-    logger.info('TRIGGERED: read_support !')
-    return templates.TemplateResponse(request, "/support.html")
+    logfire.info('TRIGGERED: read_support !')
+    return templates.TemplateResponse(request, "/support.html", {})
 
 
 @app.get("/blogs")
 async def read_blogs(request: Request):
     items = blogs.get_all_blog_data()
-    logger.info('TRIGGERED: read_ALL_blogs !')
+    logfire.info('TRIGGERED: read_ALL_blogs !')
     return templates.TemplateResponse(request, "blogs/blogs.html", {"blogs": items})
 
 
@@ -169,7 +218,7 @@ async def read_blog_detail(request: Request, slug: str):
 @app.get("/vlogs")
 async def read_vlogs(request: Request):
     items = blogs.get_all_blog_data()
-    logger.info('TRIGGERED: read_vlogs !')
+    logfire.info('TRIGGERED: read_vlogs !')
     return templates.TemplateResponse(request, "blogs/vlogs.html", {"blogs": items})
 
 @app.get("/vlogs/{slug}")
