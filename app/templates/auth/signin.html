@@ -208,6 +208,20 @@
         const signinForm = document.getElementById('signinForm');
         const errorMessage = document.getElementById('errorMessage');
 
+        // Check for signup success parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('signup') === 'success') {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = 'color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; font-weight: 600;';
+            successDiv.textContent = '✓ Account created successfully! Please sign in with your credentials.';
+            
+            // Insert success message before the form
+            signinForm.parentNode.insertBefore(successDiv, signinForm);
+            
+            // Remove the query parameter from the URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         signinForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
