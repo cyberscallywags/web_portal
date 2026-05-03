@@ -220,8 +220,7 @@ async def submit_contact_form(form_data: ContactFormData):
             contact_record = result.single()
             contact_id = contact_record["contact_id"] if contact_record else None
 
-        driver.close()
-
+     
         return {
             "success": True,
             "message": "Contact form submitted successfully",
