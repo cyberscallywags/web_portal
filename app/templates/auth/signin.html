@@ -222,6 +222,17 @@
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
+        if (urlParams.get('reset') === 'success') {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = 'color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; font-weight: 600;';
+            successDiv.textContent = '✓ Password updated successfully! Please sign in with your new password.';
+            
+            const signinForm = document.getElementById('signinForm');
+            signinForm.parentNode.insertBefore(successDiv, signinForm);
+            
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         signinForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -258,7 +269,6 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    console.log(data.detail)
                     throw new Error(data.detail || 'Login failed. Please check your credentials.');
                 }
 
