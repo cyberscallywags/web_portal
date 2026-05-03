@@ -601,7 +601,22 @@ class EventsManager {
       return `In ${years} year${years > 1 ? 's' : ''}`;
     }
   }
-
+  getEventStatus(dateString) {
+    const now = new Date();
+    const eventDate = new Date(dateString);
+    const diff = eventDate - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    if (diff < 0) {
+      return 'PASSED';
+    } else if (days === 0) {
+      return 'TODAY!';
+    } else if (days <= 7) {
+      return '! THIS WEEK !';
+    }  else {
+      return '# UPCOMING #';
+    }
+  }
   formatEventDate(dateString, endDateString) {
     const startDate = new Date(dateString);
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -634,6 +649,7 @@ class EventsManager {
     col.className = 'col-12 col-md-6 col-lg-4';
     
     const relativeTime = this.getRelativeTime(event.date);
+    const relativeStatus = this.getEventStatus(event.date);
     const formattedDate = this.formatEventDate(event.date, event.date);
     
     // Add Calendar URLs
@@ -643,7 +659,7 @@ class EventsManager {
     col.innerHTML = `
       <article class="project-card" style="cursor: pointer;" onclick="window.location.href='/event/${event.id}'">
         <div class="project-header">
-          <span class="project-status status-upcoming">Upcoming</span>
+          <span class="project-status status-upcoming">${relativeStatus}</span>
           <span style="font-size: 4rem;">📅</span>
         </div>
         <div class="project-card-body">

@@ -9,23 +9,23 @@ import requests
 listings = [
     {
         "id": 1,
-        "name": "Cybersecurity Workshop",
-        "description": "Learn essential cybersecurity practices and protect yourself from common threats. Hands-on workshop covering network security, password management, and threat detection.",
-        "date": "2025-12-15T14:00:00Z",
-        "location": "Tech Hub London, Floor 3",
-        "organizer": "Cyber Scallywags Team",
-        "createdAt": "2025-10-15T10:00:00Z",
-        "lastUpdated": "2025-11-20T12:00:00Z"
+        "name": "CyberScallywags Workshop",
+        "description": "First proper in-person working Group",
+        "date": "2025-10-04T09:00:00Z",
+        "location": "UnCommon Holborn, London",
+        "organizer": "Cyber Scallywags Exec Team",
+        "createdAt": "2025-10-01T10:00:00Z",
+        "lastUpdated": "2025-10-02T19:00:00Z"
     },
     {
         "id": 2,
-        "name": "Web Development Meetup",
-        "description": "Join us for an evening of web development talks and networking. Topics include React, Vue, and modern JavaScript frameworks.",
-        "date": "2026-01-10T18:30:00Z",
-        "location": "Innovation Centre Manchester",
-        "organizer": "Cyber Scallywags Team",
-        "createdAt": "2025-10-15T10:00:00Z",
-        "lastUpdated": "2025-11-20T12:00:00Z"
+        "name": "CyberScallywags Workshop",
+        "description": "Second proper in-person working Group",
+        "date": "2025-11-01T11:00:00Z",
+        "location": "OSB (Observer building) Hastings, East Sussex",
+        "organizer": "Cyber Scallywags Exec Team",
+        "createdAt": "2025-10-25T10:00:00Z",
+        "lastUpdated": "2025-10-29T19:00:00Z"
     },
     {
         "id": 3,

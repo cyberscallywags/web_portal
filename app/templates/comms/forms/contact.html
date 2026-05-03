@@ -3,8 +3,13 @@
 {% block content %}
 <style>
     @keyframes moveGrid {
-        0% { transform: translate(0, 0); }
-        100% { transform: translate(50px, 50px); }
+        0% {
+            transform: translate(0, 0);
+        }
+
+        100% {
+            transform: translate(50px, 50px);
+        }
     }
 
     @keyframes slideInUp {
@@ -12,6 +17,7 @@
             opacity: 0;
             transform: translateY(30px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -34,7 +40,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: 
+        background-image:
             linear-gradient(rgba(193, 228, 21, 0.03) 2px, transparent 2px),
             linear-gradient(90deg, rgba(193, 228, 21, 0.03) 2px, transparent 2px);
         background-size: 50px 50px;
@@ -55,7 +61,7 @@
         font-weight: 700;
         color: #fff;
         margin: 0 0 20px 0;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         animation: slideInUp 0.8s ease-out;
     }
 
@@ -63,7 +69,7 @@
         font-size: 1.3rem;
         color: #C1E415;
         margin: 0;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         animation: slideInUp 0.8s ease-out 0.2s backwards;
     }
 
@@ -80,7 +86,7 @@
         background: #fff;
         border-radius: 20px;
         padding: 50px 40px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         animation: slideInUp 0.6s ease-out;
     }
 
@@ -98,7 +104,8 @@
         font-size: 0.95rem;
     }
 
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
         border: 2px solid #e0e0e0;
         border-radius: 10px;
         padding: 12px 16px;
@@ -106,7 +113,8 @@
         transition: all 0.3s ease;
     }
 
-    .form-control:focus, .form-select:focus {
+    .form-control:focus,
+    .form-select:focus {
         border-color: #C1E415;
         box-shadow: 0 0 0 3px rgba(193, 228, 21, 0.1);
         outline: none;
@@ -182,7 +190,7 @@
     <div class="form-container">
         <h2>Get in Touch</h2>
         <form id="joinForm" data-api-url="/api/contact" class="row g-3" novalidate>
-            
+
             <!-- Form Type Selector -->
             <div class="col-12">
                 <label for="formType" class="form-label">What would you like to do?</label>
@@ -197,27 +205,31 @@
             <!-- Name field -->
             <div class="col-md-6">
                 <label for="name" class="form-label">Full name</label>
-                <input type="text" class="form-control" id="name" name="name" required maxlength="120" placeholder="Your name">
+                <input type="text" class="form-control" id="name" name="name" required maxlength="120"
+                    placeholder="Your name">
                 <div class="invalid-feedback">Please provide your name.</div>
             </div>
 
             <!-- Email field -->
             <div class="col-md-6">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" required maxlength="254" placeholder="you@example.com">
+                <input type="email" class="form-control" id="email" name="email" required maxlength="254"
+                    placeholder="you@example.com">
                 <div class="invalid-feedback">Please provide a valid email.</div>
             </div>
 
             <!-- Role field - only for apply-to-join -->
             <div class="col-12 field-role" style="display: none;">
                 <label for="role" class="form-label">Interest / Role</label>
-                <input type="text" class="form-control" id="role" name="role" placeholder="e.g. volunteer, mentor, learner">
+                <input type="text" class="form-control" id="role" name="role"
+                    placeholder="e.g. volunteer, mentor, learner">
             </div>
 
             <!-- Message field -->
             <div class="col-12 field-message" style="display: none;">
                 <label for="message" class="form-label"><span class="message-label">Optional message</span></label>
-                <textarea id="message" name="message" class="form-control" rows="4" maxlength="1000" placeholder="Tell us a bit about yourself (optional)"></textarea>
+                <textarea id="message" name="message" class="form-control" rows="4" maxlength="1000"
+                    placeholder="Tell us a bit about yourself (optional)"></textarea>
             </div>
 
             <!-- Consent checkbox -->
@@ -240,137 +252,153 @@
 </section>
 
 <script>
-(function () {
-  const form = document.getElementById('joinForm');
-  const statusEl = document.getElementById('formStatus');
-  const formTypeSelect = document.getElementById('formType');
-  const roleField = document.querySelector('.field-role');
-  const messageField = document.querySelector('.field-message');
-  const messageLabel = document.querySelector('.message-label');
-  const roleInput = document.getElementById('role');
-  const messageInput = document.getElementById('message');
-  const apiUrl = form.dataset.apiUrl || '/api/contact';
+    (function () {
+        const form = document.getElementById('joinForm');
+        const statusEl = document.getElementById('formStatus');
+        const formTypeSelect = document.getElementById('formType');
+        const roleField = document.querySelector('.field-role');
+        const messageField = document.querySelector('.field-message');
+        const messageLabel = document.querySelector('.message-label');
+        const roleInput = document.getElementById('role');
+        const messageInput = document.getElementById('message');
+        const apiUrl = form.dataset.apiUrl || '/api/contact';
 
-  formTypeSelect.addEventListener('change', function() {
-    const formType = this.value;
-    
-    roleField.style.display = 'none';
-    messageField.style.display = 'none';
-    roleInput.required = false;
-    messageInput.required = false;
-    
-    switch(formType) {
-      case 'mailing-list':
-        break;
-        
-      case 'apply-to-join':
-        roleField.style.display = 'block';
-        messageField.style.display = 'block';
-        roleInput.required = true;
-        messageLabel.textContent = 'Tell us about yourself';
-        messageInput.placeholder = 'Tell us about your experience and/or why you want to join';
-        messageInput.required = true;
-        break;
-        
-      case 'general-enquiry':
-        messageField.style.display = 'block';
-        messageLabel.textContent = 'Your message';
-        messageInput.placeholder = 'Please tell us how we can help you';
-        messageInput.required = true;
-        break;
-    }
-  });
+        formTypeSelect.addEventListener('change', function () {
+            const formType = this.value;
 
-  function setStatus(msg, ok = true) {
-    statusEl.textContent = msg;
-    statusEl.style.color = ok ? '#C1E415' : '#dc3545';
-  }
+            roleField.style.display = 'none';
+            messageField.style.display = 'none';
+            roleInput.required = false;
+            messageInput.required = false;
 
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    e.stopPropagation();
+            switch (formType) {
+                case 'mailing-list':
+                    break;
 
-    if (!form.checkValidity()) {
-      form.classList.add('was-validated');
-      setStatus('Please correct the highlighted fields.', false);
-      return;
-    }
+                case 'apply-to-join':
+                    roleField.style.display = 'block';
+                    messageField.style.display = 'block';
+                    roleInput.required = true;
+                    messageLabel.textContent = 'Tell us about yourself';
+                    messageInput.placeholder = 'Tell us about your experience and/or why you want to join';
+                    messageInput.required = true;
+                    break;
 
-    const payload = {
-      formType: formTypeSelect.value,
-      name: form.name.value.trim(),
-      email: form.email.value.trim().toLowerCase(),
-      role: form.role.value.trim(),
-      message: form.message.value.trim(),
-      consent: !!document.getElementById('consent').checked,
-      submitted_at: new Date().toISOString()
-    };
-
-    try {
-      const existing = JSON.parse(localStorage.getItem('contact_pending') || '[]');
-      existing.push(payload);
-      localStorage.setItem('contact_pending', JSON.stringify(existing));
-    } catch (err) {}
-
-    setStatus('Sending...', true);
-    document.getElementById('submitBtn').disabled = true;
-
-    try {
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload),
-        credentials: 'same-origin'
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || 'Server returned an error');
-      }
-
-      setStatus('Request sent. Thank you — we will be in touch soon.', true);
-      form.reset();
-      form.classList.remove('was-validated');
-      
-      roleField.style.display = 'none';
-      messageField.style.display = 'none';
-      roleInput.required = false;
-      messageInput.required = false;
-
-      localStorage.removeItem('contact_pending');
-    } catch (err) {
-      console.error('Contact form error:', err);
-      setStatus('Failed to send — your request is saved locally and will be retried later.', false);
-    } finally {
-      document.getElementById('submitBtn').disabled = false;
-    }
-  });
-
-  window.addEventListener('online', async function () {
-    const pending = JSON.parse(localStorage.getItem('contact_pending') || '[]');
-    if (!pending.length) return;
-    setStatus('Retrying pending requests...', true);
-
-    for (const p of pending.slice()) {
-      try {
-        const res = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(p),
-          credentials: 'same-origin'
+                case 'general-enquiry':
+                    messageField.style.display = 'block';
+                    messageLabel.textContent = 'Your message';
+                    messageInput.placeholder = 'Please tell us how we can help you';
+                    messageInput.required = true;
+                    break;
+            }
         });
-        if (!res.ok) throw new Error('Server error');
-      } catch (err) {
-        console.warn('Retry failed', err);
-        setStatus('Retry failed. Will try again later.', false);
-        return;
-      }
-    }
 
-    localStorage.removeItem('contact_pending');
-    setStatus('All pending requests sent.', true);
-  });
-})();
+        function setStatus(msg, ok = true) {
+            statusEl.textContent = msg;
+            statusEl.style.color = ok ? '#C1E415' : '#dc3545';
+        }
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                setStatus('Please correct the highlighted fields.', false);
+                return;
+            }
+
+            const payload = {
+                formType: formTypeSelect.value,
+                name: form.name.value.trim(),
+                email: form.email.value.trim().toLowerCase(),
+                role: form.role.value.trim(),
+                message: form.message.value.trim(),
+                consent: !!document.getElementById('consent').checked,
+                submitted_at: new Date().toISOString()
+            };
+
+            try {
+                const existing = JSON.parse(localStorage.getItem('contact_pending') || '[]');
+                existing.push(payload);
+                localStorage.setItem('contact_pending', JSON.stringify(existing));
+            } catch (err) { }
+
+            setStatus('Sending...', true);
+            document.getElementById('submitBtn').disabled = true;
+
+            try {
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(payload),
+                    credentials: 'same-origin'
+                });
+
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || 'Server returned an error');
+                }
+
+                setStatus('Request sent. Thank you — we will be in touch soon.', true);
+                form.reset();
+                form.classList.remove('was-validated');
+
+                roleField.style.display = 'none';
+                messageField.style.display = 'none';
+                roleInput.required = false;
+                messageInput.required = false;
+
+                localStorage.removeItem('contact_pending');
+            } catch (err) {
+                console.error('Contact form error:', err);
+                setStatus('Failed to send — your request is saved locally and will be retried later.', false);
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+            }
+        });
+
+        window.addEventListener('online', async function () {
+            const pending = JSON.parse(localStorage.getItem('contact_pending') || '[]');
+            if (!pending.length) return;
+            setStatus('Retrying pending requests...', true);
+
+            for (const p of pending.slice()) {
+                try {
+                    const res = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(p),
+                        credentials: 'same-origin'
+                    });
+                    if (!res.ok) throw new Error('Server error');
+                } catch (err) {
+                    console.warn('Retry failed', err);
+                    setStatus('Retry failed. Will try again later.', false);
+                    return;
+                }
+            }
+
+            localStorage.removeItem('contact_pending');
+            setStatus('All pending requests sent.', true);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const interest = urlParams.get('interest');
+
+            if (interest === 'join') {
+                const formTypeSelect = document.getElementById('formType');
+                if (formTypeSelect) {
+                    formTypeSelect.value = 'apply-to-join';
+
+                    // Trigger the change event to ensure conditional fields are shown
+                    const event = new Event('change');
+                    formTypeSelect.dispatchEvent(event);
+                }
+            }
+        });
+    })();
 </script>
 
 {% endblock %}
