@@ -115,6 +115,7 @@
   background: #C1E415;
   color: #4006a7;
   overflow: hidden;
+  margin-right: 4px;
 }
 
 .user-avatar img {
@@ -327,7 +328,7 @@ class AccountManager {
 
   renderLoggedInUser(avatarEl, nameEl, dropdownEl) {
     // Update avatar
-    if (currentUser.avatar) {
+    if (currentUser.avatar && currentUser.avatar.trim() !== "") {
       avatarEl.innerHTML = `<img src="${currentUser.avatar}" alt="${currentUser.name}" />`;
     } else {
       const initials = this.getInitials(currentUser.name);
