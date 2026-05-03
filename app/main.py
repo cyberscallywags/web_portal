@@ -17,15 +17,20 @@ from app.static.data.projects import get_all_project_data
 from app.static.data.projects import get_project_data_by_slug
 from typing import List, Optional
 from pydantic import BaseModel
-import logfire
+import logging
 
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s :: %(message)s',
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
 # Mount static files directory
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
-logfire.configure(token="pylf_v1_us_5HdpTCcCBjqgmwHgnzHHKLQN3g1STTwK8YPWkvFzdvYL")  # Replace 'xxx' with your actual Logfire token
 
 @app.get("/")
 async def read_root(request: Request):
@@ -165,7 +170,7 @@ async def read_events(request: Request):
 @app.get("/event/{event_id}")
 async def read_event_detail(request: Request, event_id: int):
     """Render event detail page"""
-    logfire.info(f'TRIGGERED: read_event_detail :: {event_id} !')
+    logger.info(f'TRIGGERED: read_event_detail :: {event_id} !')
     events_data = service_events.get_all_events()
     events_list = events_data.get('events', [])
 
@@ -201,7 +206,7 @@ async def read_blog_detail(request: Request, slug: str):
     # In a real app, you'd fetch the blog post by slug from your database
     resp = get_blog_data_by_slug(slug)
     blog = resp[0] if resp else None
-    logfire.info(f'TRIGGERED: read_blog_detail  :: {slug}!')
+    logger.info(f'TRIGGERED: read_blog_detail  :: {slug}!')
     # For now, we'll pass the slug to the template
     return templates.TemplateResponse(request, "blogs/blog-detail.html", {
         "slug": slug,
@@ -220,7 +225,7 @@ async def read_vlogs(request: Request):
 async def read_vlogs_detail(request: Request, slug: str):
     resp = get_vlog_data_by_slug(slug)
     vlog = resp[0] if resp else None
-    logfire.info(f'TRIGGERED: read_vlogs_detail :: {slug} !')
+    logger.info(f'TRIGGERED: read_vlogs_detail :: {slug} !')
     # For now, we'll pass the slug to the template
     return templates.TemplateResponse(request, "blogs/vlog-detail.html", {
         "slug": slug,
@@ -233,7 +238,7 @@ async def submit_contact_form(form_data: ContactFormData):
     """Handle contact form submissions and store in Neo4j"""
     try:
         driver = gdb.get_driver()
-        logfire.info('TRIGGERED: submit_contact_form !')
+        logger.info('TRIGGERED: submit_contact_form !')
 
         with driver.session() as session:
             # Create a contact node in Neo4j
@@ -264,8 +269,7 @@ async def submit_contact_form(form_data: ContactFormData):
             contact_record = result.single()
             contact_id = contact_record["contact_id"] if contact_record else None
 
-        driver.close()
-
+     
         return {
             "success": True,
             "message": "Contact form submitted successfully",
@@ -434,7 +438,7 @@ async def get_project_by_slug(project_slug: str):
     """Get a specific project by slug"""
     
     project = get_project_data_by_slug(project_slug)
-    logfire.info(f'TRIGGERED: get_project_by_slug (project_slug={project_slug}) !')
+    logger.info(f'TRIGGERED: get_project_by_slug (project_slug={project_slug}) !')
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     
@@ -446,7 +450,7 @@ async def get_project_by_slug(project_slug: str):
 async def get_all_events_api():
     """API endpoint to get all events"""
     events = service_events.get_all_events()
-    logfire.info('TRIGGERED: get_ALL_events !')
+    logger.info('TRIGGERED: get_ALL_events !')
     return events
 
 
@@ -455,7 +459,7 @@ async def get_event_by_id(event_id: int):
     """Get a specific event by ID"""
     events_data = service_events.get_all_events()
     events_list = events_data.get('events', [])
-    logfire.info('TRIGGERED: get_event_by_id !')
+    logger.info('TRIGGERED: get_event_by_id !')
 
     for event in events_list:
         if event.get('id') == event_id:
