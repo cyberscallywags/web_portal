@@ -490,7 +490,31 @@ async def get_projects():
             "created_date": "2025-03-27",
             "last_updated": "2025-03-27",
             
-        }
+        },
+        {
+            "id": 8,
+            "logoRect": 'images/logo/cqc_logo.png',
+            "style": 'alt="Project Emoji" style="height: 1000px; width: 100px; object-fit: cover;" class="img-fluid"',
+            "title": "AuraDB Buddy",
+            "slug": "auradb-buddy",
+            "description": "A tool for managing and validating auraDB txt credentials for AuraDB.",
+            "emoji": "🧠",
+            "status": "Planned",
+            "technologies": ["streamlit",  "AuraDB", "Credentials Management"],
+            "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://auradbuddy.cyberscallywags.uk/",
+            "contributors": [
+                
+                {
+                    "name": "Colin Moore-Hill - Lead",
+                    "emoji": "🌐",
+                    "team_slug": "colin-moore-hill"
+                }
+            ],            
+            "created_date": "2025-05-01",
+            "last_updated": "2025-05-01",
+            
+        },
     ]
     
     return {

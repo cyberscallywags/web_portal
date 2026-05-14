@@ -356,6 +356,43 @@ def get_project_data() -> list[dict]:
                 "Attend webinars and workshops to enhance your learning experience.\n"
                 "Follow the Practical Pythonista Club on social media for updates and announcements."
             ]
+        },
+        {
+            "id": 8,
+            "logoRect": 'images/logo/cqc_logo.png',
+            "style": 'alt="Project Emoji" style="height: 1000px; width: 100px; object-fit: cover;" class="img-fluid"',
+            "title": "AuraDB Buddy",
+            "slug": "auradb-buddy",
+            "description": "A tool for managing and validating auraDB txt credentials for AuraDB.",
+            "emoji": "🧠",
+            "status": "Planned",
+            "technologies": ["streamlit",  "AuraDB", "Credentials Management"],
+            "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://auradbuddy.cyberscallywags.uk/",
+            "contributors": [
+                
+                {
+                    "name": "Colin Moore-Hill - Lead",
+                    "emoji": "🌐",
+                    "team_slug": "colin-moore-hill"
+                }
+            ],            
+            "created_date": "2025-05-01",
+            "last_updated": "2025-05-01",
+            "release_date": "Mid Q3",
+            "features": [
+                "Frustrated by the volume of AuraDB credentials.",
+                "Implement a streamlined process for managing and validating credentials."
+            ],
+            "future_plans": [
+                "Expand the range of credentials to be validated.\n"
+                "This may necessitate introducing a clearer more secure deployable tools to ensure privacy.\n"
+            ],
+            "installation": [
+                "The application will be online initially for the validation of the txt files.\n"
+                "As the application looks to expand its features, user feedback will be crucial.\n"
+                "Follow PydanticAura on social media for updates and announcements."
+            ]
         }
     ]
 
