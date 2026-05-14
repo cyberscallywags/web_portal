@@ -16,7 +16,7 @@ def get_team_data() -> list[dict]:
                 },
                 {
                     "name": "Kishion Layne",
-                    "role": "CEO",
+                    "role": "Chief Executive Officer",
                     "bio": "Data management & governance. Advocate for open knowledge and community learning.",
                     "cartoon": "/static/images/team/kishion/team.png",
                     "photo": "/static/images/team/kishion/pic.jpeg",
@@ -28,7 +28,7 @@ def get_team_data() -> list[dict]:
                 },
                 {
                     "name": "Dean Foulds",
-                    "role": "Chief Scientic Technologist",
+                    "role": "Chief Scientific Technologist",
                     "bio": "Bridges product vision with technical knowledge. Makes the magic happen!",
                     "cartoon": "/static/images/team/dean/team.png",
                     "photo": "/static/images/team/dean/pic.jpeg",

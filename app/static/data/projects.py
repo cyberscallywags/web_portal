@@ -5,7 +5,7 @@ def get_project_data() -> list[dict]:
             "logoRect": 'images/logo/dsf_Companion_logo.png',
             "title": "DSF Companion",
             "slug": "dsf-companion",
-            "description": "An festival planner & AI companion for individuals to connect with the resources and support community in general.",
+            "description": "A festival planner & AI companion for individuals to connect with the resources and support community in general.",
             "emoji": "🦾",
             "status": "Active",
             "technologies": ["python", "FastAPI", "Jinja2", "TypeScript", "HTML", "SCSS", "Dockerfile", "JavaScript"],
