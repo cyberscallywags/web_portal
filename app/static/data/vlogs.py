@@ -12,7 +12,7 @@ def get_vlog_data() -> list[dict]:
             "status": "Active",
             "technologies": ["python", "FastAPI", "Jinja2", "TypeScript", "HTML", "SCSS", "Dockerfile", "JavaScript"],
             "github_url": "https://github.com/cyberscallywags/ai-ethics-toolkit",
-            "demo_url": "https://dsf.cyberscallywags.uk",
+            "demo_url": "https://mobile.dsfcompanion.uk",
             "contributors": [
                 {
                     "name": "Colin Moore-Hill",

@@ -1,23 +1,24 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
-from app.static.data import team, blogs
+from app.static.data import team, newsletter
 from app.services.models.project_schema import Project, ProjectsResponse
 from app.services import service_projects
 from app.services import service_events
+from app.services import service_blogs
+from app.services import service_vlogs
 from app.services.auth_service import authenticate_user, LoginRequest, AuthServiceError
 from app.templates.comms.forms.schema.contact_form import ContactFormData
-from app.services import graphDB as gdb 
+from app.services import graphDB as gdb
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from app.static.data.blogs import get_all_blog_data 
-from app.static.data.blogs import get_blog_data_by_slug 
-from app.static.data.vlogs import get_all_vlog_data 
-from app.static.data.vlogs import get_vlog_data_by_slug 
+from app.static.data.newsletter import get_all_newsletter_data
+from app.static.data.newsletter import get_newsletter_data_by_slug
 from app.static.data.projects import get_all_project_data
 from app.static.data.projects import get_project_data_by_slug
 from typing import List, Optional
 from pydantic import BaseModel
 import logging
+import logfire
 
 
 logging.basicConfig(
@@ -171,18 +172,11 @@ async def read_events(request: Request):
 async def read_event_detail(request: Request, event_id: int):
     """Render event detail page"""
     logger.info(f'TRIGGERED: read_event_detail :: {event_id} !')
-    events_data = service_events.get_all_events()
-    events_list = events_data.get('events', [])
+    event = service_events.get_event_by_id(event_id)
 
-    event = None
-    for e in events_list:
-        if e.get('id') == event_id:
-            event = e
-            break
-    
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
-    
+
     return templates.TemplateResponse(request, "/events/event-detail.html", {
         "event": event
     })
@@ -196,40 +190,70 @@ async def read_support(request: Request):
 
 @app.get("/blogs")
 async def read_blogs(request: Request):
-    items = blogs.get_all_blog_data()
+    blogs_data = service_blogs.get_all_blogs()
     logfire.info('TRIGGERED: read_ALL_blogs !')
-    return templates.TemplateResponse(request, "blogs/blogs.html", {"blogs": items})
+    return templates.TemplateResponse(request, "blogs/blogs.html", {"blogs": blogs_data})
 
 
 @app.get("/blog/{slug}")
 async def read_blog_detail(request: Request, slug: str):
-    # In a real app, you'd fetch the blog post by slug from your database
-    resp = get_blog_data_by_slug(slug)
-    blog = resp[0] if resp else None
-    logger.info(f'TRIGGERED: read_blog_detail  :: {slug}!')
-    # For now, we'll pass the slug to the template
+    """Render blog detail page."""
+    logger.info(f'TRIGGERED: read_blog_detail :: {slug} !')
+    blog = service_blogs.get_blog_by_slug(slug)
+
+    if not blog:
+        raise HTTPException(status_code=404, detail="Blog not found")
+
+    related = service_blogs.get_related_blogs(slug)
     return templates.TemplateResponse(request, "blogs/blog-detail.html", {
         "slug": slug,
-        "blog": blog
+        "blog": blog,
+        "related": related,
     })
-
 
 
 @app.get("/vlogs")
 async def read_vlogs(request: Request):
-    items = blogs.get_all_blog_data()
-    logfire.info('TRIGGERED: read_vlogs !')
-    return templates.TemplateResponse(request, "blogs/vlogs.html", {"blogs": items})
+    vlogs_data = service_vlogs.get_all_vlogs()
+    logfire.info('TRIGGERED: read_ALL_vlogs !')
+    return templates.TemplateResponse(request, "blogs/vlogs.html", {"vlogs": vlogs_data})
+
 
 @app.get("/vlogs/{slug}")
 async def read_vlogs_detail(request: Request, slug: str):
-    resp = get_vlog_data_by_slug(slug)
-    vlog = resp[0] if resp else None
+    """Render vlog detail page."""
     logger.info(f'TRIGGERED: read_vlogs_detail :: {slug} !')
-    # For now, we'll pass the slug to the template
+    vlog = service_vlogs.get_vlog_by_slug(slug)
+
+    if not vlog:
+        raise HTTPException(status_code=404, detail="Vlog not found")
+
+    related = service_vlogs.get_related_vlogs(slug)
     return templates.TemplateResponse(request, "blogs/vlog-detail.html", {
         "slug": slug,
-        "blog": vlog  # Using 'blog' key for template compatibility
+        "vlog": vlog,
+        "related": related,
+    })
+
+
+@app.get("/newsletter")
+async def read_newsletter(request: Request):
+    items = newsletter.get_all_newsletter_data()
+    logfire.info('TRIGGERED: read_ALL_newsletter !')
+    return templates.TemplateResponse(request, "newsletter/newsletter.html", {"newsletter": items})
+
+
+
+@app.get("/newsletter/{slug}")
+async def read_newsletter_detail(request: Request, slug: str):
+    resp = get_newsletter_data_by_slug(slug)
+    current = resp[0] if resp else None
+    related = [n for n in get_all_newsletter_data() if n["slug"] != slug][:3]
+    logger.info(f'TRIGGERED: read_newsletter_detail  :: {slug}!')
+    return templates.TemplateResponse(request, "newsletter/newsletter-detail.html", {
+        "slug": slug,
+        "newsletter": current,
+        "related": related,
     })
 
 
@@ -318,7 +342,7 @@ async def get_projects():
             "status": "Active",
             "technologies": ["python", "FastAPI", "Jinja2", "TypeScript", "HTML", "SCSS", "Dockerfile", "JavaScript"],
             "github_url": "https://github.com/cyberscallywags/ai-ethics-toolkit",
-            "demo_url": "https://dsf.cyberscallywags.uk",
+            "demo_url": "https://mobile.dsfcompanion.uk",
             "contributors": [
                 {
                     "name": "Colin Moore-Hill",
@@ -343,7 +367,8 @@ async def get_projects():
             ],
             "created_date": "2024-08-20",
             "last_updated": "2025-02-14"
-        }, {
+        }, 
+        {
             "id": 2,
             "logo": 'images/logo/dsf_Companion_logo.png',
             "title": "Python Code Nanny",
@@ -384,7 +409,8 @@ async def get_projects():
             ],
             "created_date": "2025-03-01",
             "last_updated": "2025-11-15"
-        }, {
+        }, 
+        {
             "id": 4,
             "logo": 'images/logo/dsf_Companion_logo.png',
             "title": "Cyber Scallywags Community",
@@ -412,6 +438,58 @@ async def get_projects():
             ],
             "created_date": "2025-03-01",
             "last_updated": "2025-11-15"
+        },
+        {
+            "id": 6,
+            "logoRect": 'images/logo/cqc_logo.png',
+            "style": 'alt="Project Emoji" style="height: 1000px; width: 100px; object-fit: cover;" class="img-fluid"',
+            "title": "CQC Intelligence platform",
+            "slug": "cqc-intelligence-platform",
+            "description": "A platform for collaborative intelligence gathering and analysis of CQC (Care Quality Commission).",
+            "emoji": "🧠",
+            "status": "Planned",
+            "technologies": ["python", "AI", "ML", "data-science", "Graph Neural Networks"],
+            "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://cqc.cyberscallywags.uk/",
+            "contributors": [
+                
+                {
+                    "name": "Edward Bensa - Lead",
+                    "emoji": "🎨",
+                    "team_slug": "edward-bensa"
+                },
+                {
+                    "name": "Tiana Bettinson",
+                    "emoji": "🌐",
+                    "team_slug": "tiana-bettinson"
+                }
+            ],            
+            "created_date": "2025-11-15",
+            "last_updated": "2025-11-15",
+        },
+        {
+            "id": 7,
+            "logoRect": 'images/logo/cqc_logo.png',
+            "style": 'alt="Project Emoji" style="height: 1000px; width: 100px; object-fit: cover;" class="img-fluid"',
+            "title": "Disused Coal Tip Safety Monitoring",
+            "slug": "disused-coal-tip-safety",
+            "description": "A platform for collaborative Citizen Science intelligence gathering and analysis in support of the Welsh Assembly.",
+            "emoji": "🧠",
+            "status": "Planned",
+            "technologies": ["python", "AI",  "data-science", "Geospatial Analysis"],
+            "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://coaltips.cyberscallywags.uk/",
+            "contributors": [
+                
+                {
+                    "name": "Colin Moore-Hill - Lead",
+                    "emoji": "🌐",
+                    "team_slug": "colin-moore-hill"
+                }
+            ],            
+            "created_date": "2025-03-27",
+            "last_updated": "2025-03-27",
+            
         }
     ]
     
@@ -457,12 +535,46 @@ async def get_all_events_api():
 @app.get("/api/events/{event_id}")
 async def get_event_by_id(event_id: int):
     """Get a specific event by ID"""
-    events_data = service_events.get_all_events()
-    events_list = events_data.get('events', [])
     logger.info('TRIGGERED: get_event_by_id !')
+    event = service_events.get_event_by_id(event_id)
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return event
 
-    for event in events_list:
-        if event.get('id') == event_id:
-            return event
-    
-    raise HTTPException(status_code=404, detail="Event not found")
+
+# API Endpoints for BLOGS
+
+@app.get("/api/blogs")
+async def get_all_blogs_api():
+    """Return all blogs."""
+    logger.info('TRIGGERED: get_ALL_blogs !')
+    return service_blogs.get_all_blogs()
+
+
+@app.get("/api/blogs/{slug}")
+async def get_blog_by_slug_api(slug: str):
+    """Return a single blog by slug."""
+    logger.info(f'TRIGGERED: get_blog_by_slug :: {slug} !')
+    blog = service_blogs.get_blog_by_slug(slug)
+    if not blog:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    return blog
+
+
+# API Endpoints for VLOGS
+
+@app.get("/api/vlogs")
+async def get_all_vlogs_api():
+    """Return all vlogs."""
+    logger.info('TRIGGERED: get_ALL_vlogs !')
+    return service_vlogs.get_all_vlogs()
+
+
+@app.get("/api/vlogs/{slug}")
+async def get_vlog_by_slug_api(slug: str):
+    """Return a single vlog by slug."""
+    logger.info(f'TRIGGERED: get_vlog_by_slug :: {slug} !')
+    vlog = service_vlogs.get_vlog_by_slug(slug)
+    if not vlog:
+        raise HTTPException(status_code=404, detail="Vlog not found")
+    return vlog

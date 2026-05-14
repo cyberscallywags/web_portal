@@ -5,30 +5,31 @@ def get_project_data() -> list[dict]:
             "logoRect": 'images/logo/dsf_Companion_logo.png',
             "title": "DSF Companion",
             "slug": "dsf-companion",
-            "description": "A digital companion for individuals to connect with the resources, support, and community in general.",
+            "description": "An festival planner & AI companion for individuals to connect with the resources and support community in general.",
             "emoji": "🦾",
             "status": "Active",
             "technologies": ["python", "FastAPI", "Jinja2", "TypeScript", "HTML", "SCSS", "Dockerfile", "JavaScript"],
-            "github_url": "https://github.com/cyberscallywags/ai-ethics-toolkit",
-            "demo_url": "https://dsf.cyberscallywags.uk",
+            "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://mobile.dsfcompanion.uk",
             "contributors": [
+                
+                {
+                    "name": "Amit Kumar - Lead",
+                    "emoji": "🎨",
+                    "team_slug": "amit-kumar"
+                },
                 {
                     "name": "Colin Moore-Hill",
                     "emoji": "🌐",
                     "team_slug": "colin-moore-hill"
                 },
                 {
-                    "name": "Dean Foulds",
-                    "emoji": "🎨",
-                    "team_slug": "dean-foulds"
-                },
-                {
-                    "name": "Amit ",
-                    "emoji": "🎨",
-                    "team_slug": "dean-foulds"
-                },
-                {
                     "name": "Edward Bensa",
+                    "emoji": "🎨",
+                    "team_slug": "edward-bensa"
+                },
+                {
+                    "name": "Dean Foulds",
                     "emoji": "🎨",
                     "team_slug": "dean-foulds"
                 }
@@ -154,6 +155,7 @@ def get_project_data() -> list[dict]:
             "status": "Planned",
             "technologies": ["python", "ai-ml", "data-science"],
             "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://cyberscallywags.uk",
             "contributors": [
                 {
                     "name": "Colin Moore-Hill",
@@ -212,6 +214,7 @@ def get_project_data() -> list[dict]:
             "status": "Planned",
             "technologies": ["python", "AI", "ML", "data-science", "Graph &Network Theory"],
             "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://ppc.cyberscallywags.uk/",
             "contributors": [
                 {
                     "name": "Colin Moore-Hill",
@@ -236,6 +239,101 @@ def get_project_data() -> list[dict]:
             ],            
             "created_date": "2025-11-15",
             "last_updated": "2025-11-15",
+            "release_date": "tbc",
+            "features": [
+                "Interactive coding challenges to enhance Python skills."
+                "Peer mentoring system to foster collaborative learning."
+                "Community forums for knowledge sharing and support."
+                "Regular webinars and workshops on Python-related topics."
+                "Access to a repository of open-source Python projects."
+            ],
+            "future_plans": [
+                "Expand the range of coding challenges to cover advanced Python topics.\n"
+                "Introduce a certification program for completed learning paths.\n"
+                "Collaborate with industry experts for guest lectures and mentorship.\n"
+                "Develop a mobile app for on-the-go learning and community interaction.\n"
+                "Organize hackathons and coding competitions to encourage practical application of skills."
+            ],
+            "installation": [
+                "Visit the GitHub repository to access the codebase and documentation.\n"
+                "Join the community forums to connect with other Python enthusiasts.\n"
+                "Participate in coding challenges and contribute to open-source projects.\n"
+                "Attend webinars and workshops to enhance your learning experience.\n"
+                "Follow the Practical Pythonista Club on social media for updates and announcements."
+            ]
+        },
+        {
+            "id": 6,
+            "logoRect": 'images/logo/cqc_logo.png',
+            "style": 'alt="Project Emoji" style="height: 1000px; width: 100px; object-fit: cover;" class="img-fluid"',
+            "title": "CQC Intelligence platform",
+            "slug": "cqc-intelligence-platform",
+            "description": "A platform for collaborative intelligence gathering and analysis of CQC (Care Quality Commission).",
+            "emoji": "🧠",
+            "status": "Planned",
+            "technologies": ["python", "AI", "ML", "data-science", "Graph Neural Networks"],
+            "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://cqc.cyberscallywags.uk/",
+            "contributors": [
+                
+                {
+                    "name": "Edward Bensa - Lead",
+                    "emoji": "🎨",
+                    "team_slug": "edward-bensa"
+                },
+                {
+                    "name": "Tiana Bettinson",
+                    "emoji": "🌐",
+                    "team_slug": "tiana-bettinson"
+                }
+            ],            
+            "created_date": "2025-11-15",
+            "last_updated": "2025-11-15",
+            "release_date": "tbc",
+            "features": [
+                "Interactive coding challenges to enhance Python skills."
+                "Peer mentoring system to foster collaborative learning."
+                "Community forums for knowledge sharing and support."
+                "Regular webinars and workshops on Python-related topics."
+                "Access to a repository of open-source Python projects."
+            ],
+            "future_plans": [
+                "Expand the range of coding challenges to cover advanced Python topics.\n"
+                "Introduce a certification program for completed learning paths.\n"
+                "Collaborate with industry experts for guest lectures and mentorship.\n"
+                "Develop a mobile app for on-the-go learning and community interaction.\n"
+                "Organize hackathons and coding competitions to encourage practical application of skills."
+            ],
+            "installation": [
+                "Visit the GitHub repository to access the codebase and documentation.\n"
+                "Join the community forums to connect with other Python enthusiasts.\n"
+                "Participate in coding challenges and contribute to open-source projects.\n"
+                "Attend webinars and workshops to enhance your learning experience.\n"
+                "Follow the Practical Pythonista Club on social media for updates and announcements."
+            ]
+        },
+        {
+            "id": 7,
+            "logoRect": 'images/logo/cqc_logo.png',
+            "style": 'alt="Project Emoji" style="height: 1000px; width: 100px; object-fit: cover;" class="img-fluid"',
+            "title": "Disused Coal Tip Safety Monitoring",
+            "slug": "disused-coal-tip-safety",
+            "description": "A platform for collaborative Citizen Science intelligence gathering and analysis in support of the Welsh Assembly.",
+            "emoji": "🧠",
+            "status": "Planned",
+            "technologies": ["python", "AI",  "data-science", "Geospatial Analysis"],
+            "github_url": "https://github.com/cyberscallywags/",
+            "demo_url": "https://coaltips.cyberscallywags.uk/",
+            "contributors": [
+                
+                {
+                    "name": "Colin Moore-Hill - Lead",
+                    "emoji": "🌐",
+                    "team_slug": "colin-moore-hill"
+                }
+            ],            
+            "created_date": "2025-03-27",
+            "last_updated": "2025-03-27",
             "release_date": "tbc",
             "features": [
                 "Interactive coding challenges to enhance Python skills."

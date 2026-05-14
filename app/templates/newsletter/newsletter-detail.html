@@ -1,0 +1,571 @@
+{% extends "base.html" %}
+{% block title %}{{ newsletter.title if newsletter else 'newsletter Post' }} - Cyber Scallywags{% endblock %}
+{% block content %}
+
+<style>
+.newsletter-detail-hero {
+  background: linear-gradient(135deg, #4006a7 0%, #0e6abd 50%, #CC0084 100%);
+  padding: 4rem 0 3rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+
+.newsletter-detail-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(193, 228, 21, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: moveGrid 20s linear infinite;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.newsletter-detail-content {
+  position: relative;
+  z-index: 1;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #C1E415;
+  transform: translateX(-5px);
+}
+
+.newsletter-detail-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.newsletter-meta-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C1E415, #00B1B3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4006a7;
+  font-weight: bold;
+  font-size: 1.3rem;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.author-bio {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.post-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+.post-info span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.newsletter-tags-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.newsletter-tag {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 2px solid rgba(193, 228, 21, 0.5);
+  transition: all 0.3s ease;
+}
+
+.newsletter-tag:hover {
+  background: #C1E415;
+  color: #4006a7;
+  border-color: #C1E415;
+  transform: scale(1.05);
+}
+
+.main-content {
+  background: white;
+}
+
+.content-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.featured-image-section {
+  margin-bottom: 3rem;
+}
+
+.featured-image-wrapper {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #4006a7, #0e6abd);
+  position: relative;
+}
+
+.featured-image-wrapper img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4006a7, #CC0084);
+}
+
+.featured-emoji {
+  font-size: 8rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.article-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.excerpt {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: #555;
+  font-weight: 300;
+  font-style: italic;
+  border-left: 5px solid #C1E415;
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+  background: rgba(193, 228, 21, 0.05);
+  padding: 1.5rem 1.5rem 1.5rem 2rem;
+  border-radius: 0 12px 12px 0;
+}
+
+.content {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: #333;
+}
+
+.content h2, .content h3 {
+  color: #4006a7;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.content h2 {
+  font-size: 2rem;
+  border-bottom: 3px solid #C1E415;
+  padding-bottom: 0.5rem;
+}
+
+.content h3 {
+  font-size: 1.5rem;
+}
+
+.content p {
+  margin-bottom: 1.5rem;
+}
+
+.content ul, .content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.content li {
+  margin-bottom: 0.75rem;
+}
+
+.content strong {
+  color: #4006a7;
+  font-weight: 700;
+}
+
+.content a {
+  color: #0e6abd;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.content a:hover {
+  color: #CC0084;
+}
+
+.content blockquote {
+  border-left: 5px solid #00B1B3;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #666;
+  background: rgba(0, 177, 179, 0.05);
+  padding: 1rem 1.5rem;
+  border-radius: 0 12px 12px 0;
+}
+
+.content code {
+  background: #f8f9fa;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: #CC0084;
+  font-family: 'Courier New', monospace;
+}
+
+.content pre {
+  background: #1e1e1e;
+  color: #C1E415;
+  padding: 1.5rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.newsletter-actions {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.share-label {
+  font-weight: 700;
+  color: #4006a7;
+  font-size: 1.1rem;
+}
+
+.share-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-btn-twitter {
+  background: #1DA1F2;
+  color: white;
+  border-color: #1DA1F2;
+}
+
+.share-btn-twitter:hover {
+  background: white;
+  color: #1DA1F2;
+  transform: translateY(-2px);
+}
+
+.share-btn-linkedin {
+  background: #0077B5;
+  color: white;
+  border-color: #0077B5;
+}
+
+.share-btn-linkedin:hover {
+  background: white;
+  color: #0077B5;
+  transform: translateY(-2px);
+}
+
+.share-btn-facebook {
+  background: #1877F2;
+  color: white;
+  border-color: #1877F2;
+}
+
+.share-btn-facebook:hover {
+  background: white;
+  color: #1877F2;
+  transform: translateY(-2px);
+}
+
+.related-section {
+  background: linear-gradient(to bottom, #f8f9fa, white);
+  padding: 3rem 0;
+}
+
+.related-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #4006a7;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.related-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  cursor: pointer;
+  border-top: 4px solid #C1E415;
+}
+
+.related-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(64, 6, 167, 0.15);
+}
+
+.related-image {
+  height: 150px;
+  background: linear-gradient(135deg, #4006a7, #0e6abd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.related-body {
+  padding: 1.25rem;
+}
+
+.related-card-title {
+  color: #4006a7;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.related-excerpt {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .newsletter-detail-title {
+    font-size: 2rem;
+  }
+  
+  .newsletter-meta-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .post-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .share-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+</style>
+
+<!-- newsletter Header -->
+<section class="newsletter-detail-hero">
+  <div class="container">
+    <div class="newsletter-detail-content">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <a href="/newsletters" class="back-link">← Back to newsletters</a>
+          <h1 class="newsletter-detail-title">{{ newsletter.title if newsletter else 'Loading...' }}</h1>
+          
+          <div class="newsletter-meta-header">
+            <div class="author-info">
+              <div class="author-avatar">{{ newsletter.author.name[0] if newsletter and newsletter.author else 'A' }}</div>
+              <div class="author-details">
+                <span class="author-name">{{ newsletter.author.name if newsletter and newsletter.author else 'Unknown Author' }}</span>
+                <span class="author-bio">{{ newsletter.author.bio if newsletter and newsletter.author else 'Writer' }}</span>
+              </div>
+            </div>
+            
+            <div class="post-info">
+              <span>📅 {{ newsletter.published_date if newsletter else '' }}</span>
+              <span>⏱️ {{ newsletter.read_time if newsletter else '' }}</span>
+              <span>👁️ {{ newsletter.views if newsletter else 0 }} views</span>
+            </div>
+          </div>
+          
+          <div class="newsletter-tags-header">
+            {% if newsletter and newsletter.tags %}
+              {% for tag in newsletter.tags %}
+                <span class="newsletter-tag">{{ tag }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- newsletter Content -->
+<section class="main-content py-5">
+  <div class="container">
+    <div class="content-wrapper">
+      <!-- Featured Image -->
+      <div class="featured-image-section">
+        <div class="featured-image-wrapper">
+          {% if newsletter and newsletter.featured_image %}
+          <img src="{{ url_for('static', path=newsletter.featured_image) }}" alt="{{ newsletter.title }}">
+          {% else %}
+          <div class="image-placeholder">
+            <span class="featured-emoji">{{ newsletter.emoji if newsletter else '📝' }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Article Content -->
+      <article class="article-content">
+        {% if newsletter and newsletter.excerpt %}
+        <div class="excerpt">
+          {{ newsletter.excerpt }}
+        </div>
+        {% endif %}
+        
+        <div class="content">
+          <div id="newsletterContent">
+            {% if newsletter and newsletter.content %}
+              {{ newsletter.content | safe }}
+            {% else %}
+              <p class="text-muted">Content will be loaded here...</p>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+      
+      <!-- Share & Actions -->
+      <div class="newsletter-actions">
+        <div class="share-buttons">
+          <span class="share-label">Share this article:</span>
+          <a href="#" class="share-btn share-btn-twitter">🐦 Twitter</a>
+          <a href="#" class="share-btn share-btn-linkedin">💼 LinkedIn</a>
+          <a href="#" class="share-btn share-btn-facebook">📘 Facebook</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Related Posts -->
+{% if related %}
+<section class="related-section">
+  <div class="container">
+    <h2 class="related-title">More from the newsletter</h2>
+    <div class="row g-4">
+      <div class="col-lg-10 mx-auto">
+        <div class="row g-4">
+          {% for r in related %}
+            <div class="col-md-6 col-lg-4">
+              <a href="/newsletter/{{ r.slug }}" class="text-decoration-none">
+                <div class="related-card">
+                  <div class="related-image">
+                    {% if r.featured_image %}
+                      <img src="{{ url_for('static', path=r.featured_image) }}" alt="{{ r.title }}" style="max-height:100%; max-width:100%; object-fit:contain; padding:1rem;">
+                    {% else %}
+                      <span>{{ r.emoji or '📝' }}</span>
+                    {% endif %}
+                  </div>
+                  <div class="related-body">
+                    <h6 class="related-card-title">{{ r.title }}</h6>
+                    <p class="related-excerpt">{{ r.excerpt }}</p>
+                    <small class="text-muted">⏱️ {{ r.read_time }}</small>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

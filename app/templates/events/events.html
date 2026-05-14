@@ -328,8 +328,8 @@
 <div class="events-hero">
   <div class="container">
     <div class="events-hero-content">
-      <h1 class="events-title">📅 Cyber Scallywags Events 🎉</h1>
-      <p class="events-tagline">Join us for technical workshops, community meetups, and learning sessions</p>
+      <h1 class="events-title">Cyber Scallywags Events</h1>
+      <p class="events-tagline">Join us for workshops, community meetups, and learning sessions</p>
     </div>
   </div>
 </div>
@@ -543,13 +543,16 @@ class EventsManager {
 
   filterEvents() {
     const searchTerm = document.getElementById('searchInput').value;
+    const term = searchTerm.toLowerCase();
 
     this.filteredEvents = this.events.filter(event => {
-      const matchesSearch = !searchTerm || 
-        event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (event.location && event.location.toLowerCase().includes(searchTerm.toLowerCase()));
-      
+      const matchesSearch = !term ||
+        event.name.toLowerCase().includes(term) ||
+        event.description.toLowerCase().includes(term) ||
+        (event.location && event.location.toLowerCase().includes(term)) ||
+        (event.event_type && event.event_type.toLowerCase().includes(term)) ||
+        (event.tags && event.tags.some(t => t.toLowerCase().includes(term)));
+
       return matchesSearch;
     });
 
@@ -647,22 +650,65 @@ class EventsManager {
   createEventCard(event) {
     const col = document.createElement('div');
     col.className = 'col-12 col-md-6 col-lg-4';
-    
+
     const relativeTime = this.getRelativeTime(event.date);
-    const relativeStatus = this.getEventStatus(event.date);
-    const formattedDate = this.formatEventDate(event.date, event.date);
-    
-    // Add Calendar URLs
+    let relativeStatus = this.getEventStatus(event.date);
+    let statusClass = 'status-upcoming';
+
+    if (event.status === 'cancelled') {
+      relativeStatus = 'CANCELLED';
+      statusClass = 'status-cancelled';
+    } else if (event.is_sold_out) {
+      relativeStatus = 'SOLD OUT';
+      statusClass = 'status-cancelled';
+    } else if (relativeStatus === 'PASSED') {
+      statusClass = 'status-past';
+    }
+
+    const formattedDate = this.formatEventDate(event.date, event.end_date);
     const googleCalUrl = this.generateGoogleCalendarUrl(event);
-    const icalUrl = this.generateICalUrl(event);
+
+    const emoji = event.emoji || '📅';
+    const eventType = event.event_type || 'Event';
+    const onlineBadge = event.is_online
+      ? '<span class="event-type-badge" style="background: rgba(0, 177, 179, 0.15); color: #00B1B3; margin-left: 0.4rem;">🌐 Online</span>'
+      : '';
+
+    const priceLabel = event.is_free ? '✨ Free' : (event.price || '');
+
+    let capacityHTML = '';
+    if (event.capacity) {
+      const registered = event.registered_count || 0;
+      const pct = Math.min(100, Math.round((registered / event.capacity) * 100));
+      capacityHTML = `
+        <div style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #666; margin-bottom: 0.3rem;">
+            <span>${registered} / ${event.capacity} registered</span>
+            <span style="font-weight: 600; color: #4006a7;">${priceLabel}</span>
+          </div>
+          <div style="height: 6px; background: #eee; border-radius: 3px; overflow: hidden;">
+            <div style="height: 100%; width: ${pct}%; background: linear-gradient(90deg, #4006a7, #C1E415);"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    const tagsHTML = (event.tags || []).slice(0, 3).map(t =>
+      `<span style="display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.7rem; background: rgba(64, 6, 167, 0.1); color: #4006a7; margin-right: 0.3rem; margin-bottom: 0.3rem;">${t}</span>`
+    ).join('');
+
+    const safeName = event.name.replace(/'/g, "\\'");
 
     col.innerHTML = `
       <article class="project-card" style="cursor: pointer;" onclick="window.location.href='/event/${event.id}'">
         <div class="project-header">
-          <span class="project-status status-upcoming">${relativeStatus}</span>
-          <span style="font-size: 4rem;">📅</span>
+          <span class="project-status ${statusClass}">${relativeStatus}</span>
+          <span style="font-size: 4rem;">${emoji}</span>
         </div>
         <div class="project-card-body">
+          <div>
+            <span class="event-type-badge">${eventType}</span>${onlineBadge}
+          </div>
           <h3 class="project-title">${event.name}</h3>
           <div class="event-time">${formattedDate}</div>
           <div class="countdown-timer">🕒 ${relativeTime}</div>
@@ -675,10 +721,11 @@ class EventsManager {
               <strong>👤</strong> ${event.organizer || 'TBD'}
             </p>
           </div>
-          
+          ${tagsHTML ? `<div style="margin-bottom: 0.75rem;">${tagsHTML}</div>` : ''}
+          ${capacityHTML}
           <div class="project-links" style="margin-top: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
-            <button class="project-link" onclick="event.stopPropagation(); eventsManager.registerForEvent(${event.id}, '${event.name.replace(/'/g, "\\'")}', false)" style="border: none; cursor: pointer;">
-              ✅ Register
+            <button class="project-link" onclick="event.stopPropagation(); eventsManager.registerForEvent(${event.id}, '${safeName}', ${event.is_sold_out ? 'true' : 'false'})" style="border: none; cursor: pointer; ${event.is_sold_out ? 'opacity: 0.6; cursor: not-allowed;' : ''}" ${event.is_sold_out ? 'disabled' : ''}>
+              ${event.is_sold_out ? '🚫 Sold Out' : '✅ Register'}
             </button>
             <a href="${googleCalUrl}" target="_blank" rel="noopener" class="project-link" onclick="event.stopPropagation();" style="font-size: 0.75rem;">
               📅 Add to Cal
@@ -687,7 +734,7 @@ class EventsManager {
         </div>
       </article>
     `;
-    
+
     return col;
   }
 
@@ -759,9 +806,11 @@ class EventsManager {
 
   generateGoogleCalendarUrl(event) {
     const startDate = new Date(event.date);
-    const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Add 2 hours
+    const endDate = event.end_date
+      ? new Date(event.end_date)
+      : new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
     const formatDate = (date) => date.toISOString().replace(/-|:|\.\d+/g, '');
-    
+
     const params = new URLSearchParams({
       action: 'TEMPLATE',
       text: event.name,
@@ -769,13 +818,15 @@ class EventsManager {
       details: event.description,
       location: event.location || '',
     });
-    
+
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   }
 
   generateICalUrl(event) {
     const startDate = new Date(event.date);
-    const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Add 2 hours
+    const endDate = event.end_date
+      ? new Date(event.end_date)
+      : new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
     const formatDate = (date) => date.toISOString().replace(/-|:|\.\d+/g, '');
     
     const ical = `BEGIN:VCALENDAR

@@ -74,6 +74,17 @@ def get_team_data() -> list[dict]:
                         "Website": "https://github.com/edwardbensa"
                     }
                 },
+                {
+                    "name": "Tiana Bettinson",
+                    "role": "UI/UX Associate",
+                    "bio": "Making the mundane magical through design.",
+                    "cartoon": "/static/images/team/tiana/team.png",
+                    "photo": "/static/images/team/tiana/pic.jpeg",
+                    "links": {
+                        "LinkedIn": "https://www.linkedin.com/in/tianabettinson",
+                        "GitHub": "https://github.com/tbetti",
+                    }
+                },
         ]
 
 
