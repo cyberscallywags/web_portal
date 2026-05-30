@@ -37,7 +37,8 @@ def get_vlog_data() -> list[dict]:
             ],
             "created_date": "2024-08-20",
             "last_updated": "2025-02-14"
-        }, {
+        }, 
+        {
             "id": 2,
             "logo": 'images/logo/dsf_Companion_logo.png',
             "title": "Python Code Nanny",
@@ -78,7 +79,8 @@ def get_vlog_data() -> list[dict]:
             ],
             "created_date": "2025-03-01",
             "last_updated": "2025-11-15"
-        }, {
+        }, 
+        {
             "id": 4,
             "logo": 'images/logo/dsf_Companion_logo.png',
             "title": "Cyber Scallywags Community",
@@ -92,7 +94,8 @@ def get_vlog_data() -> list[dict]:
             ],
             "created_date": "2025-03-01",
             "last_updated": "2025-11-15"
-        }, {
+        }, 
+        {
             "id": 5,
             "logo": 'images/logo/dsf_Companion_logo.png',
             "title": "Practical Pythonista Club",

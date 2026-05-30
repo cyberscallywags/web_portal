@@ -1,0 +1,428 @@
+{% extends "base.html" %}
+{% block title %}My Profile - Cyber Scallywags{% endblock %}
+{% block content %}
+<style>
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-8px); }
+    }
+
+    .profile-page {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #4006a7 0%, #0e6abd 50%, #00B1B3 100%);
+        border-radius: 25px;
+    }
+
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .profile-header {
+        background: #fff;
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .profile-avatar-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #C1E415, #00B1B3);
+        color: #4006a7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 2.8rem;
+        overflow: hidden;
+        border: 4px solid #4006a7;
+        flex-shrink: 0;
+        animation: float 3.5s ease-in-out infinite;
+    }
+
+    .profile-avatar-large img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-identity h1 {
+        color: #4006a7;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+        font-size: 1.9rem;
+    }
+
+    .profile-identity .profile-email {
+        color: #666;
+        margin: 0 0 12px 0;
+        font-size: 1rem;
+    }
+
+    .profile-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .profile-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #4006a7, #CC0084);
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+        .profile-grid { grid-template-columns: 1fr; }
+        .profile-header { justify-content: center; text-align: center; }
+        .profile-badges { justify-content: center; }
+    }
+
+    .profile-card {
+        background: #fff;
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-card h2 {
+        color: #4006a7;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0 0 20px 0;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #C1E415;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+
+    .detail-label {
+        color: #666;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .detail-value {
+        color: #333;
+        font-weight: 500;
+        text-align: right;
+    }
+
+    .option-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .option-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        margin-bottom: 6px;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+    .option-item:hover {
+        background: rgba(193, 228, 21, 0.15);
+        border-color: #C1E415;
+        color: #4006a7;
+        transform: translateX(4px);
+    }
+
+    .option-item i {
+        font-size: 1.3rem;
+        color: #4006a7;
+        width: 26px;
+        text-align: center;
+    }
+
+    .option-item.danger { color: #CC0084; }
+    .option-item.danger i { color: #CC0084; }
+    .option-item.danger:hover {
+        background: rgba(204, 0, 132, 0.1);
+        border-color: #CC0084;
+    }
+
+    .guest-state {
+        background: #fff;
+        border-radius: 25px;
+        padding: 60px 40px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .guest-state .auth-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .guest-state h2 {
+        color: #4006a7;
+        margin-bottom: 12px;
+    }
+
+    .guest-state p {
+        color: #666;
+        margin-bottom: 24px;
+    }
+
+    .btn-primary-action {
+        display: inline-block;
+        background: linear-gradient(135deg, #4006a7, #0e6abd);
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin: 0 6px;
+    }
+
+    .btn-primary-action:hover {
+        background: linear-gradient(135deg, #CC0084, #4006a7);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(64, 6, 167, 0.4);
+    }
+</style>
+
+<div class="profile-page">
+    <div class="profile-container">
+        <!-- Logged-in view (populated via JS) -->
+        <div id="profileView" style="display: none;">
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatar"></div>
+                <div class="profile-identity">
+                    <h1 id="profileName">—</h1>
+                    <p class="profile-email" id="profileEmail">—</p>
+                    <div class="profile-badges" id="profileBadges"></div>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <h2><i class="bi bi-person-badge"></i> Account Details</h2>
+                    <div class="detail-row">
+                        <span class="detail-label">Username</span>
+                        <span class="detail-value" id="detailUsername">—</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Email</span>
+                        <span class="detail-value" id="detailEmail">—</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Role</span>
+                        <span class="detail-value" id="detailRole">—</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Membership</span>
+                        <span class="detail-value" id="detailMembership">—</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Member Since</span>
+                        <span class="detail-value" id="detailJoined">—</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">User ID</span>
+                        <span class="detail-value" id="detailId" style="font-family: monospace; font-size: 0.85rem;">—</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h2><i class="bi bi-gear"></i> Profile Options</h2>
+                    <ul class="option-list">
+                        <li>
+                            <a href="/dashboard" class="option-item">
+                                <i class="bi bi-speedometer2"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="option-item" onclick="editProfile(event)">
+                                <i class="bi bi-pencil-square"></i>
+                                <span>Edit Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/forgot-password" class="option-item">
+                                <i class="bi bi-key"></i>
+                                <span>Change Password</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="option-item" onclick="toggleNotifications(event)">
+                                <i class="bi bi-bell"></i>
+                                <span>Notification Preferences</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/newsletter" class="option-item">
+                                <i class="bi bi-envelope-paper"></i>
+                                <span>Newsletter Subscriptions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="option-item" onclick="managePrivacy(event)">
+                                <i class="bi bi-shield-lock"></i>
+                                <span>Privacy &amp; Security</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/support" class="option-item">
+                                <i class="bi bi-life-preserver"></i>
+                                <span>Help &amp; Support</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="option-item danger" onclick="signOutFromProfile(event)">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guest view -->
+        <div id="guestView" class="guest-state" style="display: none;">
+            <div class="auth-icon">🐺</div>
+            <h2>You're not signed in</h2>
+            <p>Sign in to view your profile, manage your account, and customise your Cyber Scallywags experience.</p>
+            <a href="/signin" class="btn-primary-action"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
+            <a href="/signup" class="btn-primary-action"><i class="bi bi-person-plus"></i> Sign Up</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getInitials(name) {
+        if (!name) return '?';
+        if (name.includes(' ')) {
+            return name.split(' ').map(w => w.charAt(0).toUpperCase()).join('').slice(0, 2);
+        }
+        return name.charAt(0).toUpperCase();
+    }
+
+    function formatDate(value) {
+        if (!value) return '—';
+        const d = new Date(value);
+        if (isNaN(d.getTime())) return value;
+        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function renderProfile(user) {
+        document.getElementById('profileView').style.display = 'block';
+        document.getElementById('guestView').style.display = 'none';
+
+        const displayName = user.name || user.username || 'Scallywag';
+        const avatarEl = document.getElementById('profileAvatar');
+        if (user.avatar && user.avatar.trim() !== '') {
+            avatarEl.innerHTML = `<img src="${user.avatar}" alt="${displayName}">`;
+        } else {
+            avatarEl.textContent = getInitials(displayName);
+        }
+
+        document.getElementById('profileName').textContent = displayName;
+        document.getElementById('profileEmail').textContent = user.email || 'No email on file';
+
+        const badgesEl = document.getElementById('profileBadges');
+        badgesEl.innerHTML = '';
+        const badges = [];
+        if (user.role) badges.push(`<i class="bi bi-shield-check"></i> ${user.role}`);
+        if (user.membership_tier || user.tier) badges.push(`<i class="bi bi-star-fill"></i> ${user.membership_tier || user.tier}`);
+        if (user.verified) badges.push(`<i class="bi bi-patch-check-fill"></i> Verified`);
+        if (badges.length === 0) badges.push(`<i class="bi bi-people-fill"></i> Community Member`);
+        badgesEl.innerHTML = badges.map(b => `<span class="profile-badge">${b}</span>`).join('');
+
+        document.getElementById('detailUsername').textContent = user.username || displayName;
+        document.getElementById('detailEmail').textContent = user.email || '—';
+        document.getElementById('detailRole').textContent = user.role || 'Community Member';
+        document.getElementById('detailMembership').textContent = user.membership_tier || user.tier || 'Standard';
+        document.getElementById('detailJoined').textContent = formatDate(user.joined || user.created_at);
+        document.getElementById('detailId').textContent = user.id || user.user_id || '—';
+    }
+
+    function renderGuest() {
+        document.getElementById('profileView').style.display = 'none';
+        document.getElementById('guestView').style.display = 'block';
+    }
+
+    function editProfile(e) {
+        e.preventDefault();
+        alert('Profile editing is coming soon!');
+    }
+
+    function toggleNotifications(e) {
+        e.preventDefault();
+        alert('Notification preferences are coming soon!');
+    }
+
+    function managePrivacy(e) {
+        e.preventDefault();
+        alert('Privacy & Security settings are coming soon!');
+    }
+
+    function signOutFromProfile(e) {
+        e.preventDefault();
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        window.location.href = '/';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let user = null;
+        try {
+            const stored = localStorage.getItem('currentUser');
+            if (stored) user = JSON.parse(stored);
+        } catch (err) {
+            console.error('Failed to parse currentUser:', err);
+        }
+
+        if (user) renderProfile(user); else renderGuest();
+    });
+</script>
+{% endblock %}

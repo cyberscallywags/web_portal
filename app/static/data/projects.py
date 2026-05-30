@@ -56,8 +56,6 @@ def get_project_data() -> list[dict]:
                 "Watch webinars and workshops and enhance your skills and knowledge.\n"
                 "Follow the DSF Companion on social media for updates and announcements."
             ]
-
-
         }, 
         {
             "id": 2,

@@ -145,8 +145,20 @@ async def login(login_request: LoginRequest):
 
 @app.get("/signout")
 async def read_signout(request: Request):
-    logfire.info('TRIGGERED: read_signout !')  
+    logfire.info('TRIGGERED: read_signout !')
     return templates.TemplateResponse(request, "/auth/signout.html", {})
+
+
+@app.get("/profile")
+async def read_profile(request: Request):
+    logfire.info('TRIGGERED: read_profile !')
+    return templates.TemplateResponse(request, "auth/profile.html", {})
+
+
+@app.get("/dashboard")
+async def read_dashboard(request: Request):
+    logfire.info('TRIGGERED: read_dashboard !')
+    return templates.TemplateResponse(request, "auth/dashboard.html", {})
 
 
 @app.get("/forgot-password")

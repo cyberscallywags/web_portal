@@ -4,15 +4,15 @@ def get_team_data() -> list[dict]:
     return [
                 {
                     "name": "Colin Moore-Hill",
-                "role": "Founder & Chief Gopher",
-                "bio": "Graph enthusiast and long-time DSF collaborator. Loves turning open data archives into living knowledge.",
-                "cartoon": "/static/images/team/colin/team.png",
-                "photo": "/static/images/team/colin/pic.jpeg",
-                "links": {
-                    "LinkedIn": "https://www.linkedin.com/in/colinmoorehill/",
-                    "GitHub": "https://github.com/Spanarchian",
-                    "X/Twitter": "https://x.com/CyberScallywags"
-                }
+                    "role": "Founder & Chief Gopher",
+                    "bio": "Graph enthusiast and long-time DSF collaborator. Loves turning open data archives into living knowledge.",
+                    "cartoon": "/static/images/team/colin/team.png",
+                    "photo": "/static/images/team/colin/pic.jpeg",
+                    "links": {
+                        "LinkedIn": "https://www.linkedin.com/in/colinmoorehill/",
+                        "GitHub": "https://github.com/Spanarchian",
+                        "X/Twitter": "https://x.com/CyberScallywags"
+                    }
                 },
                 {
                     "name": "Kishion Layne",
@@ -83,8 +83,21 @@ def get_team_data() -> list[dict]:
                     "links": {
                         "LinkedIn": "https://www.linkedin.com/in/tianabettinson",
                         "GitHub": "https://github.com/tbetti",
+                        "Website": "https://tbetti.github.io/Portfolio/"
                     }
                 },
+                {
+                    "name": "Matthieu Malling",
+                    "role": "Data Engineer Associate",
+                    "bio": "More than just a petty bean counter.",
+                    "cartoon": "/static/images/team/matthieu/team.png",
+                    "photo": "/static/images/team/matthieu/pic.jpeg",
+                    "links": {
+                        "LinkedIn": "https://www.linkedin.com/in/mattie-malling",
+                        "GitHub": "https://github.com/mattsam1234",
+                        "Website": "https://github.com/mattsam1234"
+                    }
+                }
         ]
 
 
