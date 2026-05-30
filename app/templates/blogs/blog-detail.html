@@ -52,6 +52,43 @@
   transform: translateX(-5px);
 }
 
+.blog-hero-emoji {
+  font-size: 3.5rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.featured-badge {
+  display: inline-block;
+  background: linear-gradient(45deg, #C1E415, #00B1B3);
+  color: #4006a7;
+  font-weight: 800;
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  margin-right: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.category-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  font-weight: 700;
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+}
+
 .blog-detail-title {
   font-size: 3rem;
   font-weight: 900;
@@ -88,6 +125,13 @@
   font-size: 1.3rem;
   border: 3px solid white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .author-details {
@@ -208,10 +252,9 @@
   font-weight: 300;
   font-style: italic;
   border-left: 5px solid #C1E415;
-  padding-left: 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 2rem;
   margin-bottom: 2rem;
   background: rgba(193, 228, 21, 0.05);
-  padding: 1.5rem 1.5rem 1.5rem 2rem;
   border-radius: 0 12px 12px 0;
 }
 
@@ -268,7 +311,6 @@
 
 .content blockquote {
   border-left: 5px solid #00B1B3;
-  padding-left: 1.5rem;
   margin: 2rem 0;
   font-style: italic;
   color: #666;
@@ -300,6 +342,52 @@
   border-radius: 20px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.engagement-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(64, 6, 167, 0.1);
+}
+
+.engagement-stats {
+  display: flex;
+  gap: 1.5rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+.engagement-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.like-btn {
+  background: linear-gradient(135deg, #4006a7, #CC0084);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 25px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.like-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(64, 6, 167, 0.3);
 }
 
 .share-buttons {
@@ -327,41 +415,12 @@
   gap: 0.5rem;
 }
 
-.share-btn-twitter {
-  background: #1DA1F2;
-  color: white;
-  border-color: #1DA1F2;
-}
-
-.share-btn-twitter:hover {
-  background: white;
-  color: #1DA1F2;
-  transform: translateY(-2px);
-}
-
-.share-btn-linkedin {
-  background: #0077B5;
-  color: white;
-  border-color: #0077B5;
-}
-
-.share-btn-linkedin:hover {
-  background: white;
-  color: #0077B5;
-  transform: translateY(-2px);
-}
-
-.share-btn-facebook {
-  background: #1877F2;
-  color: white;
-  border-color: #1877F2;
-}
-
-.share-btn-facebook:hover {
-  background: white;
-  color: #1877F2;
-  transform: translateY(-2px);
-}
+.share-btn-twitter { background: #1DA1F2; color: white; border-color: #1DA1F2; }
+.share-btn-twitter:hover { background: white; color: #1DA1F2; transform: translateY(-2px); }
+.share-btn-linkedin { background: #0077B5; color: white; border-color: #0077B5; }
+.share-btn-linkedin:hover { background: white; color: #0077B5; transform: translateY(-2px); }
+.share-btn-facebook { background: #1877F2; color: white; border-color: #1877F2; }
+.share-btn-facebook:hover { background: white; color: #1877F2; transform: translateY(-2px); }
 
 .related-section {
   background: linear-gradient(to bottom, #f8f9fa, white);
@@ -399,6 +458,15 @@
   align-items: center;
   justify-content: center;
   font-size: 3rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.related-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .related-body {
@@ -421,235 +489,200 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.related-meta {
+  font-size: 0.8rem;
+  color: #888;
 }
 
 @media (max-width: 768px) {
-  .blog-detail-title {
-    font-size: 2rem;
-  }
-  
-  .blog-meta-header {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .post-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  
-  .share-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
+  .blog-detail-title { font-size: 2rem; }
+  .blog-meta-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .post-info { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .share-buttons { flex-direction: column; align-items: stretch; }
+  .engagement-row { flex-direction: column; align-items: stretch; }
 }
 </style>
 
-<!-- Blog Header -->
 <section class="blog-detail-hero">
   <div class="container">
     <div class="blog-detail-content">
       <div class="row">
         <div class="col-lg-10 mx-auto">
           <a href="/blogs" class="back-link">← Back to Blogs</a>
-          <h1 class="blog-detail-title">{{ blog.title if blog else 'Loading...' }}</h1>
-          
-          <div class="blog-meta-header">
-            <div class="author-info">
-              <div class="author-avatar">{{ blog.author.name[0] if blog and blog.author else 'A' }}</div>
-              <div class="author-details">
-                <span class="author-name">{{ blog.author.name if blog and blog.author else 'Unknown Author' }}</span>
-                <span class="author-bio">{{ blog.author.bio if blog and blog.author else 'Writer' }}</span>
-              </div>
-            </div>
-            
-            <div class="post-info">
-              <span>📅 {{ blog.published_date if blog else '' }}</span>
-              <span>⏱️ {{ blog.read_time if blog else '' }}</span>
-              <span>👁️ {{ blog.views if blog else 0 }} views</span>
-            </div>
-          </div>
-          
-          <div class="blog-tags-header">
-            {% if blog and blog.tags %}
-              {% for tag in blog.tags %}
-                <span class="blog-tag">{{ tag }}</span>
-              {% endfor %}
+
+          <div>
+            {% if blog.featured %}
+              <span class="featured-badge">⭐ Featured</span>
+            {% endif %}
+            {% if blog.category %}
+              <span class="category-badge">{{ blog.category }}</span>
             {% endif %}
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- Blog Content -->
-<section class="main-content py-5">
-  <div class="container">
-    <div class="content-wrapper">
-      <!-- Featured Image -->
-      <div class="featured-image-section">
-        <div class="featured-image-wrapper">
-          {% if blog and blog.featured_image %}
-          <img src="{{ blog.featured_image }}" alt="{{ blog.title }}">
-          {% else %}
-          <div class="image-placeholder">
-            <span class="featured-emoji">📝</span>
+          {% if blog.emoji %}
+            <span class="blog-hero-emoji">{{ blog.emoji }}</span>
+          {% endif %}
+
+          <h1 class="blog-detail-title">{{ blog.title }}</h1>
+
+          <div class="blog-meta-header">
+            <div class="author-info">
+              <div class="author-avatar">
+                {% if blog.author.avatar %}
+                  <img src="{{ blog.author.avatar }}" alt="{{ blog.author.name }}">
+                {% else %}
+                  {{ blog.author.name[0] }}
+                {% endif %}
+              </div>
+              <div class="author-details">
+                <span class="author-name">{{ blog.author.name }}</span>
+                {% if blog.author.bio %}
+                  <span class="author-bio">{{ blog.author.bio }}</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="post-info">
+              <span>📅 <span id="publishedDate">{{ blog.published_date }}</span></span>
+              <span>⏱️ {{ blog.read_time }}</span>
+              <span>👁️ {{ blog.views }} views</span>
+            </div>
+          </div>
+
+          {% if blog.tags %}
+          <div class="blog-tags-header">
+            {% for tag in blog.tags %}
+              <span class="blog-tag">{{ tag }}</span>
+            {% endfor %}
           </div>
           {% endif %}
         </div>
       </div>
-      
-      <!-- Article Content -->
-      <article class="article-content">
-        {% if blog and blog.excerpt %}
-        <div class="excerpt">
-          {{ blog.excerpt }}
+    </div>
+  </div>
+</section>
+
+<section class="main-content py-5">
+  <div class="container">
+    <div class="content-wrapper">
+      <div class="featured-image-section">
+        <div class="featured-image-wrapper">
+          {% if blog.featured_image %}
+            <img src="{{ blog.featured_image }}" alt="{{ blog.title }}">
+          {% else %}
+            <div class="image-placeholder">
+              <span class="featured-emoji">{{ blog.emoji or '📝' }}</span>
+            </div>
+          {% endif %}
         </div>
+      </div>
+
+      <article class="article-content">
+        {% if blog.excerpt %}
+        <div class="excerpt">{{ blog.excerpt }}</div>
         {% endif %}
-        
+
         <div class="content">
-          <div id="blogContent">
-            {% if blog and blog.content %}
-              {{ blog.content | safe }}
-            {% else %}
-              <p class="text-muted">Content will be loaded here...</p>
-            {% endif %}
-          </div>
+          {{ blog.content | safe }}
         </div>
       </article>
-      
-      <!-- Share & Actions -->
+
       <div class="blog-actions">
+        <div class="engagement-row">
+          <div class="engagement-stats">
+            <span>👁️ {{ blog.views }}</span>
+            <span>❤️ <span id="likeCount">{{ blog.likes }}</span></span>
+            <span>⏱️ {{ blog.read_time }}</span>
+          </div>
+          <button class="like-btn" id="likeBtn" type="button">❤️ Like this post</button>
+        </div>
+
         <div class="share-buttons">
           <span class="share-label">Share this article:</span>
-          <a href="#" class="share-btn share-btn-twitter">🐦 Twitter</a>
-          <a href="#" class="share-btn share-btn-linkedin">💼 LinkedIn</a>
-          <a href="#" class="share-btn share-btn-facebook">📘 Facebook</a>
+          <a href="#" class="share-btn share-btn-twitter" data-share="twitter">🐦 Twitter</a>
+          <a href="#" class="share-btn share-btn-linkedin" data-share="linkedin">💼 LinkedIn</a>
+          <a href="#" class="share-btn share-btn-facebook" data-share="facebook">📘 Facebook</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Related Posts -->
+{% if related %}
 <section class="related-section">
   <div class="container">
     <h2 class="related-title">Related Articles</h2>
-    <div class="row g-4">
-      <div class="col-lg-10 mx-auto">
-        <div id="relatedPosts" class="row g-4">
-          <!-- Related posts will be loaded here -->
-        </div>
+    <div class="row g-4 justify-content-center">
+      {% for post in related %}
+      <div class="col-md-6 col-lg-4">
+        <article class="related-card" onclick="window.location.href='/blog/{{ post.slug }}'">
+          <div class="related-image">
+            {% if post.featured_image %}
+              <img src="{{ post.featured_image }}" alt="{{ post.title }}">
+            {% else %}
+              {{ post.emoji or '📝' }}
+            {% endif %}
+          </div>
+          <div class="related-body">
+            <h3 class="related-card-title">{{ post.title }}</h3>
+            <p class="related-excerpt">{{ post.excerpt }}</p>
+            <div class="related-meta">⏱️ {{ post.read_time }} · 👁️ {{ post.views }}</div>
+          </div>
+        </article>
       </div>
+      {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
 <script>
-// Get blog data from URL or use sample data
-const blogSlug = window.location.pathname.split('/').pop();
+const blog = {{ blog | tojson }};
 
-// Sample blog data - replace with API call
-const sampleBlogData = {
-  "id": 1,
-  "title": "Building Communities Through Code: The Cyber Scallywags Way",
-  "slug": "building-communities-through-code",
-  "excerpt": "Discover how we're using technology to bring people together and create lasting change in our communities. From workshops to open-source projects, learn about our grassroots approach to making technology accessible and meaningful for everyone.",
-  "content": `
-    <p>In a world increasingly dominated by big tech and profit-driven algorithms, there's something revolutionary about choosing purpose over profit. At Cyber Scallywags, we believe that technology should serve communities, not control them.</p>
-    
-    <h3>The Genesis of Our Movement</h3>
-    <p>Born in the neon shadows of forgotten steel towns and weather-worn seaside streets, Cyber Scallywags emerged from a simple but powerful idea: that technology can be a force for good when it's built by and for the people who use it.</p>
-    
-    <p>We're not your typical tech company. We're the dreamers and doers who live between the circuits — the coders, makers, and data-misfits who understand that behind every line of code is an opportunity to make someone's life better.</p>
-    
-    <h3>Community-Driven Development</h3>
-    <p>Our approach to building technology is fundamentally different. Instead of starting with the technology and finding users, we start with the community and find solutions. This means:</p>
-    
-    <ul>
-      <li><strong>Listening First:</strong> We spend time in communities, understanding real needs and challenges before we write a single line of code.</li>
-      <li><strong>Inclusive Design:</strong> Our projects are built with accessibility and inclusion at their core, not as an afterthought.</li>
-      <li><strong>Open by Default:</strong> Everything we build is open source, ensuring that communities can own and modify their tools.</li>
-      <li><strong>Skills Sharing:</strong> We don't just build tools; we teach others to build them too.</li>
-    </ul>
-    
-    <h3>Real Projects, Real Impact</h3>
-    <p>Our community learning platform has helped over 500 people take their first steps into coding. Our local business directory API supports 15 community organizations across Wales. These aren't just numbers — they represent individuals whose lives have been touched by technology that truly serves them.</p>
-    
-    <h3>The Path Forward</h3>
-    <p>We're not here to hack the system. We're here to rewrite it — together. Every workshop we run, every open-source project we release, and every collaboration we foster is a step toward a more equitable digital future.</p>
-    
-    <p>Join us in lighting up the digital night with ideas powered by kindness, not capital. Because our code isn't just syntax — it's solidarity.</p>
-  `,
-  "author": {
-    "name": "Colin Moore-Hill",
-    "bio": "Community Lead & Full-stack Developer",
-    "avatar": "/static/images/team/colin/pics.jpg"
-  },
-  "published_date": "October 25, 2025",
-  "featured_image": "/static/images/blog/community-code.jpg",
-  "tags": ["community", "technology", "open-source", "social-impact"],
-  "read_time": "5 min read",
-  "status": "published",
-  "views": 1250,
-  "featured": true
-};
-
-// Load blog content
-document.addEventListener('DOMContentLoaded', function() {
-  // In a real app, you'd fetch this based on the slug
-  // For now, we'll use sample data
-  loadBlogContent(sampleBlogData);
-  loadRelatedPosts();
-});
-
-function loadBlogContent(blogData) {
-  // Update meta information
-  document.title = `${blogData.title} - Cyber Scallywags`;
-  
-  // Format and display content
-  const contentDiv = document.getElementById('blogContent');
-  if (contentDiv) {
-    contentDiv.innerHTML = blogData.content;
-  }
+function formatPublishedDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-function loadRelatedPosts() {
-  const relatedContainer = document.getElementById('relatedPosts');
-  
-  // Sample related posts
-  const relatedPosts = [
-    {
-      title: "Getting Started with Python: A Beginner's Journey",
-      excerpt: "New to coding? Start your journey with Python!",
-      slug: "getting-started-python-beginners",
-      read_time: "8 min read"
-    },
-    {
-      title: "Open Source Contribution Guide",
-      excerpt: "Want to contribute to open source but don't know where to start?",
-      slug: "open-source-contribution-guide", 
-      read_time: "10 min read"
-    }
-  ];
-  
-  let html = '';
-  relatedPosts.forEach(post => {
-    html += `
-      <div class="col-md-6">
-        <div class="related-post-card" onclick="window.location.href='/blog/${post.slug}'">
-          <h6>${post.title}</h6>
-          <p class="text-muted mb-2">${post.excerpt}</p>
-          <small class="text-primary">${post.read_time}</small>
-        </div>
-      </div>
-    `;
+document.addEventListener('DOMContentLoaded', () => {
+  const dateEl = document.getElementById('publishedDate');
+  if (dateEl) dateEl.textContent = formatPublishedDate(blog.published_date);
+
+  const likeBtn = document.getElementById('likeBtn');
+  const likeCount = document.getElementById('likeCount');
+  let liked = false;
+  let count = blog.likes || 0;
+  likeBtn?.addEventListener('click', () => {
+    liked = !liked;
+    count += liked ? 1 : -1;
+    likeCount.textContent = count;
+    likeBtn.style.background = liked
+      ? 'linear-gradient(135deg, #CC0084, #C1E415)'
+      : 'linear-gradient(135deg, #4006a7, #CC0084)';
   });
-  
-  relatedContainer.innerHTML = html;
-}
+
+  const url = window.location.href;
+  const text = blog.title;
+  document.querySelectorAll('.share-btn').forEach((btn) => {
+    const network = btn.dataset.share;
+    let href = '#';
+    if (network === 'twitter') {
+      href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+    } else if (network === 'linkedin') {
+      href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    } else if (network === 'facebook') {
+      href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    }
+    btn.setAttribute('href', href);
+    btn.setAttribute('target', '_blank');
+    btn.setAttribute('rel', 'noopener');
+  });
+});
 </script>
 
 {% endblock %}

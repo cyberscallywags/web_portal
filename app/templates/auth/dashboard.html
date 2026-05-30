@@ -1,0 +1,890 @@
+{% extends "base.html" %}
+{% block title %}Member Dashboard - Cyber Scallywags{% endblock %}
+{% block content %}
+<style>
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-page {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #4006a7 0%, #0e6abd 50%, #00B1B3 100%);
+        border-radius: 25px;
+    }
+
+    .dashboard-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .dashboard-hero {
+        background: #fff;
+        border-radius: 25px;
+        padding: 30px 36px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .dashboard-hero h1 {
+        color: #4006a7;
+        font-weight: 700;
+        margin: 0 0 4px 0;
+        font-size: 1.8rem;
+    }
+
+    .dashboard-hero p {
+        color: #666;
+        margin: 0;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .stat-chip {
+        background: linear-gradient(135deg, #4006a7, #CC0084);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .stat-chip .stat-num {
+        background: #C1E415;
+        color: #4006a7;
+        border-radius: 8px;
+        padding: 2px 8px;
+        font-weight: 700;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    @media (max-width: 900px) {
+        .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+        background: #fff;
+        border-radius: 25px;
+        padding: 28px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 12px;
+        margin-bottom: 18px;
+        border-bottom: 2px solid #C1E415;
+    }
+
+    .panel-header h2 {
+        color: #4006a7;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .panel-header .panel-sub {
+        color: #999;
+        font-size: 0.85rem;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .input-row input,
+    .input-row select,
+    .input-row textarea {
+        flex: 1;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease;
+        font-family: inherit;
+    }
+
+    .input-row input:focus,
+    .input-row select:focus,
+    .input-row textarea:focus {
+        border-color: #C1E415;
+        outline: none;
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, #4006a7, #0e6abd);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 0 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .btn-add:hover {
+        background: linear-gradient(135deg, #CC0084, #4006a7);
+        transform: translateY(-1px);
+    }
+
+    .item-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .item-card {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f7f6fb;
+        margin-bottom: 10px;
+        border-left: 4px solid #4006a7;
+    }
+
+    .item-card.status-in-progress { border-left-color: #00B1B3; }
+    .item-card.status-completed   { border-left-color: #C1E415; }
+    .item-card.status-planned     { border-left-color: #CC0084; }
+
+    .item-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .item-title {
+        font-weight: 600;
+        color: #333;
+        word-wrap: break-word;
+    }
+
+    .item-meta {
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .status-pill {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .status-pill.in-progress { background: rgba(0, 177, 179, 0.15); color: #00807d; }
+    .status-pill.completed   { background: rgba(193, 228, 21, 0.25); color: #5f7a00; }
+    .status-pill.planned     { background: rgba(204, 0, 132, 0.15); color: #CC0084; }
+
+    .btn-remove {
+        background: transparent;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: color 0.2s ease;
+        padding: 0 4px;
+    }
+
+    .btn-remove:hover { color: #CC0084; }
+
+    .chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #4006a7, #0e6abd);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .chip button {
+        background: transparent;
+        border: none;
+        color: rgba(255,255,255,0.8);
+        cursor: pointer;
+        padding: 0;
+        font-size: 0.9rem;
+        line-height: 1;
+    }
+
+    .chip button:hover { color: #fff; }
+
+    .suggestion-block {
+        background: rgba(193, 228, 21, 0.12);
+        border: 1px dashed #C1E415;
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-top: 14px;
+    }
+
+    .suggestion-block h4 {
+        color: #4006a7;
+        font-size: 0.9rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .suggestion-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .suggestion-chip {
+        background: #fff;
+        color: #4006a7;
+        border: 1px solid #C1E415;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .suggestion-chip:hover {
+        background: #4006a7;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .objective-tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+    .tab-btn {
+        flex: 1;
+        background: #f0eef7;
+        color: #4006a7;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+        background: linear-gradient(135deg, #4006a7, #0e6abd);
+        color: #fff;
+    }
+
+    .empty-state {
+        text-align: center;
+        color: #aaa;
+        font-style: italic;
+        padding: 20px 0;
+        font-size: 0.9rem;
+    }
+
+    .save-indicator {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #C1E415;
+        color: #4006a7;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+        z-index: 9999;
+    }
+
+    .save-indicator.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .guest-state {
+        background: #fff;
+        border-radius: 25px;
+        padding: 60px 40px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .guest-state h2 { color: #4006a7; margin-bottom: 12px; }
+    .guest-state p  { color: #666; margin-bottom: 24px; }
+
+    .btn-primary-action {
+        display: inline-block;
+        background: linear-gradient(135deg, #4006a7, #0e6abd);
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin: 0 6px;
+    }
+
+    .btn-primary-action:hover {
+        background: linear-gradient(135deg, #CC0084, #4006a7);
+        color: #fff;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="dashboard-page">
+    <div class="dashboard-container">
+
+        <!-- Loading view -->
+        <div id="loadingView" class="guest-state">
+            <h2>🔐 Verifying your session…</h2>
+            <p>One moment while we securely load your dashboard.</p>
+        </div>
+
+        <!-- Guest view -->
+        <div id="guestView" class="guest-state" style="display: none;">
+            <h2>Sign in to access your dashboard</h2>
+            <p>Your dashboard tracks the work you're doing, your goals, and the skills and causes you care about.</p>
+            <a href="/signin?next=/dashboard" class="btn-primary-action"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
+            <a href="/signup" class="btn-primary-action"><i class="bi bi-person-plus"></i> Sign Up</a>
+        </div>
+
+        <!-- Error view (auth service unreachable) -->
+        <div id="errorView" class="guest-state" style="display: none;">
+            <h2>⚠️ Couldn't verify your session</h2>
+            <p id="errorMessage">The authentication service is unreachable right now. Please try again.</p>
+            <a href="/dashboard" class="btn-primary-action"><i class="bi bi-arrow-clockwise"></i> Retry</a>
+            <a href="/signin?next=/dashboard" class="btn-primary-action"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
+        </div>
+
+        <!-- Member dashboard -->
+        <div id="dashboardView" style="display: none;">
+
+            <div class="dashboard-hero">
+                <div>
+                    <h1>👋 Welcome back, <span id="memberName">Scallywag</span></h1>
+                    <p>Your personal mission control — track work, set goals, grow your skills, give back.</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-chip"><span class="stat-num" id="statActive">0</span> Active</div>
+                    <div class="stat-chip"><span class="stat-num" id="statDone">0</span> Done</div>
+                    <div class="stat-chip"><span class="stat-num" id="statGoals">0</span> Goals</div>
+                    <div class="stat-chip"><span class="stat-num" id="statSkills">0</span> Skills</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+
+                <!-- Work tracker -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2><i class="bi bi-kanban"></i> Work Tracker</h2>
+                        <span class="panel-sub">What you're doing & what you've done</span>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="workInput" placeholder="e.g. Refactor onboarding flow" maxlength="120">
+                        <select id="workStatus">
+                            <option value="planned">Planned</option>
+                            <option value="in-progress" selected>In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <button class="btn-add" onclick="addWork()"><i class="bi bi-plus-lg"></i></button>
+                    </div>
+                    <ul class="item-list" id="workList"></ul>
+                </div>
+
+                <!-- Aspirations & objectives -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2><i class="bi bi-bullseye"></i> Aspirations &amp; Objectives</h2>
+                        <span class="panel-sub">Personal &amp; group goals</span>
+                    </div>
+                    <div class="objective-tabs">
+                        <button class="tab-btn active" data-scope="personal" onclick="switchObjectiveTab('personal')">🧍 Personal</button>
+                        <button class="tab-btn" data-scope="group" onclick="switchObjectiveTab('group')">🐺 Cyber Scallywags</button>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="objectiveInput" placeholder="e.g. Lead a workshop this quarter" maxlength="160">
+                        <button class="btn-add" onclick="addObjective()"><i class="bi bi-plus-lg"></i></button>
+                    </div>
+                    <ul class="item-list" id="objectiveList"></ul>
+                </div>
+
+                <!-- Skills & tech wishlist -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2><i class="bi bi-lightbulb"></i> Skills &amp; Tech Wishlist</h2>
+                        <span class="panel-sub">What you'd like exposure to</span>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="skillInput" placeholder="e.g. Neo4j, Kubernetes, Rust" maxlength="40">
+                        <button class="btn-add" onclick="addSkill()"><i class="bi bi-plus-lg"></i></button>
+                    </div>
+                    <div class="chip-list" id="skillList"></div>
+                    <div class="suggestion-block">
+                        <h4><i class="bi bi-stars"></i> Suggestions — tap to add</h4>
+                        <div class="suggestion-chips" id="skillSuggestions"></div>
+                    </div>
+                </div>
+
+                <!-- Charities & causes -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2><i class="bi bi-heart-fill" style="color:#CC0084;"></i> Causes to Support</h2>
+                        <span class="panel-sub">Pay it forward — charities &amp; orgs</span>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="causeName" placeholder="Organisation name" maxlength="80">
+                        <input type="text" id="causeReason" placeholder="Why? (optional)" maxlength="120">
+                        <button class="btn-add" onclick="addCause()"><i class="bi bi-plus-lg"></i></button>
+                    </div>
+                    <ul class="item-list" id="causeList"></ul>
+                    <div class="suggestion-block">
+                        <h4><i class="bi bi-stars"></i> Suggestions — tap to add</h4>
+                        <div class="suggestion-chips" id="causeSuggestions"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="save-indicator" id="saveIndicator"><i class="bi bi-check-circle-fill"></i> Saved</div>
+
+<script>
+    const SKILL_SUGGESTIONS = [
+        'Neo4j', 'GraphQL', 'Rust', 'Kubernetes', 'Terraform', 'FastAPI',
+        'React', 'TypeScript', 'Tauri', 'LangChain', 'Pydantic', 'DuckDB',
+        'Geospatial', 'UX Research', 'Public Speaking', 'Tech Writing',
+        'Mentoring', 'Open-Source Maintenance', 'Data Storytelling', 'Accessibility'
+    ];
+
+    const CAUSE_SUGGESTIONS = [
+        { name: 'Disability Sport Foundation', reason: 'Inclusive sport & community' },
+        { name: 'Code Club', reason: 'Kids learning to code' },
+        { name: 'Welsh Assembly — Coal Tip Safety', reason: 'Citizen-science in the valleys' },
+        { name: 'CodeFirstGirls', reason: 'Tech career pathways for women' },
+        { name: 'Mind', reason: 'Mental-health support' },
+        { name: 'Local food bank', reason: 'Community resilience' }
+    ];
+
+    const AUTH_VERIFY_URL = 'http://135.181.99.53:8910/auth/me';
+
+    let currentUser = null;
+    let storageKey = null;
+    let state = defaultState();
+    let activeObjectiveScope = 'personal';
+
+    function defaultState() {
+        return {
+            work: [],
+            objectives: { personal: [], group: [] },
+            skills: [],
+            causes: []
+        };
+    }
+
+    function getCachedUser() {
+        try {
+            const raw = localStorage.getItem('currentUser');
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) { return null; }
+    }
+
+    function userKey(user) {
+        // Stable, server-confirmed identifier. Never fall back to a shared key
+        // (e.g. 'anon') — that would mix unrelated users' dashboards together.
+        const id = user && (user.id || user.user_id || user.uuid || user.sub);
+        if (id !== undefined && id !== null && String(id).trim() !== '') {
+            return 'dashboard:' + String(id);
+        }
+        // Last-resort fallback: username (mutable but at least user-specific).
+        if (user && user.username) return 'dashboard:u:' + user.username;
+        return null;
+    }
+
+    function migrateLegacyState(user, targetKey) {
+        // If state was previously stored under a different identifier
+        // (e.g. username before we had the server-confirmed id), copy it over once.
+        if (localStorage.getItem(targetKey)) return;
+        const candidates = [
+            user.username && 'dashboard:' + user.username,
+            user.email    && 'dashboard:' + user.email,
+            'dashboard:anon'
+        ].filter(Boolean);
+        for (const k of candidates) {
+            if (k === targetKey) continue;
+            const legacy = localStorage.getItem(k);
+            if (legacy) {
+                localStorage.setItem(targetKey, legacy);
+                localStorage.removeItem(k);
+                return;
+            }
+        }
+    }
+
+    async function verifySession() {
+        const token = localStorage.getItem('access_token');
+        if (!token) return { status: 'unauthenticated' };
+
+        try {
+            const res = await fetch(AUTH_VERIFY_URL, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('currentUser');
+                return { status: 'unauthenticated' };
+            }
+            if (!res.ok) {
+                return { status: 'error', message: 'Auth service returned ' + res.status };
+            }
+            const user = await res.json();
+            // Refresh the cached user so name/avatar in the nav stay accurate.
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            return { status: 'ok', user };
+        } catch (err) {
+            console.error('Session verify failed:', err);
+            return { status: 'error', message: 'Could not reach the authentication service.' };
+        }
+    }
+
+    function loadState() {
+        try {
+            const raw = localStorage.getItem(storageKey);
+            if (!raw) return;
+            const parsed = JSON.parse(raw);
+            state = Object.assign(defaultState(), parsed);
+            state.objectives = Object.assign({ personal: [], group: [] }, parsed.objectives || {});
+        } catch (e) { console.error('Failed to load dashboard state:', e); }
+    }
+
+    function persist() {
+        localStorage.setItem(storageKey, JSON.stringify(state));
+        const ind = document.getElementById('saveIndicator');
+        ind.classList.add('show');
+        clearTimeout(persist._t);
+        persist._t = setTimeout(() => ind.classList.remove('show'), 1200);
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]));
+    }
+
+    function uid() {
+        return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+    }
+
+    // --- Work ---
+    function addWork() {
+        const input = document.getElementById('workInput');
+        const status = document.getElementById('workStatus').value;
+        const title = input.value.trim();
+        if (!title) return;
+        state.work.unshift({ id: uid(), title, status, added: new Date().toISOString() });
+        input.value = '';
+        renderWork();
+        persist();
+    }
+
+    function cycleWorkStatus(id) {
+        const order = ['planned', 'in-progress', 'completed'];
+        const item = state.work.find(w => w.id === id);
+        if (!item) return;
+        item.status = order[(order.indexOf(item.status) + 1) % order.length];
+        renderWork();
+        persist();
+    }
+
+    function removeWork(id) {
+        state.work = state.work.filter(w => w.id !== id);
+        renderWork();
+        persist();
+    }
+
+    function renderWork() {
+        const list = document.getElementById('workList');
+        if (state.work.length === 0) {
+            list.innerHTML = '<li class="empty-state">No work tracked yet — add your first item above.</li>';
+        } else {
+            list.innerHTML = state.work.map(w => `
+                <li class="item-card status-${w.status}">
+                    <div class="item-body">
+                        <div class="item-title">${escapeHtml(w.title)}</div>
+                        <div class="item-meta">
+                            <span class="status-pill ${w.status}" onclick="cycleWorkStatus('${w.id}')" style="cursor:pointer;" title="Click to change status">
+                                ${w.status.replace('-', ' ')}
+                            </span>
+                            <span>· added ${new Date(w.added).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    <button class="btn-remove" onclick="removeWork('${w.id}')" title="Remove"><i class="bi bi-x-lg"></i></button>
+                </li>
+            `).join('');
+        }
+        updateStats();
+    }
+
+    // --- Objectives ---
+    function switchObjectiveTab(scope) {
+        activeObjectiveScope = scope;
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.scope === scope);
+        });
+        document.getElementById('objectiveInput').placeholder = scope === 'personal'
+            ? 'e.g. Lead a workshop this quarter'
+            : 'e.g. Run a community hack-day in 2026';
+        renderObjectives();
+    }
+
+    function addObjective() {
+        const input = document.getElementById('objectiveInput');
+        const text = input.value.trim();
+        if (!text) return;
+        state.objectives[activeObjectiveScope].unshift({ id: uid(), text, added: new Date().toISOString() });
+        input.value = '';
+        renderObjectives();
+        persist();
+    }
+
+    function removeObjective(id) {
+        state.objectives[activeObjectiveScope] =
+            state.objectives[activeObjectiveScope].filter(o => o.id !== id);
+        renderObjectives();
+        persist();
+    }
+
+    function renderObjectives() {
+        const list = document.getElementById('objectiveList');
+        const items = state.objectives[activeObjectiveScope] || [];
+        if (items.length === 0) {
+            const label = activeObjectiveScope === 'personal' ? 'personal' : 'group';
+            list.innerHTML = `<li class="empty-state">No ${label} objectives yet — share what you're aiming for.</li>`;
+        } else {
+            list.innerHTML = items.map(o => `
+                <li class="item-card">
+                    <div class="item-body">
+                        <div class="item-title">${escapeHtml(o.text)}</div>
+                        <div class="item-meta"><span>added ${new Date(o.added).toLocaleDateString()}</span></div>
+                    </div>
+                    <button class="btn-remove" onclick="removeObjective('${o.id}')" title="Remove"><i class="bi bi-x-lg"></i></button>
+                </li>
+            `).join('');
+        }
+        updateStats();
+    }
+
+    // --- Skills ---
+    function addSkill(name) {
+        const value = (name || document.getElementById('skillInput').value).trim();
+        if (!value) return;
+        if (state.skills.some(s => s.toLowerCase() === value.toLowerCase())) return;
+        state.skills.push(value);
+        if (!name) document.getElementById('skillInput').value = '';
+        renderSkills();
+        persist();
+    }
+
+    function removeSkill(name) {
+        state.skills = state.skills.filter(s => s !== name);
+        renderSkills();
+        persist();
+    }
+
+    function renderSkills() {
+        const list = document.getElementById('skillList');
+        if (state.skills.length === 0) {
+            list.innerHTML = '<span class="empty-state">No skills added yet — pick a suggestion or add your own.</span>';
+        } else {
+            list.innerHTML = state.skills.map(s => `
+                <span class="chip">${escapeHtml(s)}
+                    <button onclick="removeSkill('${s.replace(/'/g, "\\'")}')" title="Remove"><i class="bi bi-x"></i></button>
+                </span>
+            `).join('');
+        }
+        const sugg = document.getElementById('skillSuggestions');
+        const remaining = SKILL_SUGGESTIONS.filter(s =>
+            !state.skills.some(have => have.toLowerCase() === s.toLowerCase())
+        );
+        sugg.innerHTML = remaining.map(s =>
+            `<span class="suggestion-chip" onclick="addSkill('${s.replace(/'/g, "\\'")}')">+ ${escapeHtml(s)}</span>`
+        ).join('') || '<span class="empty-state">You\'ve added all our suggestions — nice!</span>';
+        updateStats();
+    }
+
+    // --- Causes ---
+    function addCause(presetName, presetReason) {
+        const name = (presetName || document.getElementById('causeName').value).trim();
+        const reason = (presetReason !== undefined ? presetReason : document.getElementById('causeReason').value).trim();
+        if (!name) return;
+        if (state.causes.some(c => c.name.toLowerCase() === name.toLowerCase())) return;
+        state.causes.unshift({ id: uid(), name, reason, added: new Date().toISOString() });
+        if (!presetName) {
+            document.getElementById('causeName').value = '';
+            document.getElementById('causeReason').value = '';
+        }
+        renderCauses();
+        persist();
+    }
+
+    function removeCause(id) {
+        state.causes = state.causes.filter(c => c.id !== id);
+        renderCauses();
+        persist();
+    }
+
+    function renderCauses() {
+        const list = document.getElementById('causeList');
+        if (state.causes.length === 0) {
+            list.innerHTML = '<li class="empty-state">No causes added yet — who would you like to pay it forward to?</li>';
+        } else {
+            list.innerHTML = state.causes.map(c => `
+                <li class="item-card">
+                    <div class="item-body">
+                        <div class="item-title">${escapeHtml(c.name)}</div>
+                        ${c.reason ? `<div class="item-meta"><span>${escapeHtml(c.reason)}</span></div>` : ''}
+                    </div>
+                    <button class="btn-remove" onclick="removeCause('${c.id}')" title="Remove"><i class="bi bi-x-lg"></i></button>
+                </li>
+            `).join('');
+        }
+        const sugg = document.getElementById('causeSuggestions');
+        const remaining = CAUSE_SUGGESTIONS.filter(c =>
+            !state.causes.some(have => have.name.toLowerCase() === c.name.toLowerCase())
+        );
+        sugg.innerHTML = remaining.map(c =>
+            `<span class="suggestion-chip" onclick="addCause('${c.name.replace(/'/g, "\\'")}', '${c.reason.replace(/'/g, "\\'")}')">+ ${escapeHtml(c.name)}</span>`
+        ).join('') || '<span class="empty-state">You\'ve added all our suggestions — generous!</span>';
+    }
+
+    function updateStats() {
+        document.getElementById('statActive').textContent =
+            state.work.filter(w => w.status === 'in-progress').length;
+        document.getElementById('statDone').textContent =
+            state.work.filter(w => w.status === 'completed').length;
+        document.getElementById('statGoals').textContent =
+            (state.objectives.personal.length + state.objectives.group.length);
+        document.getElementById('statSkills').textContent = state.skills.length;
+    }
+
+    function enterKeySubmit(inputId, handler) {
+        const el = document.getElementById(inputId);
+        if (!el) return;
+        el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); handler(); } });
+    }
+
+    function showOnly(viewId) {
+        ['loadingView', 'guestView', 'errorView', 'dashboardView'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = (id === viewId) ? 'block' : 'none';
+        });
+    }
+
+    async function initDashboard() {
+        showOnly('loadingView');
+
+        const result = await verifySession();
+
+        if (result.status === 'unauthenticated') {
+            // Optimistic render only if we have nothing — otherwise send to signin.
+            showOnly('guestView');
+            return;
+        }
+        if (result.status === 'error') {
+            // Network/service issue — fall back to cached user if we have one.
+            const cached = getCachedUser();
+            if (!cached) {
+                document.getElementById('errorMessage').textContent = result.message;
+                showOnly('errorView');
+                return;
+            }
+            currentUser = cached;
+        } else {
+            currentUser = result.user;
+        }
+
+        const key = userKey(currentUser);
+        if (!key) {
+            document.getElementById('errorMessage').textContent =
+                "We couldn't identify your account. Please sign in again.";
+            showOnly('errorView');
+            return;
+        }
+        storageKey = key;
+        migrateLegacyState(currentUser, storageKey);
+
+        document.getElementById('memberName').textContent =
+            currentUser.name || currentUser.username || 'Scallywag';
+
+        loadState();
+        renderWork();
+        renderObjectives();
+        renderSkills();
+        renderCauses();
+
+        enterKeySubmit('workInput', addWork);
+        enterKeySubmit('objectiveInput', addObjective);
+        enterKeySubmit('skillInput', () => addSkill());
+        enterKeySubmit('causeName', () => addCause());
+        enterKeySubmit('causeReason', () => addCause());
+
+        showOnly('dashboardView');
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+{% endblock %}

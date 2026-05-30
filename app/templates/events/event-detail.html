@@ -33,6 +33,13 @@
   z-index: 1;
 }
 
+.event-hero-emoji {
+  font-size: 4rem;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
 .back-link {
   color: white;
   text-decoration: none;
@@ -56,7 +63,26 @@
   letter-spacing: 1px;
   background: linear-gradient(45deg, #28a745, #20c997);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  margin-right: 0.5rem;
+}
+
+.event-badge.badge-cancelled {
+  background: linear-gradient(45deg, #dc3545, #c82333);
+}
+
+.event-badge.badge-soldout {
+  background: linear-gradient(45deg, #6c757d, #495057);
+}
+
+.event-badge.badge-type {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.event-badge.badge-online {
+  background: linear-gradient(45deg, #00B1B3, #0e6abd);
 }
 
 .event-detail-title {
@@ -162,11 +188,17 @@
   margin-bottom: 1.5rem;
 }
 
-.register-btn:hover {
+.register-btn:hover:not(:disabled) {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(193, 228, 21, 0.4);
   background: linear-gradient(135deg, #C1E415, #00B1B3);
   color: #4006a7;
+}
+
+.register-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #6c757d, #495057);
 }
 
 .calendar-btn {
@@ -191,10 +223,144 @@
   box-shadow: 0 4px 12px rgba(64, 6, 167, 0.3);
 }
 
+.agenda-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.agenda-item {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(64, 6, 167, 0.1);
+}
+
+.agenda-item:last-child {
+  border-bottom: none;
+}
+
+.agenda-time {
+  flex: 0 0 90px;
+  font-weight: 700;
+  color: #4006a7;
+  font-size: 1.05rem;
+}
+
+.agenda-body h5 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.05rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.agenda-body p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.speaker-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(64, 6, 167, 0.1);
+}
+
+.speaker-card:last-child {
+  border-bottom: none;
+}
+
+.speaker-avatar {
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C1E415, #00B1B3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 12px rgba(64, 6, 167, 0.2);
+}
+
+.speaker-body h5 {
+  margin: 0 0 0.2rem 0;
+  font-size: 1.1rem;
+  color: #4006a7;
+  font-weight: 700;
+}
+
+.speaker-role {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.speaker-bio {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.tag-pill {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  background: rgba(64, 6, 167, 0.1);
+  color: #4006a7;
+  margin: 0 0.4rem 0.4rem 0;
+  font-weight: 500;
+}
+
+.capacity-block {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(64, 6, 167, 0.1);
+}
+
+.capacity-bar {
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.capacity-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4006a7, #C1E415);
+  border-radius: 4px;
+}
+
+.price-tag {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #4006a7;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.prereq-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #555;
+}
+
+.prereq-list li {
+  margin-bottom: 0.4rem;
+}
+
 @media (max-width: 768px) {
   .event-detail-title { font-size: 2rem; }
   .event-meta { gap: 1rem; }
   .section-card, .sidebar-card { padding: 1.5rem; }
+  .agenda-item { flex-direction: column; gap: 0.25rem; }
+  .agenda-time { flex: 0; }
 }
 </style>
 
@@ -206,7 +372,22 @@
           <div class="mb-3">
             <a href="/events" class="back-link">← Back to Events</a>
           </div>
-          <span class="event-badge">📅 Upcoming Event</span>
+          <span class="event-hero-emoji">{{ event.emoji or '📅' }}</span>
+          <div>
+            {% if event.status == 'cancelled' %}
+              <span class="event-badge badge-cancelled">🚫 Cancelled</span>
+            {% elif event.is_sold_out %}
+              <span class="event-badge badge-soldout">Sold Out</span>
+            {% else %}
+              <span class="event-badge">📅 Upcoming Event</span>
+            {% endif %}
+            {% if event.event_type %}
+              <span class="event-badge badge-type">{{ event.event_type }}</span>
+            {% endif %}
+            {% if event.is_online %}
+              <span class="event-badge badge-online">🌐 Online</span>
+            {% endif %}
+          </div>
           <h1 class="event-detail-title">{{ event.name }}</h1>
           <div class="event-meta">
             <span class="event-meta-item">📅 <span id="eventDate"></span></span>
@@ -226,8 +407,48 @@
       <div class="col-lg-8">
         <div class="section-card">
           <h2>About This Event</h2>
-          <p style="font-size: 1.1rem; line-height: 1.8; color: #666;">{{ event.description }}</p>
+          <p style="font-size: 1.1rem; line-height: 1.8; color: #666;">{{ event.long_description or event.description }}</p>
+          {% if event.tags %}
+            <div style="margin-top: 1.5rem;">
+              {% for tag in event.tags %}
+                <span class="tag-pill">{{ tag }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
+
+        {% if event.agenda %}
+        <div class="section-card">
+          <h2>Agenda</h2>
+          <ul class="agenda-list">
+            {% for item in event.agenda %}
+            <li class="agenda-item">
+              <div class="agenda-time">{{ item.time }}</div>
+              <div class="agenda-body">
+                <h5>{{ item.title }}</h5>
+                {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {% if event.speakers %}
+        <div class="section-card">
+          <h2>Speakers</h2>
+          {% for speaker in event.speakers %}
+          <div class="speaker-card">
+            <div class="speaker-avatar">{{ speaker.avatar or '🎤' }}</div>
+            <div class="speaker-body">
+              <h5>{{ speaker.name }}</h5>
+              {% if speaker.role %}<div class="speaker-role">{{ speaker.role }}</div>{% endif %}
+              {% if speaker.bio %}<p class="speaker-bio">{{ speaker.bio }}</p>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
 
         <div class="section-card">
           <h2>Event Details</h2>
@@ -239,22 +460,73 @@
             <div class="col-md-6 mb-3">
               <p><strong>📍 Location:</strong></p>
               <p style="color: #666;">{{ event.location }}</p>
+              {% if event.address %}
+                <p style="color: #888; font-size: 0.9rem; margin-top: -0.25rem;">{{ event.address }}</p>
+              {% endif %}
             </div>
             <div class="col-md-6 mb-3">
               <p><strong>👤 Organizer:</strong></p>
-              <p style="color: #666;">{{ event.organizer }}</p>
+              {% if event.organizer_url %}
+                <p style="color: #666;"><a href="{{ event.organizer_url }}" target="_blank" rel="noopener" style="color: #4006a7; text-decoration: none;">{{ event.organizer }} ↗</a></p>
+              {% else %}
+                <p style="color: #666;">{{ event.organizer }}</p>
+              {% endif %}
             </div>
+            {% if event.timezone %}
+            <div class="col-md-6 mb-3">
+              <p><strong>🌍 Timezone:</strong></p>
+              <p style="color: #666;">{{ event.timezone }}</p>
+            </div>
+            {% endif %}
           </div>
+          {% if event.prerequisites %}
+            <div style="margin-top: 1rem;">
+              <p><strong>🎒 What to bring / prerequisites:</strong></p>
+              <ul class="prereq-list">
+                {% for item in event.prerequisites %}
+                  <li>{{ item }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
         </div>
       </div>
 
       <div class="col-lg-4">
         <div class="sidebar-card">
-          <button class="register-btn" onclick="registerForEventDetail()">
-            ✅ Register Now
+          {% if event.capacity %}
+          <div class="capacity-block">
+            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Availability</h4>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666;">
+              <span>{{ event.registered_count or 0 }} / {{ event.capacity }} registered</span>
+              <span>{{ ((event.registered_count or 0) / event.capacity * 100) | round | int }}%</span>
+            </div>
+            <div class="capacity-bar">
+              <div id="capacityBarFill" class="capacity-bar-fill"></div>
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="price-tag">
+            {% if event.is_free %}✨ Free{% else %}{{ event.price or 'Paid' }}{% endif %}
+          </div>
+
+          <button class="register-btn" onclick="registerForEventDetail()" {% if event.is_sold_out or event.status == 'cancelled' %}disabled{% endif %}>
+            {% if event.status == 'cancelled' %}
+              🚫 Cancelled
+            {% elif event.is_sold_out %}
+              🚫 Sold Out
+            {% else %}
+              ✅ Register Now
+            {% endif %}
           </button>
 
           <div class="d-grid gap-2">
+            {% if event.is_online and event.meeting_url %}
+              <a href="{{ event.meeting_url }}" target="_blank" rel="noopener" class="calendar-btn" style="background: #00B1B3; color: white; border-color: #00B1B3;">
+                🌐 Join Online
+              </a>
+            {% endif %}
             <a id="googleCalLink" href="#" target="_blank" class="calendar-btn">
               📅 Add to Google Calendar
             </a>
@@ -274,50 +546,62 @@
 <script>
 const event = {{ event | tojson }};
 
-function formatEventDate(dateString) {
+function formatEventDate(dateString, endDateString) {
   const startDate = new Date(dateString);
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-  return startDate.toLocaleDateString('en-US', options);
+  const start = startDate.toLocaleDateString('en-US', options);
+  if (!endDateString) return start;
+  const endDate = new Date(endDateString);
+  const sameDay = startDate.toDateString() === endDate.toDateString();
+  if (sameDay) {
+    const endTime = endDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    return `${start} – ${endTime}`;
+  }
+  return `${start} → ${endDate.toLocaleDateString('en-US', options)}`;
 }
 
 function generateGoogleCalendarUrl() {
   const startDate = new Date(event.date);
-  const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Default 2 hours
-  
+  const endDate = event.end_date
+    ? new Date(event.end_date)
+    : new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+
   const formatDateForGoogle = (date) => {
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   };
-  
+
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: event.name,
     dates: `${formatDateForGoogle(startDate)}/${formatDateForGoogle(endDate)}`,
-    details: event.description,
-    location: event.location || ''
+    details: event.long_description || event.description,
+    location: event.address || event.location || ''
   });
-  
+
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
 function generateICalUrl() {
   const startDate = new Date(event.date);
-  const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
-  
+  const endDate = event.end_date
+    ? new Date(event.end_date)
+    : new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+
   const formatDateForICal = (date) => {
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   };
-  
+
   const icalContent = `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
 SUMMARY:${event.name}
 DTSTART:${formatDateForICal(startDate)}
 DTEND:${formatDateForICal(endDate)}
-DESCRIPTION:${event.description}
-LOCATION:${event.location || ''}
+DESCRIPTION:${(event.long_description || event.description).replace(/\n/g, '\\n')}
+LOCATION:${event.address || event.location || ''}
 END:VEVENT
 END:VCALENDAR`;
-  
+
   return 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icalContent);
 }
 
@@ -325,22 +609,23 @@ function updateCountdown() {
   const now = new Date();
   const eventDate = new Date(event.date);
   const diff = eventDate - now;
-  
+
   if (diff < 0) {
     document.getElementById('countdownDisplay').textContent = 'Event has started!';
     return;
   }
-  
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-  
-  document.getElementById('countdownDisplay').textContent = 
+
+  document.getElementById('countdownDisplay').textContent =
     `🕒 Starts in ${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
 function registerForEventDetail() {
+  if (event.is_sold_out || event.status === 'cancelled') return;
   const modal = document.createElement('div');
   modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(64, 6, 167, 0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(5px);';
   modal.innerHTML = `
@@ -366,14 +651,13 @@ function registerForEventDetail() {
       </form>
     </div>
   `;
-  
+
   document.body.appendChild(modal);
-  
+
   modal.querySelector('#registrationForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    
-    // Replace form with success message
+
     const modalContent = modal.querySelector('div[style*="background: linear-gradient"]');
     modalContent.innerHTML = `
       <div style="text-align: center; padding: 2rem;">
@@ -393,7 +677,7 @@ function shareEvent() {
     text: event.description,
     url: window.location.href
   };
-  
+
   if (navigator.share) {
     navigator.share(shareData);
   } else {
@@ -402,16 +686,20 @@ function shareEvent() {
   }
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  const formattedDate = formatEventDate(event.date);
+  const formattedDate = formatEventDate(event.date, event.end_date);
   document.getElementById('eventDate').textContent = formattedDate;
   document.getElementById('fullEventDate').textContent = formattedDate;
-  
-  // Set calendar URLs
+
   document.getElementById('googleCalLink').href = generateGoogleCalendarUrl();
   document.getElementById('icalLink').href = generateICalUrl();
-  
+
+  const capacityFill = document.getElementById('capacityBarFill');
+  if (capacityFill && event.capacity) {
+    const pct = Math.min(100, Math.round(((event.registered_count || 0) / event.capacity) * 100));
+    capacityFill.style.width = pct + '%';
+  }
+
   updateCountdown();
   setInterval(updateCountdown, 1000);
 });
