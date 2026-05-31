@@ -305,7 +305,6 @@ async def submit_contact_form(form_data: ContactFormData):
             contact_record = result.single()
             contact_id = contact_record["contact_id"] if contact_record else None
 
-     
         return {
             "success": True,
             "message": "Contact form submitted successfully",
@@ -436,7 +435,8 @@ async def get_projects():
             ],
             "created_date": "2025-03-01",
             "last_updated": "2025-11-15"
-        }, {
+        }, 
+        {
             "id": 5,
             "logo": 'images/logo/dsf_Companion_logo.png',
             "title": "Practical Pythonista Club",
