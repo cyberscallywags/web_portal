@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
-AUTH_SERVICE_URL = "http://135.181.99.53:8910"
+AUTH_SERVICE_URL = "https://auth.cyberscallywags.uk"
 
 
 class LoginRequest(BaseModel):

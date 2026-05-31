@@ -288,7 +288,7 @@
 
                     // Verify token and get user roles
                     try {
-                        const verifyResponse = await fetch('http://135.181.99.53:8910/auth/me', {
+                        const verifyResponse = await fetch('https://auth.cyberscallywags.uk/auth/me', {
                             method: 'GET',
                             headers: {
                                 'Authorization': `Bearer ${data.tokens.access_token}`,
