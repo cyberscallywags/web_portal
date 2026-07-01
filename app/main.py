@@ -17,6 +17,7 @@ from app.static.data.projects import get_all_project_data
 from app.static.data.projects import get_project_data_by_slug
 from typing import List, Optional
 from pydantic import BaseModel
+from datetime import datetime
 import logging
 import logfire
 
@@ -32,6 +33,8 @@ app = FastAPI()
 # Mount static files directory
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
+# Evaluated at render time so the footer year is always current
+templates.env.globals["current_year"] = lambda: datetime.now().year
 
 @app.get("/")
 async def read_root(request: Request):
