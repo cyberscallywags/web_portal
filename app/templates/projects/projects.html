@@ -355,10 +355,10 @@
     <div class="container">
       <div class="row g-3">
         <div class="col-md-6">
-          <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search projects...">
+          <input type="search" id="searchInput" class="form-control" aria-label="Search projects" placeholder="🔍 Search projects...">
         </div>
         <div class="col-md-3">
-          <select id="statusFilter" class="form-select">
+          <select id="statusFilter" class="form-select" aria-label="Filter by status">
             <option value="">All Status</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -367,7 +367,7 @@
           </select>
         </div>
         <div class="col-md-3">
-          <select id="techFilter" class="form-select">
+          <select id="techFilter" class="form-select" aria-label="Filter by technology">
             <option value="">All Technologies</option>
             <option value="python">Python</option>
             <option value="javascript">JavaScript</option>

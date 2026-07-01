@@ -589,7 +589,7 @@ function loadProjectContent(projectData) {
       // Handle both string and array emoji formats
       const emoji = Array.isArray(contributor.emoji) ? contributor.emoji[0] : contributor.emoji;
       return `
-        <div class="contributor-item" onclick="window.location.href='/team#${contributor.team_slug}'">
+        <div class="contributor-item" role="link" tabindex="0" aria-label="View ${contributor.name} on the team page" onclick="window.location.href='/team#${contributor.team_slug}'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='/team#${contributor.team_slug}';}">
           <div class="contributor-avatar">${emoji}</div>
           <div class="contributor-info">
             <div class="contributor-name">${contributor.name}</div>
@@ -639,7 +639,7 @@ function loadRelatedProjects() {
     
     if (relatedProjects.length > 0) {
       relatedContainer.innerHTML = relatedProjects.map(project => `
-        <div class="related-project" onclick="window.location.href='/project/${project.slug}'">
+        <div class="related-project" role="link" tabindex="0" aria-label="View project ${project.title}" onclick="window.location.href='/project/${project.slug}'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='/project/${project.slug}';}">
           <div class="related-project-title">${project.title}</div>
           <div class="related-project-desc">${project.description.substring(0, 80)}...</div>
         </div>
