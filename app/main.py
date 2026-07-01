@@ -59,8 +59,14 @@ async def read_about(request: Request):
 
 @app.get("/specialisms")
 async def read_specialisms(request: Request):
-    logfire.info('TRIGGERED: read_specialisms !')  
+    logfire.info('TRIGGERED: read_specialisms !')
     return templates.TemplateResponse(request, "specialisms.html", {})
+
+
+@app.get("/privacy")
+async def read_privacy(request: Request):
+    logfire.info('TRIGGERED: read_privacy !')
+    return templates.TemplateResponse(request, "privacy.html", {})
 
 
 

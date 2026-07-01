@@ -268,11 +268,124 @@
     <hr class="border-secondary">
     <div class="row">
       <div class="col-12 text-center">
-        <p class="mb-0 text-light">&copy; 2025 Cyber Scallywags. All rights reserved. | DSF Companion Project</p>
+        <p class="mb-0 text-light">&copy; 2025 Cyber Scallywags. All rights reserved. | DSF Companion Project | <a href="/privacy" class="text-light">Privacy &amp; Cookies</a></p>
       </div>
     </div>
   </div>
 </footer>
+
+<!-- Cookie / privacy consent banner -->
+<style>
+  .cookie-consent {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    max-width: 360px;
+    width: calc(100% - 2rem);
+    background: #ffffff;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #C1E415;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    padding: 1rem 1.1rem;
+    z-index: 10000;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    /* Hidden until JS decides whether to show it */
+    display: none;
+    transform: translateY(12px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .cookie-consent.is-visible {
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .cookie-consent__title {
+    font-weight: 700;
+    color: #4006a7;
+    margin: 0 0 0.35rem;
+    font-size: 0.95rem;
+  }
+  .cookie-consent__text { margin: 0 0 0.85rem; color: #555; }
+  .cookie-consent__text a { color: #4006a7; font-weight: 600; }
+  .cookie-consent__actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .cookie-consent__btn {
+    flex: 1 1 auto;
+    padding: 0.5rem 0.9rem;
+    border-radius: 20px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .cookie-consent__btn:hover { transform: translateY(-1px); }
+  .cookie-consent__btn--accept { background: #4006a7; color: #fff; }
+  .cookie-consent__btn--accept:hover { background: #5a0fc9; }
+  .cookie-consent__btn--decline { background: #eee; color: #333; }
+  .cookie-consent__btn--decline:hover { background: #ddd; }
+  .cookie-consent__btn:focus-visible { outline: 3px solid #CC0084; outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .cookie-consent { transition: none; }
+  }
+</style>
+
+<div id="cookieConsent" class="cookie-consent" role="dialog" aria-modal="false"
+     aria-labelledby="cookieConsentTitle" aria-describedby="cookieConsentText" hidden>
+  <p id="cookieConsentTitle" class="cookie-consent__title">🍪 Cookies &amp; privacy</p>
+  <p id="cookieConsentText" class="cookie-consent__text">
+    We use essential cookies and local storage to keep you signed in and remember your
+    preferences. See our <a href="/privacy">privacy policy</a> for details.
+  </p>
+  <div class="cookie-consent__actions">
+    <button type="button" id="cookieAccept" class="cookie-consent__btn cookie-consent__btn--accept">Accept</button>
+    <button type="button" id="cookieDecline" class="cookie-consent__btn cookie-consent__btn--decline">Decline non-essential</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'cookieConsent';
+  var banner = document.getElementById('cookieConsent');
+  if (!banner) return;
+
+  function storeChoice(value) {
+    try { localStorage.setItem(STORAGE_KEY, value); } catch (e) { /* storage unavailable */ }
+  }
+
+  function hideBanner(value) {
+    storeChoice(value);
+    banner.classList.remove('is-visible');
+    // Wait for the fade-out before fully removing from the a11y tree
+    window.setTimeout(function () {
+      banner.setAttribute('hidden', '');
+      banner.style.display = 'none';
+    }, 300);
+  }
+
+  var existing = null;
+  try { existing = localStorage.getItem(STORAGE_KEY); } catch (e) { existing = null; }
+
+  if (!existing) {
+    banner.removeAttribute('hidden');
+    banner.style.display = 'block';
+    // Force reflow so the transition runs, then reveal
+    // eslint-disable-next-line no-unused-expressions
+    banner.offsetHeight;
+    banner.classList.add('is-visible');
+  }
+
+  document.getElementById('cookieAccept').addEventListener('click', function () {
+    hideBanner('accepted');
+  });
+  document.getElementById('cookieDecline').addEventListener('click', function () {
+    hideBanner('declined');
+  });
+})();
+</script>
 
 <!-- Account Management JavaScript -->
 <script>

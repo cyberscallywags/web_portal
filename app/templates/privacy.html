@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Privacy & Cookies - Cyber Scallywags{% endblock %}
+{% block content %}
+<style>
+    .privacy-hero {
+        background: linear-gradient(135deg, #4006a7 0%, #CC0084 100%);
+        padding: 80px 0;
+        text-align: center;
+    }
+    .privacy-hero h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 15px 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .privacy-hero p {
+        font-size: 1.2rem;
+        color: #C1E415;
+        margin: 0;
+    }
+    .privacy-content {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 60px 20px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .privacy-content h2 {
+        font-size: 1.8rem;
+        color: #4006a7;
+        margin: 40px 0 15px;
+    }
+    .privacy-content h2:first-of-type { margin-top: 0; }
+    .privacy-content p,
+    .privacy-content li {
+        font-size: 1.05rem;
+        line-height: 1.75;
+        color: #2a2a2a;
+    }
+    .privacy-content ul { padding-left: 1.4rem; }
+    .privacy-content a { color: #CC0084; font-weight: 600; }
+    .privacy-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    .privacy-content th,
+    .privacy-content td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid #eee;
+        font-size: 0.98rem;
+    }
+    .privacy-content th { color: #4006a7; }
+    .privacy-note {
+        background: #f6f3ff;
+        border-left: 4px solid #C1E415;
+        padding: 15px 18px;
+        border-radius: 8px;
+        margin: 30px 0;
+        color: #444;
+    }
+</style>
+
+<section class="privacy-hero">
+    <div class="container">
+        <h1>Privacy &amp; Cookies</h1>
+        <p>How Cyber Scallywags handles your data</p>
+    </div>
+</section>
+
+<div class="privacy-content">
+    <p><em>Last updated: 2026</em></p>
+
+    <div class="privacy-note">
+        This is a plain-language summary of how this site uses cookies and local storage.
+        It is a starting template — please review it with the team (and, where needed, a
+        legal advisor) before treating it as your final published policy.
+    </div>
+
+    <h2>What we store</h2>
+    <p>
+        The Cyber Scallywags portal keeps a small amount of information in your browser to make
+        the site work. We do <strong>not</strong> currently use third-party advertising or
+        cross-site tracking cookies.
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>currentUser</code></td>
+                <td>Local storage (essential)</td>
+                <td>Keeps you signed in and shows your account details.</td>
+            </tr>
+            <tr>
+                <td><code>cookieConsent</code></td>
+                <td>Local storage (essential)</td>
+                <td>Remembers your choice on this banner so we don't ask again.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Essential vs. non-essential</h2>
+    <p>
+        Essential storage (like keeping you signed in and remembering your consent choice) is
+        required for the site to function and cannot be switched off. Choosing
+        <strong>Decline non-essential</strong> on the banner means we will not add any optional
+        analytics or marketing storage should we introduce it in future.
+    </p>
+
+    <h2>Managing your data</h2>
+    <ul>
+        <li>You can clear this data at any time by clearing your browser's site data for this domain.</li>
+        <li>Signing out removes your stored account information.</li>
+        <li>Most browsers let you block or delete cookies and local storage in their settings.</li>
+    </ul>
+
+    <h2>Contact</h2>
+    <p>
+        Questions about your data or this policy? <a href="/contact">Get in touch</a> and the
+        Cyber Scallywags team will be happy to help.
+    </p>
+</div>
+
+{% endblock %}
