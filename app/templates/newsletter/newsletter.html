@@ -265,10 +265,10 @@
     <div class="container">
       <div class="row g-3">
         <div class="col-md-8">
-          <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search by title, excerpt, or author...">
+          <input type="search" id="searchInput" class="form-control" aria-label="Search newsletters" placeholder="🔍 Search by title, excerpt, or author...">
         </div>
         <div class="col-md-4">
-          <select id="tagFilter" class="form-select">
+          <select id="tagFilter" class="form-select" aria-label="Filter by tag">
             <option value="">All Topics</option>
             {% for tag in all_tags %}
               <option value="{{ tag|lower }}">{{ tag }}</option>

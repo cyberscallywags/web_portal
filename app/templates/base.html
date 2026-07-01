@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body style="background-color: #4006a7;">
+<a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
 <nav class="navbar navbar-expand-lg">
   <div class="container" style="background-color: #4006a7;">
     <a class="navbar-brand" href="/">
-      <img src="{{ url_for('static', path='images/logo/logo.png') }}" alt="Hero image" width="100" class="img-fluid mb-4 rounded">
+      <img src="{{ url_for('static', path='images/logo/logo.png') }}" alt="Cyber Scallywags home" width="100" class="img-fluid mb-4 rounded">
     </a>
     
     <!-- Mobile hamburger button -->
@@ -181,9 +182,9 @@
 }
 </style>
 
-<div class="container mt-4" style="background-color: #4006a7;">
+<main id="main-content" class="container mt-4" style="background-color: #4006a7;">
   {% block content %}{% endblock %}
-</div>
+</main>
 
 <!-- Footer -->
 <footer class="text-light py-4 mt-5" style="background-color: #4006a7;">
@@ -249,7 +250,7 @@
             </a>
           </li>
           <li class="mb-2">
-            <a href="https://www.buymeacoffee.com/cyberscallywags"><img src="https://img.buymeacoffee.com/button-api/?text=Buy us a coffee&emoji=&slug=cyberscallywags&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" /></a>
+            <a href="https://www.buymeacoffee.com/cyberscallywags" target="_blank" rel="noopener"><img src="https://img.buymeacoffee.com/button-api/?text=Buy us a coffee&emoji=&slug=cyberscallywags&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy us a coffee" /></a>
           </li>
           <li class="mb-2">
             <a href="/support" class="text-light text-decoration-none" target="_self">

@@ -429,13 +429,13 @@
                         <span class="panel-sub">What you're doing & what you've done</span>
                     </div>
                     <div class="input-row">
-                        <input type="text" id="workInput" placeholder="e.g. Refactor onboarding flow" maxlength="120">
-                        <select id="workStatus">
+                        <input type="text" id="workInput" aria-label="New work item" placeholder="e.g. Refactor onboarding flow" maxlength="120">
+                        <select id="workStatus" aria-label="Work item status">
                             <option value="planned">Planned</option>
                             <option value="in-progress" selected>In Progress</option>
                             <option value="completed">Completed</option>
                         </select>
-                        <button class="btn-add" onclick="addWork()"><i class="bi bi-plus-lg"></i></button>
+                        <button class="btn-add" onclick="addWork()" aria-label="Add work item"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
                     </div>
                     <ul class="item-list" id="workList"></ul>
                 </div>
@@ -446,13 +446,13 @@
                         <h2><i class="bi bi-bullseye"></i> Aspirations &amp; Objectives</h2>
                         <span class="panel-sub">Personal &amp; group goals</span>
                     </div>
-                    <div class="objective-tabs">
-                        <button class="tab-btn active" data-scope="personal" onclick="switchObjectiveTab('personal')">🧍 Personal</button>
-                        <button class="tab-btn" data-scope="group" onclick="switchObjectiveTab('group')">🐺 Cyber Scallywags</button>
+                    <div class="objective-tabs" role="tablist" aria-label="Objective scope">
+                        <button class="tab-btn active" role="tab" aria-selected="true" data-scope="personal" onclick="switchObjectiveTab('personal')">🧍 Personal</button>
+                        <button class="tab-btn" role="tab" aria-selected="false" data-scope="group" onclick="switchObjectiveTab('group')">🐺 Cyber Scallywags</button>
                     </div>
                     <div class="input-row">
-                        <input type="text" id="objectiveInput" placeholder="e.g. Lead a workshop this quarter" maxlength="160">
-                        <button class="btn-add" onclick="addObjective()"><i class="bi bi-plus-lg"></i></button>
+                        <input type="text" id="objectiveInput" aria-label="New objective" placeholder="e.g. Lead a workshop this quarter" maxlength="160">
+                        <button class="btn-add" onclick="addObjective()" aria-label="Add objective"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
                     </div>
                     <ul class="item-list" id="objectiveList"></ul>
                 </div>
@@ -464,8 +464,8 @@
                         <span class="panel-sub">What you'd like exposure to</span>
                     </div>
                     <div class="input-row">
-                        <input type="text" id="skillInput" placeholder="e.g. Neo4j, Kubernetes, Rust" maxlength="40">
-                        <button class="btn-add" onclick="addSkill()"><i class="bi bi-plus-lg"></i></button>
+                        <input type="text" id="skillInput" aria-label="New skill" placeholder="e.g. Neo4j, Kubernetes, Rust" maxlength="40">
+                        <button class="btn-add" onclick="addSkill()" aria-label="Add skill"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
                     </div>
                     <div class="chip-list" id="skillList"></div>
                     <div class="suggestion-block">
@@ -481,9 +481,9 @@
                         <span class="panel-sub">Pay it forward — charities &amp; orgs</span>
                     </div>
                     <div class="input-row">
-                        <input type="text" id="causeName" placeholder="Organisation name" maxlength="80">
-                        <input type="text" id="causeReason" placeholder="Why? (optional)" maxlength="120">
-                        <button class="btn-add" onclick="addCause()"><i class="bi bi-plus-lg"></i></button>
+                        <input type="text" id="causeName" aria-label="Organisation name" placeholder="Organisation name" maxlength="80">
+                        <input type="text" id="causeReason" aria-label="Reason (optional)" placeholder="Why? (optional)" maxlength="120">
+                        <button class="btn-add" onclick="addCause()" aria-label="Add cause"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
                     </div>
                     <ul class="item-list" id="causeList"></ul>
                     <div class="suggestion-block">
@@ -672,7 +672,7 @@
                             <span>· added ${new Date(w.added).toLocaleDateString()}</span>
                         </div>
                     </div>
-                    <button class="btn-remove" onclick="removeWork('${w.id}')" title="Remove"><i class="bi bi-x-lg"></i></button>
+                    <button class="btn-remove" onclick="removeWork('${w.id}')" title="Remove" aria-label="Remove work item"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
                 </li>
             `).join('');
         }
@@ -683,7 +683,9 @@
     function switchObjectiveTab(scope) {
         activeObjectiveScope = scope;
         document.querySelectorAll('.tab-btn').forEach(b => {
-            b.classList.toggle('active', b.dataset.scope === scope);
+            const isActive = b.dataset.scope === scope;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
         document.getElementById('objectiveInput').placeholder = scope === 'personal'
             ? 'e.g. Lead a workshop this quarter'
@@ -721,7 +723,7 @@
                         <div class="item-title">${escapeHtml(o.text)}</div>
                         <div class="item-meta"><span>added ${new Date(o.added).toLocaleDateString()}</span></div>
                     </div>
-                    <button class="btn-remove" onclick="removeObjective('${o.id}')" title="Remove"><i class="bi bi-x-lg"></i></button>
+                    <button class="btn-remove" onclick="removeObjective('${o.id}')" title="Remove" aria-label="Remove objective"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
                 </li>
             `).join('');
         }
@@ -798,7 +800,7 @@
                         <div class="item-title">${escapeHtml(c.name)}</div>
                         ${c.reason ? `<div class="item-meta"><span>${escapeHtml(c.reason)}</span></div>` : ''}
                     </div>
-                    <button class="btn-remove" onclick="removeCause('${c.id}')" title="Remove"><i class="bi bi-x-lg"></i></button>
+                    <button class="btn-remove" onclick="removeCause('${c.id}')" title="Remove" aria-label="Remove cause"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
                 </li>
             `).join('');
         }

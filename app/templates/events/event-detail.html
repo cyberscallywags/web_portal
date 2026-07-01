@@ -627,22 +627,25 @@ function updateCountdown() {
 function registerForEventDetail() {
   if (event.is_sold_out || event.status === 'cancelled') return;
   const modal = document.createElement('div');
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'registrationModalTitle');
   modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(64, 6, 167, 0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(5px);';
   modal.innerHTML = `
     <div style="background: linear-gradient(135deg, white, #f8f9fa); padding: 2.5rem; border-radius: 24px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); border: 3px solid #C1E415;">
-      <h2 style="color: #4006a7; margin-bottom: 1.5rem; font-size: 2rem; font-weight: 700;">Register for ${event.name}</h2>
+      <h2 id="registrationModalTitle" style="color: #4006a7; margin-bottom: 1.5rem; font-size: 2rem; font-weight: 700;">Register for ${event.name}</h2>
       <form id="registrationForm">
         <div style="margin-bottom: 1.5rem;">
-          <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Name *</label>
-          <input type="text" name="name" required style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
+          <label for="regName" style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Name *</label>
+          <input type="text" id="regName" name="name" required style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
         </div>
         <div style="margin-bottom: 1.5rem;">
-          <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Email *</label>
-          <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
+          <label for="regEmail" style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Email *</label>
+          <input type="email" id="regEmail" name="email" required style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
         </div>
         <div style="margin-bottom: 1.5rem;">
-          <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Phone</label>
-          <input type="tel" name="phone" style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
+          <label for="regPhone" style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #4006a7;">Phone</label>
+          <input type="tel" id="regPhone" name="phone" style="width: 100%; padding: 0.75rem; border: 2px solid #C1E415; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;" onfocus="this.style.borderColor='#4006a7'; this.style.boxShadow='0 0 0 0.2rem rgba(64, 6, 167, 0.25)'" onblur="this.style.borderColor='#C1E415'; this.style.boxShadow='none'">
         </div>
         <div style="display: flex; gap: 1rem; margin-top: 2rem;">
           <button type="submit" style="flex: 1; padding: 1rem; background: linear-gradient(135deg, #4006a7, #CC0084); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(64, 6, 167, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(193, 228, 21, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(64, 6, 167, 0.3)'">Submit</button>
@@ -653,6 +656,17 @@ function registerForEventDetail() {
   `;
 
   document.body.appendChild(modal);
+
+  // Move focus into the dialog and restore it on close
+  const previouslyFocused = document.activeElement;
+  const firstField = modal.querySelector('#regName');
+  if (firstField) firstField.focus();
+  modal.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      modal.remove();
+      if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+    }
+  });
 
   modal.querySelector('#registrationForm').addEventListener('submit', (e) => {
     e.preventDefault();
